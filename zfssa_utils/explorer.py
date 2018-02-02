@@ -1,4 +1,7 @@
-"""explorer functions"""
+"""explorer functions
+
+Functions to generate ZFSSA explorers.
+"""
 import os
 import csv
 from datetime import datetime
@@ -369,7 +372,8 @@ def create_csv(data, datatype, outputdir):
 
 
 def run_explorer(configfile, args_progress=False):
-    """Run explorer from configfile."""
+    """Run explorer from given configfile and create a zip file with all csv
+    files generated."""
     config = read_yaml_file(configfile)
     zfsip = "https://{}:215/api".format(config['ip'])
     zauth = (config['username'], config['password'])

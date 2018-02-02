@@ -1,4 +1,4 @@
-"""Common utils"""
+"""Common functions"""
 import argparse
 import logging
 import re
@@ -51,7 +51,7 @@ def exists(data, key):
 
 
 def fetch(url, zauth, header, timeout, datatype):
-    """Fetch data from zfs api"""
+    """Fetch data from zfs api, returning a tuple (data, datatype)"""
     req = requests.get(url, timeout=timeout, auth=zauth,
                        verify=False, headers=header)
     data = req.json()
@@ -148,7 +148,7 @@ def create_parser():
 
 
 def urls_contructor(zfsip):
-    """Return full URL list from defined IP or hostname"""
+    """Return full URL list (tuples: url, datatype) from defined IP or hostname"""
     urls_group = [("{}/system/v1/version".format(zfsip), "version"),
                   ("{}/hardware/v1/cluster".format(zfsip), "cluster"),
                   ("{}/problem/v1/problems".format(zfsip), "problems"),
