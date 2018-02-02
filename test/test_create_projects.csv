@@ -1,0 +1,2 @@
+#pool(str),project(str),mountpoint(str),quota(str),reservation(str),compression(str),dedup(bool),logbias(str),nodestroy(bool),recordsize(str),readonly(bool),atime(bool),default_sparse(bool),default_user(str),default_group(str),default_permissions(str),default_volblocksize(str),default_volsize(str),sharenfs(str),sharesmb(str)
+pool_0,unittest01,/export/unittest01,10g,10g,gzip,True,latency,False,128k,False,True,True,nobody,other,750,128k,1g,on,off

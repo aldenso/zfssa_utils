@@ -1,0 +1,2 @@
+#pool(str),project(str),lun(str),size(int),size_unit(str),blocksize(str),thin(bool),targetgrp(str),initiatorgrp(str),compression(str),logbias(str),nodestroy(bool)
+pool_0,unittest,lun01,1,gb,512,False,default,cluster-test,gzip,latency,False

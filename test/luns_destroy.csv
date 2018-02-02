@@ -1,0 +1,5 @@
+#pool(str),project(str),lun(str)
+pool_0,project1,lun01
+pool_0,project1,lun02
+pool_0,project1,lun03
+pool_0,project1,lun04
