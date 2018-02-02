@@ -1,4 +1,7 @@
-"""Projects functions"""
+"""Projects functions
+
+Functions to create, list/show and delete projects.
+"""
 from __future__ import print_function, division
 import json
 import csv
@@ -27,7 +30,7 @@ def read_project_file(filename):
 
 
 def list_projects(fileline, zfsurl, zauth):
-    """List/Show projects specified in csv file (err, msg)"""
+    """List/Show projects from line in csv format. (err, msg)"""
     pool = project = None
     if len(fileline) == 2:
         pool, project = fileline
@@ -83,7 +86,7 @@ def list_projects(fileline, zfsurl, zauth):
 
 
 def create_project(fileline, zfsurl, zauth):
-    """Create Project from csv file. (err, msg)"""
+    """Create Project from line in csv format. (err, msg)"""
     if len(fileline) != 20:
         return True, ("CREATE - FAIL - Error in line {} It needs to be 20"
                       "columns long".format(fileline))
@@ -146,7 +149,7 @@ def create_project(fileline, zfsurl, zauth):
 
 
 def delete_project(fileline, zfsurl, zauth):
-    """Delete project specified in csv file (err, msg)"""
+    """Delete project from line in csv format. (err, msg)"""
     if len(fileline) != 2:
         return True, ("DELETE - FAIL - Error in line {} It needs to be 2 "
                       "columns long".format(fileline))

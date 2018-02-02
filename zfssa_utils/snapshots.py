@@ -1,4 +1,7 @@
-"""Snapshots functions"""
+"""Snapshots functions
+
+Functions to create, list/show and delete snapshots.
+"""
 from __future__ import print_function, division
 import json
 import csv
@@ -27,7 +30,7 @@ def read_snap_file(filename):
 
 
 def list_snap(snap, zfsurl, zauth):
-    """List Snapshots specified in csv file (fail, message)"""
+    """List Snapshots from line in csv format. (err, msg)"""
     pool, project, filesystem, snapname = snap
     fullurl = ("{}/storage/v1/pools/{}/projects/{}/filesystems/{}/"
                "snapshots".format(zfsurl, pool, project, filesystem))
@@ -70,7 +73,7 @@ def list_snap(snap, zfsurl, zauth):
 
 
 def create_snap(snap, zfsurl, zauth):
-    """Create Snapshots from csv file"""
+    """Create Snapshots from line in csv format. (err, msg)"""
     pool, project, filesystem, snapname = snap
     fullurl = ("{}/storage/v1/pools/{}/projects/{}/filesystems/{}/"
                "snapshots".format(zfsurl, pool, project, filesystem))
@@ -107,7 +110,7 @@ def create_snap(snap, zfsurl, zauth):
 
 
 def delete_snap(snap, zfsurl, zauth):
-    """Delete Snapshots specified in csv file"""
+    """Delete Snapshots from line in csv format. (err, msg)"""
     pool, project, filesystem, snapname = snap
     fullurl = ("{}/storage/v1/pools/{}/projects/{}/filesystems/{}/"
                "snapshots/{}".format(zfsurl, pool, project, filesystem,

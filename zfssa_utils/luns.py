@@ -1,4 +1,7 @@
-"""luns functions"""
+"""LUNS functions
+
+Functions to create, list/show and delete luns.
+"""
 from __future__ import print_function, division
 import json
 import csv
@@ -29,7 +32,7 @@ def read_lun_file(filename):
 
 
 def list_lun(fileline, zfsurl, zauth):
-    """List/Show lun specified in csv file (err, msg)"""
+    """List/Show lun from line in csv format. (err, msg)"""
     pool = project = lun = None
     if len(fileline) == 3:
         pool, project, lun = fileline
@@ -74,7 +77,7 @@ def list_lun(fileline, zfsurl, zauth):
 
 
 def create_lun(fileline, zfsurl, zauth):
-    """Create LUN from csv file. (err, msg)"""
+    """Create LUN from line in csv format. (err, msg)"""
     if len(fileline) != 12:
         return True, "CREATE - FAIL - Error in line {} It needs to be 12 columns long"\
                      .format(fileline)
@@ -118,7 +121,7 @@ def create_lun(fileline, zfsurl, zauth):
 
 
 def delete_lun(fileline, zfsurl, zauth):
-    """Delete lun specified in csv file (err, msg)"""
+    """Delete lun from line in csv format. (err, msg)"""
     if len(fileline) != 3:
         return True, "DELETE - FAIL - Error in line {} It needs to be 3 columns long"\
                      .format(fileline)
