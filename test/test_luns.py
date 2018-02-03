@@ -6,8 +6,6 @@ from zfssa_utils.luns import run_luns
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
-YAMLOUTPUT = {'username': 'root', 'ip': '192.168.56.150', 'password': 'password'}
-
 
 class Namespace:
     """Class to simulate args parsed"""

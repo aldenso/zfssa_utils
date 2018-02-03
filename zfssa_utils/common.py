@@ -227,5 +227,4 @@ def get_real_blocksize(blocksize):
         string = re.sub(r"\d+", "", blocksize)
         blocksize = int(blocksize.replace(string, "")) * 1024 * 1024
         return blocksize
-    else:
-        return blocksize
+    return blocksize

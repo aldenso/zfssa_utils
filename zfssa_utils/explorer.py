@@ -124,7 +124,7 @@ def create_csv(data, datatype, outputdir):
                                      response_size(u['used']), u['compression'],
                                      u['usage_data'], response_size(u['usage_data']), u['free'],
                                      response_size(u['free']), u['dedupratio'], u['total'],
-                                     response_size(u['total']), u['usage_total'], 
+                                     response_size(u['total']), u['usage_total'],
                                      response_size(u['usage_total']),
                                      d['peer'], exists(d, 'href'), d['owner'], d['asn']])
     elif datatype == "projects":
