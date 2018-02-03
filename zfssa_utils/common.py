@@ -2,8 +2,8 @@
 import argparse
 import logging
 import re
+import csv
 import requests
-from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
 import yaml
 from progressbar import ProgressBar, AdaptiveETA, Bar, Percentage
@@ -29,6 +29,17 @@ def read_yaml_file(configfile):
         except yaml.YAMLError as error:
             print("Error in configuration file: {}").format(error)
         return config
+
+
+def read_csv_file(filename):
+    """Read csv file and return the list"""
+    csvlist = []
+    with open(filename, 'r') as cvsfile:
+        filereader = csv.reader(cvsfile, delimiter=',')
+        for row in filereader:
+            csvlist.append(row)
+    del csvlist[0]
+    return csvlist
 
 
 def response_size(nbytes):

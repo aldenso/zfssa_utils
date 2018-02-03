@@ -4,29 +4,17 @@ Functions to create, list/show and delete snapshots.
 """
 from __future__ import print_function, division
 import json
-import csv
 import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
 from zfssa_utils.common import HEADER, response_size, read_yaml_file, \
-     createprogress, createlogger, SNAPLOGFILE
+     read_csv_file, createprogress, createlogger, SNAPLOGFILE
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
 # Adding certificate verification is strongly advised. See:
 # https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
 requests.urllib3.disable_warnings(InsecureRequestWarning)
-
-
-def read_snap_file(filename):
-    """Read snap csv file and return the list"""
-    snaplist = []
-    with open(filename, 'r') as cvsfile:
-        filereader = csv.reader(cvsfile, delimiter=',')
-        for row in filereader:
-            snaplist.append(row)
-    del snaplist[0]
-    return snaplist
 
 
 def list_snap(snap, zfsurl, zauth):
@@ -144,7 +132,7 @@ def run_fs_snaps(args):
     listsnaps = args.list
     createsnaps = args.create
     deletesnaps = args.delete
-    snaplist = read_snap_file(csvfile)
+    snaplist = read_csv_file(csvfile)
     configfile = args.server
     config = read_yaml_file(configfile)
     zfsurl = "https://{}:215/api".format(config['ip'])

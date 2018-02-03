@@ -2,11 +2,9 @@
 import unittest
 import sys
 import os
-from zfssa_utils.projects import read_project_file, run_projects
+from zfssa_utils.projects import run_projects
 
 HERE = os.path.abspath(os.path.dirname(__file__))
-
-PROJFILEOUTPUT = ['pool_0', 'unittest01', '/export/unittest01']
 
 YAMLOUTPUT = {'username': 'root', 'ip': '192.168.56.150', 'password': 'password'}
 
@@ -19,11 +17,6 @@ class Namespace:
 
 class TestProjects(unittest.TestCase):
     """Test Projects functions"""
-
-    def test_read_project_file(self):
-        """Test read_project_file function to read a test csv file"""
-        proj_file = os.path.join(HERE, "test_create_projects.csv")
-        self.assertEqual(read_project_file(proj_file)[0][:3], PROJFILEOUTPUT)
 
     def test_00_create_projects(self):
         """Test projects with arguments to use create_projects function"""

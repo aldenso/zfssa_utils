@@ -2,8 +2,8 @@
 import unittest
 # import sys
 import os
-from zfssa_utils.common import read_yaml_file, response_size, get_real_size,\
-     get_real_blocksize
+from zfssa_utils.common import read_yaml_file, read_csv_file, response_size,\
+     get_real_size, get_real_blocksize
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
@@ -25,10 +25,18 @@ class TestCommon(unittest.TestCase):
 
     def test_read_yaml_file(self):
         """Test read_yaml_file function to read a regular yml file"""
-        self.assertEqual(read_yaml_file(os.path.join(HERE, "serverOS86.yml")), YAMLOUTPUT)
+        self.assertEqual(read_yaml_file(os.path.join(HERE, "serverOS86.yml")),
+                         YAMLOUTPUT)
+
+    def test_read_csv_file(self):
+        """Test read_csv_file function to read a regular csv file"""
+        self.assertEqual(read_csv_file(os.path.join(HERE,
+                                                    "test_destroy_lun.csv")),
+                         LUNFILEOUTPUT)
 
     def test_get_real_size(self):
-        """Test get_real_size function to convert input sizes (integer and string) to integer"""
+        """Test get_real_size function to convert input sizes
+        (integer and string) to integer"""
         self.assertEqual(get_real_size(3, 'kb'), 3072)
         self.assertEqual(get_real_size(3, 'Mb'), 3145728)
         self.assertEqual(get_real_size(3, 'gb'), 3221225472)

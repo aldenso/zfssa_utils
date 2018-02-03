@@ -2,11 +2,9 @@
 import unittest
 import sys
 import os
-from zfssa_utils.luns import read_lun_file, run_luns
+from zfssa_utils.luns import run_luns
 
 HERE = os.path.abspath(os.path.dirname(__file__))
-
-LUNFILEOUTPUT = [['pool_0', 'unittest', 'lun01']]
 
 YAMLOUTPUT = {'username': 'root', 'ip': '192.168.56.150', 'password': 'password'}
 
@@ -19,10 +17,6 @@ class Namespace:
 
 class TestLUNS(unittest.TestCase):
     """Test LUNs functions"""
-
-    def test_read_lun_file(self):
-        """Test read_lun_file function to read a test csv file"""
-        self.assertEqual(read_lun_file(os.path.join(HERE, "test_destroy_lun.csv")), LUNFILEOUTPUT)
 
     def test_00_create_lun(self):
         """Test luns with arguments to use create_lun function"""

@@ -4,31 +4,19 @@ Functions to create, list/show and delete luns.
 """
 from __future__ import print_function, division
 import json
-import csv
 import ast
 import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
 from zfssa_utils.common import HEADER, response_size, get_real_size,\
      get_real_blocksize, createprogress, createlogger, read_yaml_file,\
-     LUNLOGFILE
+     read_csv_file, LUNLOGFILE
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
 # Adding certificate verification is strongly advised. See:
 # https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
 requests.urllib3.disable_warnings(InsecureRequestWarning)
-
-
-def read_lun_file(filename):
-    """Read lun csv file and return the list."""
-    lunlist = []
-    with open(filename, 'r') as cvsfile:
-        filereader = csv.reader(cvsfile, delimiter=',')
-        for row in filereader:
-            lunlist.append(row)
-    del lunlist[0]
-    return lunlist
 
 
 def list_lun(fileline, zfsurl, zauth):
@@ -152,7 +140,7 @@ def run_luns(args):
     listlun = args.list
     createlun = args.create
     deletelun = args.delete
-    lunlistfromfile = read_lun_file(csvfile)
+    lunlistfromfile = read_csv_file(csvfile)
     configfile = args.server
     config = read_yaml_file(configfile)
     zauth = (config['username'], config['password'])
