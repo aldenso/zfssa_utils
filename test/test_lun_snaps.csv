@@ -1,2 +1,2 @@
 #pool(str),project(str),snaptarget(str),snaptype(str),snapname(str)
-pool_0,unittest,fs01,filesystem,backup
+pool_0,unittest,lun01,lun,backup

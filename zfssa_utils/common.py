@@ -146,13 +146,6 @@ def create_parser():
                              help="Delete Snapshots specified in csv file")
     snaps_opers.add_argument("--list", action="store_true",
                              help="List/Check Snapshots specified in csv file")
-    snaps_type = snaps_args.add_mutually_exclusive_group(required=True)
-    snaps_type.add_argument('--filesystems', action='store_true',
-                            help="Apply to File Systems")
-    snaps_type.add_argument('--projects', action='store_true',
-                            help="Apply to Projects")
-    snaps_type.add_argument('--luns', action='store_true',
-                            help="Apply to LUNs")
 
     parsed_args = parser.parse_args()
     return parsed_args

@@ -1,6 +1,18 @@
 """Snapshots functions
 
 Functions to create, list/show and delete snapshots.
+
+Every snap line should look like this:
+#pool(str),project(str),snaptarget(str),snaptype(str),snapname(str)
+
+Available values:
+
+pool: string
+project: string
+snaptarget: [string|-] # it may be a filesystem or lun name,
+            the hyphen is for projects.
+snaptype: [filesystem|lun|project]
+snapname: string
 """
 from __future__ import print_function, division
 import json
@@ -19,52 +31,74 @@ requests.urllib3.disable_warnings(InsecureRequestWarning)
 
 def list_snap(snap, zfsurl, zauth):
     """List Snapshots from line in csv format. (err, msg)"""
-    pool, project, filesystem, snapname = snap
-    fullurl = ("{}/storage/v1/pools/{}/projects/{}/filesystems/{}/"
-               "snapshots".format(zfsurl, pool, project, filesystem))
+    pool, project, snaptarget, snaptype, snapname = snap
+    fullurl = ""
+    if snaptype == 'filesystem':
+        fullurl = ("{}/storage/v1/pools/{}/projects/{}/filesystems/{}/"
+                   "snapshots".format(zfsurl, pool, project, snaptarget))
+    elif snaptype == 'lun':
+        fullurl = ("{}/storage/v1/pools/{}/projects/{}/luns/{}/"
+                   "snapshots".format(zfsurl, pool, project, snaptarget))
+    elif snaptype == 'project':
+        fullurl = ("{}/storage/v1/pools/{}/projects/{}/snapshots"
+                   .format(zfsurl, pool, project))
+    else:
+        return False, "snaptype '{}' unknown".format(snaptype)
     try:
         req = requests.get(fullurl, auth=zauth, verify=False, headers=HEADER)
         j = json.loads(req.text)
         req.close()
         req.raise_for_status()
         if len(j['snapshots']) == 0:
-            return False, ("LIST - NOTPRESENT - snapshot '{}' filesystem '{}' "
+            return False, ("LIST - NOTPRESENT - snapshot '{}' {} '{}' "
                            "project '{}' and pool '{}' - Message Snapshot not "
-                           "present".format(snapname, filesystem,
+                           "present".format(snapname, snaptype, snaptarget,
                                             project, pool))
         else:
             for i in j['snapshots']:
                 if i['name'] == snapname:
-                    return False, ("LIST - PRESENT - snapshot '{}' filesystem "
+                    return False, ("LIST - PRESENT - snapshot '{}' {} "
                                    "'{}' project '{}' pool '{}' created_at "
                                    "'{}' space_data '{}' space_unique '{}'"
-                                   .format(i['name'], filesystem, project,
-                                           pool, i['creation'],
+                                   .format(i['name'], snaptype, snaptarget,
+                                           project, pool, i['creation'],
                                            response_size(i['space_data']),
                                            response_size(i['space_unique'])))
-        return False, ("LIST - NOTPRESENT - snapshot '{}' filesystem '{}' "
+        return False, ("LIST - NOTPRESENT - snapshot '{}' {} '{}' "
                        "project '{}' pool '{}' - Message Snapshot not present"
-                       .format(snapname, filesystem, project, pool))
+                       .format(snapname, snaptype, snaptarget, project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("LIST - FAIL - snapshot '{}' filesystem '{}' project '{}' "
-                 "pool '{}' - Error {}".format(snapname, filesystem, project,
-                                               pool, error))
+            exit("LIST - FAIL - snapshot '{}' {} '{}' project '{}' "
+                 "pool '{}' - Error {}".format(snapname, snaptype, snaptarget,
+                                               project, pool, error))
         else:
-            return True, ("LIST - FAIL - snapshot '{}' filesystem '{}' project"
+            return True, ("LIST - FAIL - snapshot '{}' {} '{}' project "
                           "'{}' pool '{}' - Error {}"
-                          .format(snapname, filesystem, project, pool, error))
+                          .format(snapname, snaptype, snaptarget, project,
+                                  pool, error))
     except ConnectionError as error:
-        return True, ("LIST - FAIL - snapshot '{}' filesystem '{}' project "
-                      "'{}' pool '{}' - Error {}".format(snapname, filesystem,
-                                                         project, pool, error))
+        return True, ("LIST - FAIL - snapshot '{}' {} '{}' project "
+                      "'{}' pool '{}' - Error {}".format(snapname, snaptype,
+                                                         snaptarget, project,
+                                                         pool, error))
 
 
 def create_snap(snap, zfsurl, zauth):
     """Create Snapshots from line in csv format. (err, msg)"""
-    pool, project, filesystem, snapname = snap
-    fullurl = ("{}/storage/v1/pools/{}/projects/{}/filesystems/{}/"
-               "snapshots".format(zfsurl, pool, project, filesystem))
+    pool, project, snaptarget, snaptype, snapname = snap
+    fullurl = ""
+    if snaptype == 'filesystem':
+        fullurl = ("{}/storage/v1/pools/{}/projects/{}/filesystems/{}/"
+                   "snapshots".format(zfsurl, pool, project, snaptarget))
+    elif snaptype == 'lun':
+        fullurl = ("{}/storage/v1/pools/{}/projects/{}/luns/{}/"
+                   "snapshots".format(zfsurl, pool, project, snaptarget))
+    elif snaptype == 'project':
+        fullurl = ("{}/storage/v1/pools/{}/projects/{}/snapshots"
+                   .format(zfsurl, pool, project))
+    else:
+        return False, "snaptype '{}' unknown".format(snaptype)
     try:
         req = requests.post(fullurl, data=json.dumps({'name': snapname}),
                             auth=zauth, verify=False, headers=HEADER)
@@ -73,60 +107,75 @@ def create_snap(snap, zfsurl, zauth):
         req.raise_for_status()
         if 'fault' in j:
             if 'message' in j['fault']:
-                return True, ("CREATE - FAIL - snapshot '{}' filesystem '{}' "
+                return True, ("CREATE - FAIL - snapshot '{}' {} '{}' "
                               "project '{}' pool {}' - Error {}"
-                              .format(snapname, filesystem, project, pool,
-                                      j['fault']['message']))
+                              .format(snapname, snaptype, snaptarget, project,
+                                      pool, j['fault']['message']))
         else:
-            return False, ("CREATE - SUCCESS - snapshot '{}' filesystem '{}' "
+            return False, ("CREATE - SUCCESS - snapshot '{}' {} '{}' "
                            "project '{}' pool '{}'"
-                           .format(snapname, filesystem, project, pool))
+                           .format(snapname, snaptype, snaptarget,
+                                   project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("CREATE - FAIL - snapshot '{}' filesystem '{}' project '{}' "
-                 "pool '{}' - Error {}".format(snapname, filesystem, project,
-                                               pool, error))
+            exit("CREATE - FAIL - snapshot '{}' {} '{}' project '{}' "
+                 "pool '{}' - Error {}".format(snapname, snaptype, snaptarget,
+                                               project, pool, error))
         else:
-            return True, ("CREATE - FAIL - snapshot '{}' filesystem '{}' "
+            return True, ("CREATE - FAIL - snapshot '{}' {} '{}' "
                           "project '{}' pool '{}' - Error {}"
-                          .format(snapname, filesystem, project, pool,
-                                  error))
+                          .format(snapname, snaptype, snaptarget, project,
+                                  pool, error))
     except ConnectionError as error:
-        return True, ("CREATE - FAIL - snapshot '{}' filesystem '{}' project "
+        return True, ("CREATE - FAIL - snapshot '{}' {} '{}' project "
                       "'{}' pool '{}' - Error {}"
-                      .format(snapname, filesystem, project, pool, error))
+                      .format(snapname, snaptype, snaptarget, project, pool,
+                              error))
 
 
 def delete_snap(snap, zfsurl, zauth):
     """Delete Snapshots from line in csv format. (err, msg)"""
-    pool, project, filesystem, snapname = snap
-    fullurl = ("{}/storage/v1/pools/{}/projects/{}/filesystems/{}/"
-               "snapshots/{}".format(zfsurl, pool, project, filesystem,
-                                     snapname))
+    pool, project, snaptarget, snaptype, snapname = snap
+    fullurl = ""
+    if snaptype == 'filesystem':
+        fullurl = ("{}/storage/v1/pools/{}/projects/{}/filesystems/{}/"
+                   "snapshots/{}".format(zfsurl, pool, project, snaptarget,
+                                         snapname))
+    elif snaptype == 'lun':
+        fullurl = ("{}/storage/v1/pools/{}/projects/{}/luns/{}/"
+                   "snapshots/{}".format(zfsurl, pool, project, snaptarget,
+                                         snapname))
+    elif snaptype == 'project':
+        fullurl = ("{}/storage/v1/pools/{}/projects/{}/snapshots/{}"
+                   .format(zfsurl, pool, project, snapname))
+    else:
+        return False, "snaptype ''{}' unknown".format(snaptype)
     try:
         req = requests.delete(fullurl, auth=zauth, verify=False,
                               headers=HEADER)
         req.close()
         req.raise_for_status()
-        return False, ("DELETE - SUCCESS - snapshot '{}' filesystem '{}' "
+        return False, ("DELETE - SUCCESS - snapshot '{}' {} '{}' "
                        "project '{}' pool '{}'"
-                       .format(snapname, filesystem, project, pool))
+                       .format(snapname, snaptype, snaptarget, project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("DELETE - FAIL - snapshot '{}' filesystem '{}' project '{}'"
-                 "pool '{}' - Error {}".format(snapname, filesystem, project,
-                                               pool, error))
+            exit("DELETE - FAIL - snapshot '{}' {} '{}' project '{}'"
+                 "pool '{}' - Error {}".format(snapname, snaptype, snaptarget,
+                                               project, pool, error))
         else:
-            return True, ("DELETE - FAIL - snapshot '{}' filesystem '{}' "
+            return True, ("DELETE - FAIL - snapshot '{}' {} '{}' "
                           "project '{}' pool '{}' - Error {}"
-                          .format(snapname, filesystem, project, pool, error))
+                          .format(snapname, snaptype, snaptarget, project,
+                                  pool, error))
     except ConnectionError as error:
-        return True, ("DELETE - FAIL - snapshot '{}' filesystem '{}' project "
+        return True, ("DELETE - FAIL - snapshot '{}' {} '{}' project "
                       "'{}' pool '{}' - Error {}"
-                      .format(snapname, filesystem, project, pool, error))
+                      .format(snapname, snaptype, snaptarget, project, pool,
+                              error))
 
 
-def run_fs_snaps(args):
+def run_snaps(args):
     """Run all filesystems snapshots actions"""
     csvfile = args.file
     listsnaps = args.list
