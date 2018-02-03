@@ -412,7 +412,7 @@ def run_explorer(configfile, args_progress=False):
             with ZipFile('{}.zip'.format(outputdir), 'w') as outzip:
                 for root, _, files in os.walk(outputdir):
                     for file in files:
-                        outzip.write(os.path.join(root, file))
+                        outzip.write(os.path.join(root, file), file)
                         os.remove(os.path.join(root, file))
         except FileNotFoundError as err:
             print("Nothing to compress: {}".format(err))
