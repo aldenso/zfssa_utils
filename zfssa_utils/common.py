@@ -110,11 +110,11 @@ def create_parser():
                            help="progress bar", required=False)
     proj_opers = proj_args.add_mutually_exclusive_group(required=True)
     proj_opers.add_argument("--create", action="store_true",
-                            help="Create Snapshots specified in csv file")
+                            help="Create Projects specified in csv file")
     proj_opers.add_argument("--delete", action="store_true",
-                            help="Delete Snapshots specified in csv file")
+                            help="Delete Projects specified in csv file")
     proj_opers.add_argument("--list", action="store_true",
-                            help="List/Check Snapshots specified in csv file")
+                            help="List/Check Projects specified in csv file")
 
     # LUNs arguments
     luns_args = subparser.add_parser('LUNS')
@@ -126,15 +126,15 @@ def create_parser():
                            help="progress bar", required=False)
     luns_opers = luns_args.add_mutually_exclusive_group(required=True)
     luns_opers.add_argument("--create", action="store_true",
-                            help="Create Snapshots specified in csv file")
+                            help="Create Luns specified in csv file")
     luns_opers.add_argument("--delete", action="store_true",
-                            help="Delete Snapshots specified in csv file")
+                            help="Delete Luns specified in csv file")
     luns_opers.add_argument("--list", action="store_true",
-                            help="List/Check Snapshots specified in csv file")
+                            help="List/Check Luns specified in csv file")
 
     # Snapshots arguments
     snaps_args = subparser.add_parser('SNAPSHOTS')
-    snaps_args.add_argument("-f", "--file", type=str, help="luns file (CSV)",
+    snaps_args.add_argument("-f", "--file", type=str, help="snaps file (CSV)",
                             required=True)
     snaps_args.add_argument("-s", "--server", type=str, required=True,
                             help="Server config file (YAML)")
