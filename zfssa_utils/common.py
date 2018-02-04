@@ -15,10 +15,11 @@ from progressbar import ProgressBar, AdaptiveETA, Bar, Percentage
 requests.urllib3.disable_warnings(InsecureRequestWarning)
 
 HEADER = {"Content-Type": "application/json"}
-TIMEOUT = 100 # seconds
+TIMEOUT = 100  # seconds
 PROJECTLOGFILE = "projects_output.log"
 LUNLOGFILE = "luns_output.log"
 SNAPLOGFILE = "snaps_output.log"
+
 
 def read_yaml_file(configfile):
     """Read config file and return credentials in json."""
@@ -152,7 +153,8 @@ def create_parser():
 
 
 def urls_contructor(zfsip):
-    """Return full URL list (tuples: url, datatype) from defined IP or hostname"""
+    """Return full URL list (tuples: url, datatype) from defined IP or
+    hostname"""
     urls_group = [("{}/system/v1/version".format(zfsip), "version"),
                   ("{}/hardware/v1/cluster".format(zfsip), "cluster"),
                   ("{}/problem/v1/problems".format(zfsip), "problems"),
@@ -190,7 +192,8 @@ def createlogger(log_name):
     # create file handler which logs even debug messages
     fh = logging.FileHandler(log_name)
     # create formatter and add it to the handler
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('%(asctime)s - %(name)s - '
+                                  '%(levelname)s - %(message)s')
     fh.setFormatter(formatter)
     # add the handler to logger
     logger.addHandler(fh)
