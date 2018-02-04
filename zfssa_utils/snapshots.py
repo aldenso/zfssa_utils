@@ -186,7 +186,7 @@ def run_snaps(args):
     config = read_yaml_file(configfile)
     zfsurl = "https://{}:215/api".format(config['ip'])
     zauth = (config['username'], config['password'])
-    initial = 0 # for progressbar
+    initial = 0  # for progressbar
     if createsnaps:
         if args.progress:
             progbar = createprogress(len(snaplist))
