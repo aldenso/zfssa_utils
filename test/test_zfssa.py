@@ -9,7 +9,9 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 
 LUNFILEOUTPUT = [['pool_0', 'unittest', 'lun01']]
 
-YAMLOUTPUT = {'username': 'root', 'ip': '192.168.56.150', 'password': 'password'}
+YAMLOUTPUT = {'username': 'root',
+              'ip': '192.168.56.150',
+              'password': 'password'}
 
 
 class TestCommon(unittest.TestCase):
@@ -28,10 +30,24 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(read_yaml_file(os.path.join(HERE, "serverOS86.yml")),
                          YAMLOUTPUT)
 
+    @unittest.expectedFailure
+    def test_read_yaml_file_fail(self):
+        """Test read_yaml_file function to read a file not in yml format."""
+        self.assertEqual(read_yaml_file(os.path.join(HERE,
+                                                     "test_fs_snaps.csv")),
+                         YAMLOUTPUT)
+
     def test_read_csv_file(self):
         """Test read_csv_file function to read a regular csv file"""
         self.assertEqual(read_csv_file(os.path.join(HERE,
                                                     "test_destroy_lun.csv")),
+                         LUNFILEOUTPUT)
+
+    @unittest.expectedFailure
+    def test_read_csv_file_fail(self):
+        """Test read_csv_file function to read a file not in csv format"""
+        self.assertEqual(read_csv_file(os.path.join(HERE,
+                                                    "serverOS86.yml")),
                          LUNFILEOUTPUT)
 
     def test_get_real_size(self):

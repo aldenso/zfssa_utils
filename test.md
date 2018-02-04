@@ -11,7 +11,7 @@ All testing must run using a ZFSSA emulator/demo, based on OS86 and OS87, downlo
 
 **Note**: Response times depends on your zfssa assigned resources.
 
-* Testing Common.
+- Testing Common.
 
 ```sh
 python -m unittest test.test_zfssa -v
@@ -21,18 +21,22 @@ test_get_real_size (test.test_zfssa.TestCommon)
 Test get_real_size function to convert input sizes ... ok
 test_read_csv_file (test.test_zfssa.TestCommon)
 Test read_csv_file function to read a regular csv file ... ok
+test_read_csv_file_fail (test.test_zfssa.TestCommon)
+Test read_csv_file function to read a file not in csv format ... expected failure
 test_read_yaml_file (test.test_zfssa.TestCommon)
 Test read_yaml_file function to read a regular yml file ... ok
+test_read_yaml_file_fail (test.test_zfssa.TestCommon)
+Test read_yaml_file function to read a file not in yml format. ... expected failure
 test_response_size (test.test_zfssa.TestCommon)
 Test response_size function to print human readable sizes ... ok
 
 ----------------------------------------------------------------------
-Ran 5 tests in 0.013s
+Ran 7 tests in 0.012s
 
-OK
+OK (expected failures=2)
 ```
 
-* Testing Projects.
+- Testing Projects.
 
 ```sh
 python -m unittest test.test_projects --buffer -v
@@ -49,7 +53,7 @@ Ran 3 tests in 49.510s
 OK
 ```
 
-* Testing LUNS.
+- Testing LUNS.
 
 ```sh
 python -m unittest test.test_luns --buffer -v
@@ -66,7 +70,7 @@ Ran 3 tests in 51.019s
 OK
 ```
 
-* Testing Snapshots.
+- Testing Snapshots.
 
 ```sh
 python -m unittest test.test_snapshots --buffer -v
