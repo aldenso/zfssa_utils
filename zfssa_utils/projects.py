@@ -24,7 +24,7 @@ def list_projects(fileline, zfsurl, zauth):
         pool, project = fileline
     elif len(fileline) == 20:
         pool, project, _, _, _, _, _, _, _, _, \
-        _, _, _, _, _, _, _, _, _, _ = fileline
+            _, _, _, _, _, _, _, _, _, _ = fileline
     else:
         return True, ("LIST - FAIL - Error in line {} It needs to be 2 or 20 "
                       "columns long".format(fileline))
@@ -37,8 +37,8 @@ def list_projects(fileline, zfsurl, zauth):
         return False, ("LIST - PRESENT - project '{}' pool '{}' mountpoint "
                        "'{}' quota '{}' reservation '{}' compression '{}' "
                        "dedup '{}' logbias '{}' nodestroy '{}' recordsize "
-                       "'{}' readonly '{}' atime '{}' def_sparse '{}' def_user "
-                       "'{}' def_group '{}' def_perms '{}' def_volblocksize "
+                       "'{}' readonly '{}' atime '{}' def_sparse '{}' def_user"
+                       " '{}' def_group '{}' def_perms '{}' def_volblocksize "
                        "'{}' def_volsize '{}' sharenfs '{}' sharesmb '{}'"
                        .format(j["project"]["name"],
                                j["project"]["pool"],
@@ -79,10 +79,11 @@ def create_project(fileline, zfsurl, zauth):
         return True, ("CREATE - FAIL - Error in line {} It needs to be 20"
                       "columns long".format(fileline))
     pool, project, mountpoint, quota, reservation, compression, dedup, \
-    logbias, nodestroy, recordsize, readonly, atime, default_sparse, \
-    default_user, default_group, default_permissions, default_volblocksize, \
-    default_volsize, sharenfs, sharesmb = fileline
-    fullurl = zfsurl + "/storage/v1/pools/{}/projects".format(pool)
+        logbias, nodestroy, recordsize, readonly, atime, default_sparse, \
+        default_user, default_group, default_permissions, \
+        default_volblocksize, default_volsize, sharenfs, \
+        sharesmb = fileline
+    fullurl = "{}/storage/v1/pools/{}/projects".format(zfsurl, pool)
     # converted_size = get_real_size(size, size_unit)
     # real_blocksize = get_real_blocksize(blocksize)
     try:
@@ -173,7 +174,7 @@ def run_projects(args):
     config = read_yaml_file(configfile)
     zauth = (config['username'], config['password'])
     zfsurl = "https://{}:215/api".format(config['ip'])
-    initial = 0 # for progressbar
+    initial = 0  # for progressbar
     if createproject:
         if args.progress:
             progbar = createprogress(len(projectlistfromfile))
@@ -236,5 +237,3 @@ def run_projects(args):
         print("#" * 79)
         print("You need to specify an option (--list, --create, --delete)")
         print("#" * 79)
-    ## delta = datetime.now() - START
-    ## print("Finished in {} seconds".format(delta.seconds))
