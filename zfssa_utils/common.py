@@ -217,29 +217,3 @@ def createlogger(log_name):
     # add the handler to logger
     logger.addHandler(fh)
     return logger
-
-
-def get_real_size(size, size_unit):
-    """Get size in bytes for different unit sizes."""
-    real_size = 0
-    multiplier = {
-        "KB": 1024,
-        "MB": 1024 * 1024,
-        "GB": 1024 * 1024 * 1024,
-        "TB": 1024 * 1024 * 1024 * 1024
-    }
-    real_size = int(size) * (multiplier[size_unit.upper()])
-    return real_size
-
-
-def get_real_blocksize(blocksize):
-    """Get integer blocksize from string"""
-    if any(x in blocksize for x in ['k', 'K']):
-        string = re.sub(r"\d+", "", blocksize)
-        blocksize = int(blocksize.replace(string, "")) * 1024
-        return blocksize
-    elif any(x in blocksize for x in ['m', 'M']):
-        string = re.sub(r"\d+", "", blocksize)
-        blocksize = int(blocksize.replace(string, "")) * 1024 * 1024
-        return blocksize
-    return blocksize

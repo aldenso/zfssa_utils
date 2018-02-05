@@ -2,8 +2,7 @@
 import unittest
 # import sys
 import os
-from zfssa_utils.common import read_yaml_file, read_csv_file, response_size,\
-     get_real_size, get_real_blocksize
+from zfssa_utils.common import read_yaml_file, read_csv_file, response_size
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
@@ -49,21 +48,6 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(read_csv_file(os.path.join(HERE,
                                                     "serverOS86.yml")),
                          LUNFILEOUTPUT)
-
-    def test_get_real_size(self):
-        """Test get_real_size function to convert input sizes
-        (integer and string) to integer"""
-        self.assertEqual(get_real_size(3, 'kb'), 3072)
-        self.assertEqual(get_real_size(3, 'Mb'), 3145728)
-        self.assertEqual(get_real_size(3, 'gb'), 3221225472)
-        self.assertEqual(get_real_size(3, 'tB'), 3298534883328)
-
-    def test_get_real_blocksize(self):
-        """Test get_real_blocksize function to convert a string to integer"""
-        self.assertEqual(get_real_blocksize('512'), '512')
-        self.assertEqual(get_real_blocksize('8K'), 8192)
-        self.assertEqual(get_real_blocksize('128k'), 131072)
-        self.assertEqual(get_real_blocksize('1M'), 1048576)
 
 
 if __name__ == "__main__":
