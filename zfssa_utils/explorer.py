@@ -11,6 +11,13 @@ from zfssa_utils.common import exists, response_size, read_yaml_file, \
      urls_contructor, createprogress, fetch, HEADER, TIMEOUT
 
 
+def trimpath(outputdir, filename):
+    """Return only the last part of parent path joined with the filename."""
+    # zfssa_explorer_xxx.xxx.xxx.xxx_xxxxxx_xxxxxx/filename
+    zipdir = os.path.split(outputdir)[1]
+    return os.path.join(zipdir, filename)
+
+
 def create_csv(data, datatype, outputdir):
     """Create CSV files for data retrieved from zfssa."""
     if not os.path.exists(outputdir):
@@ -570,7 +577,8 @@ def run_explorer(configfile, args_progress=False):
             with ZipFile('{}.zip'.format(outputdir), 'w') as outzip:
                 for root, _, files in os.walk(outputdir):
                     for file in files:
-                        outzip.write(os.path.join(root, file), file)
+                        outzip.write(os.path.join(root, file),
+                                     trimpath(outputdir, file))
                         os.remove(os.path.join(root, file))
         except FileNotFoundError as err:
             print("Nothing to compress: {}".format(err))
