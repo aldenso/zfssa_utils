@@ -28,7 +28,8 @@ def list_projects(fileline, zfsurl, zauth):
     else:
         return True, ("LIST - FAIL - Error in line {} It needs to be 2 or 20 "
                       "columns long".format(fileline))
-    fullurl = zfsurl + "/storage/v1/pools/{}/projects/{}".format(pool, project)
+    fullurl = ("{}/storage/v1/pools/{}/projects/{}"
+               .format(zfsurl, pool, project))
     try:
         req = requests.get(fullurl, auth=zauth, verify=False, headers=HEADER)
         j = json.loads(req.text)
@@ -69,8 +70,8 @@ def list_projects(fileline, zfsurl, zauth):
             return True, ("LIST - FAIL - project '{}' pool '{}' - Error {}"
                           .format(project, pool, error))
     except ConnectionError as error:
-        return True, "LIST - FAIL - project '{}' pool '{}' - Error {}"\
-                        .format(project, pool, error)
+        return True, ("LIST - FAIL - project '{}' pool '{}' - Error {}"
+                      .format(project, pool, error))
 
 
 def create_project(fileline, zfsurl, zauth):
@@ -84,8 +85,6 @@ def create_project(fileline, zfsurl, zauth):
         default_volblocksize, default_volsize, sharenfs, \
         sharesmb = fileline
     fullurl = "{}/storage/v1/pools/{}/projects".format(zfsurl, pool)
-    # converted_size = get_real_size(size, size_unit)
-    # real_blocksize = get_real_blocksize(blocksize)
     try:
         data = {"name": project,
                 "mountpoint": mountpoint,
@@ -143,7 +142,8 @@ def delete_project(fileline, zfsurl, zauth):
         return True, ("DELETE - FAIL - Error in line {} It needs to be 2 "
                       "columns long".format(fileline))
     pool, project = fileline
-    fullurl = zfsurl + "/storage/v1/pools/{}/projects/{}".format(pool, project)
+    fullurl = ("{}/storage/v1/pools/{}/projects/{}"
+               .format(zfsurl, pool, project))
     try:
         req = requests.delete(fullurl, auth=zauth,
                               verify=False, headers=HEADER)
@@ -204,7 +204,8 @@ def run_projects(args):
                     logger.warning(msg)
                 else:
                     logger.info(msg)
-                progbar.next()
+                initial += 1
+                progbar.update(initial)
             progbar.finish()
         else:
             print("#" * 79)
@@ -233,7 +234,3 @@ def run_projects(args):
             for entry in projectlistfromfile:
                 print(list_projects(entry, zfsurl, zauth)[1])
                 print("=" * 79)
-    else:
-        print("#" * 79)
-        print("You need to specify an option (--list, --create, --delete)")
-        print("#" * 79)
