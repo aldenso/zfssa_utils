@@ -6,6 +6,7 @@ from zfssa_utils.explorer import run_explorer
 from zfssa_utils.projects import run_projects
 from zfssa_utils.luns import run_luns
 from zfssa_utils.snapshots import run_snaps
+from zfssa_utils.filesystems import run_filesystems
 
 
 if __name__ == "__main__":
@@ -20,6 +21,8 @@ if __name__ == "__main__":
         run_luns(args)
     elif args.subparser_name == 'SNAPSHOTS':
         run_snaps(args)
+    elif args.subparser_name == 'FILESYSTEMS':
+        run_filesystems(args)
     else:
         pass
     # print(args)

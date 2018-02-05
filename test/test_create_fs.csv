@@ -1,0 +1,5 @@
+# pool(str),project(str),filesystem(str),mountpoint(str),quota(str),reservation(str)
+# compression(str),dedup(bool),logbias(str),nodestroy(bool),recordsize(str),
+# readonly(bool),atime(bool),root_user(str),root_group(str),root_permissions(str),
+# sharenfs(str),sharesmb(str)
+pool_0,unittest,fs10,/export/unittest/fs10,2g,1g,lzjb,False,latency,False,128k,False,False,root,other,750,rw=@192.168.56.101/24:@192.168.56.1/24,on

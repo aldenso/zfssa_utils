@@ -19,6 +19,7 @@ TIMEOUT = 100  # seconds
 PROJECTLOGFILE = "projects_output.log"
 LUNLOGFILE = "luns_output.log"
 SNAPLOGFILE = "snaps_output.log"
+FSLOGFILE = "filesystems_output.log"
 
 
 def read_yaml_file(configfile):
@@ -38,8 +39,9 @@ def read_csv_file(filename):
     with open(filename, 'r') as cvsfile:
         filereader = csv.reader(cvsfile, delimiter=',')
         for row in filereader:
-            csvlist.append(row)
-    del csvlist[0]
+            if not row[0].startswith('#'):
+                csvlist.append(row)
+    # del csvlist[0]
     return csvlist
 
 
@@ -115,6 +117,23 @@ def create_parser():
                             help="Delete Projects specified in csv file")
     proj_opers.add_argument("--list", action="store_true",
                             help="List/Check Projects specified in csv file")
+
+    # Filesystems arguments
+    proj_args = subparser.add_parser("FILESYSTEMS")
+    proj_args.add_argument("-f", "--file", type=str, required=True,
+                           help="filesystems file (CSV)")
+    proj_args.add_argument("-s", "--server", type=str, required=True,
+                           help="Server config file (YAML)")
+    proj_args.add_argument("-p", "--progress", action="store_true",
+                           help="progress bar", required=False)
+    proj_opers = proj_args.add_mutually_exclusive_group(required=True)
+    proj_opers.add_argument("--create", action="store_true",
+                            help="Create Filesystems specified in csv file")
+    proj_opers.add_argument("--delete", action="store_true",
+                            help="Delete Filesystems specified in csv file")
+    proj_opers.add_argument("--list", action="store_true",
+                            help="List/Check Filesystems specified in csv file"
+                            )
 
     # LUNs arguments
     luns_args = subparser.add_parser('LUNS')
