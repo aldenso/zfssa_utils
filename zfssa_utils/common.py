@@ -1,7 +1,6 @@
 """Common functions"""
 import argparse
 import logging
-import re
 import csv
 import requests
 from urllib3.exceptions import InsecureRequestWarning
@@ -119,21 +118,20 @@ def create_parser():
                             help="List/Check Projects specified in csv file")
 
     # Filesystems arguments
-    proj_args = subparser.add_parser("FILESYSTEMS")
-    proj_args.add_argument("-f", "--file", type=str, required=True,
-                           help="filesystems file (CSV)")
-    proj_args.add_argument("-s", "--server", type=str, required=True,
-                           help="Server config file (YAML)")
-    proj_args.add_argument("-p", "--progress", action="store_true",
-                           help="progress bar", required=False)
-    proj_opers = proj_args.add_mutually_exclusive_group(required=True)
-    proj_opers.add_argument("--create", action="store_true",
-                            help="Create Filesystems specified in csv file")
-    proj_opers.add_argument("--delete", action="store_true",
-                            help="Delete Filesystems specified in csv file")
-    proj_opers.add_argument("--list", action="store_true",
-                            help="List/Check Filesystems specified in csv file"
-                            )
+    fs_args = subparser.add_parser("FILESYSTEMS")
+    fs_args.add_argument("-f", "--file", type=str, required=True,
+                         help="filesystems file (CSV)")
+    fs_args.add_argument("-s", "--server", type=str, required=True,
+                         help="Server config file (YAML)")
+    fs_args.add_argument("-p", "--progress", action="store_true",
+                         help="progress bar", required=False)
+    fs_opers = fs_args.add_mutually_exclusive_group(required=True)
+    fs_opers.add_argument("--create", action="store_true",
+                          help="Create Filesystems specified in csv file")
+    fs_opers.add_argument("--delete", action="store_true",
+                          help="Delete Filesystems specified in csv file")
+    fs_opers.add_argument("--list", action="store_true",
+                          help="List/Check Filesystems specified in csv file")
 
     # LUNs arguments
     luns_args = subparser.add_parser('LUNS')
