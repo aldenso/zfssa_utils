@@ -8,9 +8,8 @@ import ast
 import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
-from zfssa_utils.common import HEADER, response_size, get_real_size,\
-     get_real_blocksize, createprogress, createlogger, read_yaml_file,\
-     read_csv_file, LUNLOGFILE
+from zfssa_utils.common import HEADER, response_size, createprogress,\
+     createlogger, read_yaml_file, read_csv_file, LUNLOGFILE
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
@@ -24,10 +23,10 @@ def list_lun(fileline, zfsurl, zauth):
     pool = project = lun = None
     if len(fileline) == 3:
         pool, project, lun = fileline
-    elif len(fileline) == 12:
-        pool, project, lun, _, _, _, _, _, _, _, _, _ = fileline
+    elif len(fileline) == 11:
+        pool, project, lun, _, _, _, _, _, _, _, _ = fileline
     else:
-        return True, ("LIST - FAIL - Error in line {} It needs to be 3 or 12"
+        return True, ("LIST - FAIL - Error in line {} It needs to be 3 or 11"
                       " columns long".format(fileline))
     fullurl = ("{}/storage/v1/pools/{}/projects/{}/luns/{}"
                .format(zfsurl, pool, project, lun))
@@ -65,19 +64,17 @@ def list_lun(fileline, zfsurl, zauth):
 
 def create_lun(fileline, zfsurl, zauth):
     """Create LUN from line in csv format. (err, msg)"""
-    if len(fileline) != 12:
-        return True, ("CREATE - FAIL - Error in line {} It needs to be 12 "
+    if len(fileline) != 11:
+        return True, ("CREATE - FAIL - Error in line {} It needs to be 11 "
                       "columns long".format(fileline))
-    pool, project, lun, size, size_unit, blocksize, thin, targetgroup, \
+    pool, project, lun, volsize, volblocksize, thin, targetgroup, \
         initiatorgroup, compression, latency, nodestroy = fileline
     fullurl = ("{}/storage/v1/pools/{}/projects/{}/luns"
                .format(zfsurl, pool, project))
-    converted_size = get_real_size(size, size_unit)
-    real_blocksize = get_real_blocksize(blocksize)
     try:
         data = {"name": lun,
-                "volsize": converted_size,
-                "volblocksize": real_blocksize,
+                "volsize": volsize,
+                "volblocksize": volblocksize,
                 "sparse": ast.literal_eval(thin),
                 "targetgroup": targetgroup,
                 "initiatorgroup": initiatorgroup,
@@ -207,9 +204,3 @@ def run_luns(args):
             for entry in lunlistfromfile:
                 print(list_lun(entry, zfsurl, zauth)[1])
                 print("=" * 79)
-    else:
-        print("#" * 79)
-        print("You need to specify an option (--list, --create, --delete)")
-        print("#" * 79)
-    # delta = datetime.now() - START
-    # print("Finished in {} seconds".format(delta.seconds))
