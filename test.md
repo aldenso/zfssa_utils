@@ -105,6 +105,17 @@ virtualenv --python=python3.6 venv
 virtualenv --python=python2.7 ENV
 ```
 
+Install requirements.
+
+```sh
+source venv/bin/activate
+pip install -r requirements.txt
+deactivate
+source ENV/bin/activate
+pip install -r requirements.txt
+deactivate
+```
+
 Then run the script **run_test.sh**.
 
 ```sh
