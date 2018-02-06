@@ -96,6 +96,23 @@ Ran 9 tests in 64.694s
 OK
 ```
 
+- Testing Filesystems.
+
+```sh
+python -m unittest --buffer -v test.test_filesystems
+test_00_create_filesystems (test.test_filesystems.TestFilesystems)
+Test filesystems with args to use create_filesystems function ... ok
+test_01_list_filesystems (test.test_filesystems.TestFilesystems)
+Test filesystems with args to use list_filesystems function ... ok
+test_02_delete_filesystems (test.test_filesystems.TestFilesystems)
+Test filesystems with args to use delete_filesystems function ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 33.022s
+
+OK
+```
+
 ## Run all tests for python 2 and python 3
 
 Create 2 virtual environments, called venv and ENV.

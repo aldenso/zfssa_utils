@@ -15,6 +15,9 @@ run_tests(){
 
     # test snapshots
     python -m unittest --buffer -v test.test_snapshots
+
+    # test filesystems
+    python -m unittest --buffer -v test.test_filesystems
 }
 
 source venv/bin/activate
