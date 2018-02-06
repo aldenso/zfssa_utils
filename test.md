@@ -4,6 +4,7 @@ All testing must run using a ZFSSA emulator/demo, based on OS86 and OS87, downlo
 
 ## ZFSSA requirements to run tests
 
+- ip, username and password like those in the file serverOS86.yml.
 - pool: pool_0
 - project: unittest, pool: pool_0
 - lun: lun10, project: unittest, pool: pool_0
@@ -14,7 +15,7 @@ All testing must run using a ZFSSA emulator/demo, based on OS86 and OS87, downlo
 - Testing Common.
 
 ```sh
-python -m unittest test.test_zfssa -v
+python -m unittest -v test.test_zfssa
 test_read_csv_file (test.test_zfssa.TestCommon)
 Test read_csv_file function to read a regular csv file ... ok
 test_read_csv_file_fail (test.test_zfssa.TestCommon)
@@ -35,7 +36,7 @@ OK (expected failures=2)
 - Testing Projects.
 
 ```sh
-python -m unittest test.test_projects --buffer -v
+python -m unittest --buffer -v test.test_projects
 test_00_create_projects (test.test_projects.TestProjects)
 Test projects with arguments to use create_projects function ... ok
 test_01_list_projects (test.test_projects.TestProjects)
@@ -52,7 +53,7 @@ OK
 - Testing LUNS.
 
 ```sh
-python -m unittest test.test_luns --buffer -v
+python -m unittest --buffer -v test.test_luns
 test_00_create_lun (test.test_luns.TestLUNS)
 Test luns with arguments to use create_lun function ... ok
 test_01_list_lun (test.test_luns.TestLUNS)
@@ -69,7 +70,7 @@ OK
 - Testing Snapshots.
 
 ```sh
-python -m unittest test.test_snapshots --buffer -v
+python -m unittest --buffer -v test.test_snapshots
 test_00_create_snap_project (test.test_snapshots.TestSnapshots)
 Test snapshots with arguments to create a project snap. ... ok
 test_01_list_snap_project (test.test_snapshots.TestSnapshots)
@@ -94,3 +95,20 @@ Ran 9 tests in 64.694s
 
 OK
 ```
+
+## Run all tests for python 2 and python 3
+
+Create 2 virtual environments, called venv and ENV.
+
+```sh
+virtualenv --python=python3.6 venv
+virtualenv --python=python2.7 ENV
+```
+
+Then run the script **run_test.sh**.
+
+```sh
+./run_test.sh
+```
+
+**TODO**: Include Docker to test more python versions.
