@@ -109,6 +109,9 @@ def create_parser():
                            help="Server config file (YAML)")
     proj_args.add_argument("-p", "--progress", action="store_true",
                            help="progress bar", required=False)
+    proj_args.add_argument("--noconfirm", action="store_true",
+                           help=("Don't ask for confirmation when deleting "
+                                 "Projects"), required=False)
     proj_opers = proj_args.add_mutually_exclusive_group(required=True)
     proj_opers.add_argument("--create", action="store_true",
                             help="Create Projects specified in csv file")

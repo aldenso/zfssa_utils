@@ -22,7 +22,8 @@ class TestProjects(unittest.TestCase):
         projcreatefile = os.path.join(HERE, 'test_create_projects.csv')
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=False, create=True, delete=False,
-                             progress=False, subparser_name='PROJECTS')
+                             progress=False, subparser_name='PROJECTS',
+                             noconfirm=False)
         run_projects(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("need to run in buffered mode")
@@ -34,7 +35,8 @@ class TestProjects(unittest.TestCase):
         projcreatefile = os.path.join(HERE, 'test_create_projects.csv')
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=True, create=False, delete=False,
-                             progress=False, subparser_name='PROJECTS')
+                             progress=False, subparser_name='PROJECTS',
+                             noconfirm=False)
         run_projects(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("need to run in buffered mode")
@@ -46,7 +48,8 @@ class TestProjects(unittest.TestCase):
         projdestroyfile = os.path.join(HERE, 'test_destroy_projects.csv')
         listargs = Namespace(server=serverfile, file=projdestroyfile,
                              list=False, create=False, delete=True,
-                             progress=False, subparser_name='PROJECTS')
+                             progress=False, subparser_name='PROJECTS',
+                             noconfirm=True)
         run_projects(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("need to run in buffered mode")

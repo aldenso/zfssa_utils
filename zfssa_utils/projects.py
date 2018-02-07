@@ -5,6 +5,7 @@ Functions to create, list/show and delete projects.
 from __future__ import print_function, division
 import json
 import requests
+from six.moves import input
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
 from zfssa_utils.common import HEADER, response_size, read_yaml_file, \
@@ -195,6 +196,19 @@ def run_projects(args):
                 print(create_project(entry, zfsurl, zauth)[1])
                 print("=" * 79)
     elif deleteproject:
+        if not args.noconfirm:
+            print("You are about to destroy")
+            print("=" * 30)
+            print("{:15}{:15}".format("Pool", "Project"))
+            print("-" * 30)
+            for entry in projectlistfromfile:
+                print(entry[:2])
+            print("=" * 30)
+            response = input("Do you want to destroy (y/N)")
+            if response == "Y" or response == "y":
+                pass
+            else:
+                exit("Not confirmed, Exiting program")
         if args.progress:
             progbar = createprogress(len(projectlistfromfile))
             logger = createlogger(PROJECTLOGFILE)
