@@ -5,6 +5,7 @@ Functions to create, list/show and delete luns.
 from __future__ import print_function, division
 import json
 import ast
+from six.moves import input
 import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
@@ -165,6 +166,19 @@ def run_luns(args):
                 print(create_lun(entry, zfsurl, zauth)[1])
                 print("=" * 79)
     elif deletelun:
+        if not args.noconfirm:
+            print("You are about to destroy")
+            print("=" * 45)
+            print("{:15}{:15}{:15}".format("Pool", "Project", "Lun"))
+            print("-" * 45)
+            for entry in lunlistfromfile:
+                print(entry[:3])
+            print("=" * 45)
+            response = input("Do you want to destroy (y/N)")
+            if response == "Y" or response == "y":
+                pass
+            else:
+                exit("Not confirmed, Exiting program")
         if args.progress:
             progbar = createprogress(len(lunlistfromfile))
             logger = createlogger(LUNLOGFILE)

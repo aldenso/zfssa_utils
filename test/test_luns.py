@@ -20,9 +20,10 @@ class TestLUNS(unittest.TestCase):
         """Test luns with arguments to use create_lun function"""
         serverfile = os.path.join(HERE, 'serverOS86.yml')
         lunscreatefile = os.path.join(HERE, 'test_create_lun.csv')
-        listargs = Namespace(server=serverfile, file=lunscreatefile, list=False,
-                             create=True, delete=False, progress=False,
-                             subparser_name='LUNS')
+        listargs = Namespace(server=serverfile, file=lunscreatefile,
+                             list=False, create=True, delete=False,
+                             progress=False, subparser_name='LUNS',
+                             noconfirm=False)
         run_luns(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("need to run in buffered mode")
@@ -34,7 +35,7 @@ class TestLUNS(unittest.TestCase):
         lunscreatefile = os.path.join(HERE, 'test_create_lun.csv')
         listargs = Namespace(server=serverfile, file=lunscreatefile, list=True,
                              create=False, delete=False, progress=False,
-                             subparser_name='LUNS')
+                             subparser_name='LUNS', noconfirm=False)
         run_luns(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("need to run in buffered mode")
@@ -44,9 +45,10 @@ class TestLUNS(unittest.TestCase):
         """Test luns with arguments to use delete_lun function"""
         serverfile = os.path.join(HERE, 'serverOS86.yml')
         lunsdestroyfile = os.path.join(HERE, 'test_destroy_lun.csv')
-        deleteargs = Namespace(server=serverfile, file=lunsdestroyfile, list=False,
-                               create=False, delete=True, progress=False,
-                               subparser_name='LUNS')
+        deleteargs = Namespace(server=serverfile, file=lunsdestroyfile,
+                               list=False, create=False, delete=True,
+                               progress=False, subparser_name='LUNS',
+                               noconfirm=True)
         run_luns(deleteargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("need to run in buffered mode")

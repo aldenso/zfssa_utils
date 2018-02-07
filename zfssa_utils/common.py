@@ -144,6 +144,9 @@ def create_parser():
                            help="Server config file (YAML)")
     luns_args.add_argument("-p", "--progress", action="store_true",
                            help="progress bar", required=False)
+    luns_args.add_argument("--noconfirm", action="store_true",
+                           help=("Don't ask for confirmation when deleting "
+                                 "Luns"), required=False)
     luns_opers = luns_args.add_mutually_exclusive_group(required=True)
     luns_opers.add_argument("--create", action="store_true",
                             help="Create Luns specified in csv file")
