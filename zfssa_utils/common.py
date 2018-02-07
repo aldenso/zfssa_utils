@@ -128,6 +128,9 @@ def create_parser():
                          help="Server config file (YAML)")
     fs_args.add_argument("-p", "--progress", action="store_true",
                          help="progress bar", required=False)
+    fs_args.add_argument("--noconfirm", action="store_true",
+                         help=("Don't ask for confirmation when deleting "
+                               "Filesystems"), required=False)
     fs_opers = fs_args.add_mutually_exclusive_group(required=True)
     fs_opers.add_argument("--create", action="store_true",
                           help="Create Filesystems specified in csv file")

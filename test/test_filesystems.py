@@ -22,7 +22,8 @@ class TestFilesystems(unittest.TestCase):
         fscreatefile = os.path.join(HERE, 'test_create_fs.csv')
         listargs = Namespace(server=serverfile, file=fscreatefile,
                              list=False, create=True, delete=False,
-                             progress=False, subparser_name='FILESYSTEMS')
+                             progress=False, subparser_name='FILESYSTEMS',
+                             noconfirm=False)
         run_filesystems(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -34,7 +35,8 @@ class TestFilesystems(unittest.TestCase):
         fscreatefile = os.path.join(HERE, 'test_create_fs.csv')
         listargs = Namespace(server=serverfile, file=fscreatefile,
                              list=True, create=False, delete=False,
-                             progress=False, subparser_name='FILESYSTEMS')
+                             progress=False, subparser_name='FILESYSTEMS',
+                             noconfirm=False)
         run_filesystems(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -46,7 +48,8 @@ class TestFilesystems(unittest.TestCase):
         fsdestroyfile = os.path.join(HERE, 'test_destroy_fs.csv')
         listargs = Namespace(server=serverfile, file=fsdestroyfile,
                              list=False, create=False, delete=True,
-                             progress=False, subparser_name='FILESYSTEMS')
+                             progress=False, subparser_name='FILESYSTEMS',
+                             noconfirm=True)
         run_filesystems(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")

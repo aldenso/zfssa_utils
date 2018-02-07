@@ -4,6 +4,7 @@ Functions to create, list/show and delete filesystems.
 """
 from __future__ import print_function, division
 import json
+from six.moves import input
 import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
@@ -193,6 +194,19 @@ def run_filesystems(args):
                 print(create_filesystems(entry, zfsurl, zauth)[1])
                 print("=" * 79)
     elif deletefs:
+        if not args.noconfirm:
+            print("You are about to destroy")
+            print("=" * 45)
+            print("{:15}{:15}{:15}".format("Pool", "Project", "Filesystem"))
+            print("-" * 45)
+            for entry in fslistfromfile:
+                print(entry[:3])
+            print("=" * 45)
+            response = input("Do you want to destroy (y/N)")
+            if response == "Y" or response == "y":
+                pass
+            else:
+                exit("Not confirmed, Exiting program")
         if args.progress:
             progbar = createprogress(len(fslistfromfile))
             logger = createlogger(FSLOGFILE)
