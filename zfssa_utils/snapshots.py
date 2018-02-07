@@ -16,6 +16,7 @@ snapname: string
 """
 from __future__ import print_function, division
 import json
+from six.moves import input
 import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
@@ -208,6 +209,21 @@ def run_snaps(args):
                 print(create_snap(entry, zfsurl, zauth)[1])
                 print("=" * 79)
     elif deletesnaps:
+        if not args.noconfirm:
+            print("You are about to destroy")
+            print("=" * 75)
+            print("{:15}{:15}{:15}{:15}{:15}"
+                  .format("Pool", "Project", "fs|lun", "SnapType", "Snapshot"))
+            print("-" * 75)
+            for entry in snaplist:
+                print("{:15}{:15}{:15}{:15}{:15}"
+                      .format(entry[0], entry[1], entry[2], entry[3], entry[4]))
+            print("=" * 75)
+            response = input("Do you want to destroy (y/N)")
+            if response == "Y" or response == "y":
+                pass
+            else:
+                exit("Not confirmed, Exiting program")
         if args.progress:
             progbar = createprogress(len(snaplist))
             logger = createlogger(SNAPLOGFILE)
@@ -247,9 +263,3 @@ def run_snaps(args):
             for entry in snaplist:
                 print(list_snap(entry, zfsurl, zauth)[1])
                 print("=" * 79)
-    else:
-        print("#" * 79)
-        print("You need to specify a snap option (--list, --create, --delete)")
-        print("#" * 79)
-    # delta = datetime.now() - START
-    # print("Finished in {} seconds".format(delta.seconds))

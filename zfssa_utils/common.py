@@ -166,6 +166,9 @@ def create_parser():
                             help="Server config file (YAML)")
     snaps_args.add_argument("-p", "--progress", action="store_true",
                             help="progress bar", required=False)
+    snaps_args.add_argument("--noconfirm", action="store_true",
+                            help=("Don't ask for confirmation when deleting "
+                                  "Snapshots"), required=False)
     snaps_opers = snaps_args.add_mutually_exclusive_group(required=True)
     snaps_opers.add_argument("--create", action="store_true",
                              help="Create Snapshots specified in csv file")

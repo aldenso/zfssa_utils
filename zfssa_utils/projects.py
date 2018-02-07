@@ -202,7 +202,7 @@ def run_projects(args):
             print("{:15}{:15}".format("Pool", "Project"))
             print("-" * 30)
             for entry in projectlistfromfile:
-                print(entry[:2])
+                print("{:15}{:15}".format(entry[0], entry[1]))
             print("=" * 30)
             response = input("Do you want to destroy (y/N)")
             if response == "Y" or response == "y":

@@ -200,7 +200,7 @@ def run_filesystems(args):
             print("{:15}{:15}{:15}".format("Pool", "Project", "Filesystem"))
             print("-" * 45)
             for entry in fslistfromfile:
-                print(entry[:3])
+                print("{:15}{:15}{:15}".format(entry[0], entry[1], entry[2]))
             print("=" * 45)
             response = input("Do you want to destroy (y/N)")
             if response == "Y" or response == "y":
