@@ -18,7 +18,7 @@ from zfssa_utils.common import HEADER, response_size, read_yaml_file, \
 requests.urllib3.disable_warnings(InsecureRequestWarning)
 
 
-def list_filesystems(fileline, zfsurl, zauth):
+def list_filesystems(fileline, zfsurl, zauth, timeout):
     """List/Show filesystems from line in csv format. (err, msg)"""
     # print(fileline)
     pool = project = fs = None
@@ -34,7 +34,8 @@ def list_filesystems(fileline, zfsurl, zauth):
                .format(zfsurl, pool, project, fs))
     # print(fullurl)
     try:
-        req = requests.get(fullurl, auth=zauth, verify=False, headers=HEADER)
+        req = requests.get(fullurl, auth=zauth, verify=False, headers=HEADER,
+                           timeout=timeout)
         j = json.loads(req.text)
         # print(json.dumps(j))
         req.close()
@@ -75,7 +76,7 @@ def list_filesystems(fileline, zfsurl, zauth):
                       "- Error {}".format(fs, project, pool, error))
 
 
-def create_filesystems(fileline, zfsurl, zauth):
+def create_filesystems(fileline, zfsurl, zauth, timeout):
     """Create Filesystems from line in csv format. (err, msg)"""
     if len(fileline) != 18:
         return True, ("CREATE - FAIL - Error in line {} It needs to be 18"
@@ -110,7 +111,8 @@ def create_filesystems(fileline, zfsurl, zauth):
         elif reservation == 'None':
             del data["reservation"]
         req = requests.post(fullurl, data=json.dumps(data),
-                            auth=zauth, verify=False, headers=HEADER)
+                            auth=zauth, verify=False, headers=HEADER,
+                            timeout=timeout)
         j = json.loads(req.text)
         if 'fault' in j:
             if 'message' in j['fault']:
@@ -134,7 +136,7 @@ def create_filesystems(fileline, zfsurl, zauth):
                       "- Error {}".format(fs, project, pool, error))
 
 
-def delete_filesystems(fileline, zfsurl, zauth):
+def delete_filesystems(fileline, zfsurl, zauth, timeout):
     """Delete filesystem from line in csv format. (err, msg)"""
     if len(fileline) != 3:
         return True, ("DELETE - FAIL - Error in line {} It needs to be 3 "
@@ -144,7 +146,7 @@ def delete_filesystems(fileline, zfsurl, zauth):
                .format(zfsurl, pool, project, fs))
     try:
         req = requests.delete(fullurl, auth=zauth,
-                              verify=False, headers=HEADER)
+                              verify=False, headers=HEADER, timeout=timeout)
         req.close()
         req.raise_for_status()
         return False, ("DELETE - SUCCESS - filesystem '{}' project '{}' pool "
@@ -167,6 +169,7 @@ def run_filesystems(args):
     listfs = args.list
     createfs = args.create
     deletefs = args.delete
+    timeout = args.timeout
     fslistfromfile = read_csv_file(csvfile)
     configfile = args.server
     config = read_yaml_file(configfile)
@@ -178,7 +181,8 @@ def run_filesystems(args):
             progbar = createprogress(len(fslistfromfile))
             logger = createlogger(FSLOGFILE)
             for entry in fslistfromfile:
-                err, msg = create_filesystems(entry, zfsurl, zauth)
+                err, msg = create_filesystems(entry, zfsurl,
+                                              zauth, timeout)
                 if err:
                     logger.warning(msg)
                 else:
@@ -191,7 +195,7 @@ def run_filesystems(args):
             print("Creating filesystems")
             print("#" * 79)
             for entry in fslistfromfile:
-                print(create_filesystems(entry, zfsurl, zauth)[1])
+                print(create_filesystems(entry, zfsurl, zauth, timeout)[1])
                 print("=" * 79)
     elif deletefs:
         if not args.noconfirm:
@@ -211,7 +215,7 @@ def run_filesystems(args):
             progbar = createprogress(len(fslistfromfile))
             logger = createlogger(FSLOGFILE)
             for entry in fslistfromfile:
-                err, msg = delete_filesystems(entry, zfsurl, zauth)
+                err, msg = delete_filesystems(entry, zfsurl, zauth, timeout)
                 if err:
                     logger.warning(msg)
                 else:
@@ -224,14 +228,14 @@ def run_filesystems(args):
             print("Deleting filesystems")
             print("#" * 79)
             for entry in fslistfromfile:
-                print(delete_filesystems(entry, zfsurl, zauth)[1])
+                print(delete_filesystems(entry, zfsurl, zauth, timeout)[1])
                 print("=" * 79)
     elif listfs:
         if args.progress:
             progbar = createprogress(len(fslistfromfile))
             logger = createlogger(FSLOGFILE)
             for entry in fslistfromfile:
-                err, msg = list_filesystems(entry, zfsurl, zauth)
+                err, msg = list_filesystems(entry, zfsurl, zauth, timeout)
                 initial += 1
                 if err:
                     logger.warning(msg)
@@ -244,5 +248,5 @@ def run_filesystems(args):
             print("Listing filesystems")
             print("#" * 79)
             for entry in fslistfromfile:
-                print(list_filesystems(entry, zfsurl, zauth)[1])
+                print(list_filesystems(entry, zfsurl, zauth, timeout)[1])
                 print("=" * 79)

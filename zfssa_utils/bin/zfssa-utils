@@ -13,9 +13,7 @@ from zfssa_utils.templates import create_template
 if __name__ == "__main__":
     args = create_parser()
     if args.subparser_name == 'EXPLORER':
-        CONFIGFILE = args.server
-        run_explorer(CONFIGFILE, args.progress)
-        print("********************")
+        run_explorer(args)
     elif args.subparser_name == 'PROJECTS':
         run_projects(args)
     elif args.subparser_name == 'LUNS':

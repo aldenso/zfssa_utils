@@ -23,7 +23,7 @@ class TestFilesystems(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=fscreatefile,
                              list=False, create=True, delete=False,
                              progress=False, subparser_name='FILESYSTEMS',
-                             noconfirm=False)
+                             noconfirm=False, timeout=100)
         run_filesystems(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -36,7 +36,7 @@ class TestFilesystems(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=fscreatefile,
                              list=True, create=False, delete=False,
                              progress=False, subparser_name='FILESYSTEMS',
-                             noconfirm=False)
+                             noconfirm=False, timeout=100)
         run_filesystems(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -49,7 +49,7 @@ class TestFilesystems(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=fsdestroyfile,
                              list=False, create=False, delete=True,
                              progress=False, subparser_name='FILESYSTEMS',
-                             noconfirm=True)
+                             noconfirm=True, timeout=100)
         run_filesystems(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")

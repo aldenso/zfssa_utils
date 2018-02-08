@@ -23,7 +23,7 @@ class TestProjects(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=False, create=True, delete=False,
                              progress=False, subparser_name='PROJECTS',
-                             noconfirm=False)
+                             noconfirm=False, timeout=100)
         run_projects(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("need to run in buffered mode")
@@ -36,7 +36,7 @@ class TestProjects(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=True, create=False, delete=False,
                              progress=False, subparser_name='PROJECTS',
-                             noconfirm=False)
+                             noconfirm=False, timeout=100)
         run_projects(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("need to run in buffered mode")
@@ -49,7 +49,7 @@ class TestProjects(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=projdestroyfile,
                              list=False, create=False, delete=True,
                              progress=False, subparser_name='PROJECTS',
-                             noconfirm=True)
+                             noconfirm=True, timeout=100)
         run_projects(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("need to run in buffered mode")

@@ -8,7 +8,7 @@ from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from zipfile import ZipFile
 from zfssa_utils.common import exists, response_size, read_yaml_file, \
-     urls_contructor, createprogress, fetch, HEADER, TIMEOUT
+     urls_contructor, createprogress, fetch, HEADER
 
 
 def trimpath(outputdir, filename):
@@ -537,9 +537,10 @@ def create_csv(data, datatype, outputdir):
                                  exists(d, 'kiosk_screen'), d['href']])
 
 
-def run_explorer(configfile, args_progress=False):
+def run_explorer(args):
     """Run explorer from given configfile and create a zip file with all csv
     files generated."""
+    configfile = args.server
     config = read_yaml_file(configfile)
     zfsip = "https://{}:215/api".format(config['ip'])
     zauth = (config['username'], config['password'])
@@ -550,13 +551,14 @@ def run_explorer(configfile, args_progress=False):
 
     progbar = None
     initial = 0
-    if args_progress:
+    timeout = args.timeout
+    if args.progress:
         progbar = createprogress(len(group))
     with ThreadPoolExecutor(max_workers=4) as executor:
         futures = {}
         for i in group:
             url = i[0]
-            future = executor.submit(fetch, url, zauth, HEADER, TIMEOUT, i[1])
+            future = executor.submit(fetch, url, zauth, HEADER, timeout, i[1])
             futures[future] = url
 
         for future in as_completed(futures):

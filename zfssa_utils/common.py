@@ -14,7 +14,7 @@ from progressbar import ProgressBar, AdaptiveETA, Bar, Percentage
 requests.urllib3.disable_warnings(InsecureRequestWarning)
 
 HEADER = {"Content-Type": "application/json"}
-TIMEOUT = 100  # seconds
+# TIMEOUT = 100  # seconds
 PROJECTLOGFILE = "projects_output.log"
 LUNLOGFILE = "luns_output.log"
 SNAPLOGFILE = "snaps_output.log"
@@ -100,7 +100,9 @@ def create_parser():
                                help="Server config file (YAML)")
     explorer_args.add_argument("-p", "--progress", action="store_true",
                                help="progress bar", required=False)
-
+    explorer_args.add_argument("-t", "--timeout", type=int,
+                               help="connection timeout", required=False,
+                               default=100)
     # Projects arguments
     proj_args = subparser.add_parser("PROJECTS")
     proj_args.add_argument("-f", "--file", type=str, required=True,
@@ -112,6 +114,9 @@ def create_parser():
     proj_args.add_argument("--noconfirm", action="store_true",
                            help=("Don't ask for confirmation when deleting "
                                  "Projects"), required=False)
+    proj_args.add_argument("-t", "--timeout", type=int,
+                           help="connection timeout", required=False,
+                           default=100)
     proj_opers = proj_args.add_mutually_exclusive_group(required=True)
     proj_opers.add_argument("--create", action="store_true",
                             help="Create Projects specified in csv file")
@@ -131,6 +136,9 @@ def create_parser():
     fs_args.add_argument("--noconfirm", action="store_true",
                          help=("Don't ask for confirmation when deleting "
                                "Filesystems"), required=False)
+    fs_args.add_argument("-t", "--timeout", type=int,
+                         help="connection timeout", required=False,
+                         default=100)
     fs_opers = fs_args.add_mutually_exclusive_group(required=True)
     fs_opers.add_argument("--create", action="store_true",
                           help="Create Filesystems specified in csv file")
@@ -150,6 +158,9 @@ def create_parser():
     luns_args.add_argument("--noconfirm", action="store_true",
                            help=("Don't ask for confirmation when deleting "
                                  "Luns"), required=False)
+    luns_args.add_argument("-t", "--timeout", type=int,
+                           help="connection timeout", required=False,
+                           default=100)
     luns_opers = luns_args.add_mutually_exclusive_group(required=True)
     luns_opers.add_argument("--create", action="store_true",
                             help="Create Luns specified in csv file")
@@ -191,6 +202,9 @@ def create_parser():
     template_args.add_argument("--snapshots", action="store_true",
                                required=False,
                                help="generate template for snapshots")
+    template_args.add_argument("-t", "--timeout", type=int,
+                               help="connection timeout", required=False,
+                               default=100)
     templ_opers = template_args.add_mutually_exclusive_group(required=True)
     templ_opers.add_argument("--create", action="store_true",
                              help="template for creation")
