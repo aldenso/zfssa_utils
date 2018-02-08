@@ -7,6 +7,7 @@ from zfssa_utils.projects import run_projects
 from zfssa_utils.luns import run_luns
 from zfssa_utils.snapshots import run_snaps
 from zfssa_utils.filesystems import run_filesystems
+from zfssa_utils.templates import create_template
 
 
 if __name__ == "__main__":
@@ -23,6 +24,8 @@ if __name__ == "__main__":
         run_snaps(args)
     elif args.subparser_name == 'FILESYSTEMS':
         run_filesystems(args)
+    elif args.subparser_name == 'TEMPLATES':
+        create_template(args)
     else:
         pass
     # print(args)

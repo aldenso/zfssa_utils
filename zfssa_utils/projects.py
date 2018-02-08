@@ -4,8 +4,8 @@ Functions to create, list/show and delete projects.
 """
 from __future__ import print_function, division
 import json
-import requests
 from six.moves import input
+import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
 from zfssa_utils.common import HEADER, response_size, read_yaml_file, \

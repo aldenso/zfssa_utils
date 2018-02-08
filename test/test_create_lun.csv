@@ -1,4 +1,4 @@
-# pool(str),project(str),lun(str),size(int),size_unit(str),blocksize(str),
-# thin(bool),targetgrp(str),initiatorgrp(str),compression(str),logbias(str),
-# nodestroy(bool)
+# pool(str),project(str),lun(str),size(str),blocksize(str),
+# thin(bool),targetgrp(str),initiatorgrp(str),compression(str)
+# logbias(str), nodestroy(bool)
 pool_0,unittest,lun01,1g,128k,False,default,cluster-test,gzip,latency,False

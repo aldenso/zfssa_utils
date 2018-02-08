@@ -177,6 +177,26 @@ def create_parser():
     snaps_opers.add_argument("--list", action="store_true",
                              help="List/Check Snapshots specified in csv file")
 
+    # Templates arguments
+    template_args = subparser.add_parser("TEMPLATES")
+    template_args.add_argument("--projects", action="store_true",
+                               required=False,
+                               help="generate template for projects")
+    template_args.add_argument("--filesystems", action="store_true",
+                               required=False,
+                               help="generate template for filesystems")
+    template_args.add_argument("--luns", action="store_true",
+                               required=False,
+                               help="generate template for luns")
+    template_args.add_argument("--snapshots", action="store_true",
+                               required=False,
+                               help="generate template for snapshots")
+    templ_opers = template_args.add_mutually_exclusive_group(required=True)
+    templ_opers.add_argument("--create", action="store_true",
+                             help="template for creation")
+    templ_opers.add_argument("--delete", action="store_true",
+                             help="template for deletion")
+
     parsed_args = parser.parse_args()
     return parsed_args
 
