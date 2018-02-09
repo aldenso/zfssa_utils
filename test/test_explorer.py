@@ -2,6 +2,7 @@
 import unittest
 import sys
 import os
+import six
 from zfssa_utils.explorer import run_explorer
 from zfssa_utils.common import urls_contructor
 
@@ -50,7 +51,11 @@ class TestExplorer(unittest.TestCase):
         output = sys.stdout.getvalue()
         print(output)
         item_list = [x.split(" ")[4] for x in output.splitlines()]
-        DATASETCOPY = DATASET.copy()
+        DATASETCOPY = None
+        if six.PY2:
+            DATASETCOPY = DATASET[:]
+        else:
+            DATASETCOPY = DATASET.copy()
         for item in item_list:
             DATASETCOPY.remove(item)
         if DATASETCOPY:

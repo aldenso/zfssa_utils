@@ -18,6 +18,9 @@ run_tests(){
 
     # test filesystems
     python -m unittest --buffer -v test.test_filesystems
+
+    # test explorer
+    python -m unittest --buffer -v test.test_explorer
 }
 
 source venv/bin/activate
