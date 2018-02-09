@@ -190,7 +190,8 @@ def run_projects(args):
                     logger.warning(msg)
                 else:
                     logger.info(msg)
-                progbar.next()
+                initial += 1
+                progbar.update(initial)
             progbar.finish()
         else:
             print("#" * 79)
