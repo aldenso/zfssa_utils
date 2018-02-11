@@ -12,7 +12,13 @@ setup(name='zfssa_utils',
           'requests',
           'progressbar33',
           'pyyaml',
+          'six',
       ],
+      extras_require={
+          ':python_version < "3.2"': [
+              'futures',
+          ],
+      },
       classifiers=[
           'Development Status :: 4 - Beta',
           'Intended Audience :: System Administrators',
