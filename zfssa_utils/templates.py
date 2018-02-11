@@ -23,6 +23,7 @@ TEMPL_FS_CREATE = """# Template create filesystems
 # sharesmb:         str
 #
 # Confirm the restful API accepted values in the Oracle Docs for your ZFSSA version.
+#
 # pool,project,filesystem,mountpoint,quota,reservation,compression,dedup,logbias,nodestroy,recordsize,readonly,atime,root_user,root_group,root_permissions,sharenfs,sharesmb
 pool_0,unittest,fs10,/export/unittest/fs10,2g,1g,lzjb,False,latency,False,128k,False,False,root,other,750,rw=@192.168.56.101/24:@192.168.56.1/24,on
 """
@@ -81,8 +82,8 @@ TEMPL_PROJECT_CREATE = """# Template create projects
 # default_user:         str
 # default_group:        str
 # default_permissions:  int         example: 750
-# default_volblocksize: str         example: example: 131072 or 128k
-# default_volsize:      str         example: 10737418240 or 10g
+# default_volblocksize: str or int  example: example: 131072 or 128k
+# default_volsize:      str or int  example: 10737418240 or 10g
 # sharenfs:             str
 # sharesmb:             str
 #

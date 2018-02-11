@@ -1,2 +1,6 @@
-#pool(str),project(str),lun(str)
+# pool:      str
+# project:   str
+# lun:       str
+#
+# pool,project,lun
 pool_0,unittest,lun01

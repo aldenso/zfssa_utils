@@ -107,13 +107,6 @@ def create_project(fileline, zfsurl, zauth, timeout):
                 "default_volsize": default_volsize,
                 "sharenfs": sharenfs,
                 "sharesmb": sharesmb}
-        if quota == 'None' and reservation == 'None':
-            del data["quota"]
-            del data["reservation"]
-        elif quota == 'None':
-            del data["quota"]
-        elif reservation == 'None':
-            del data["reservation"]
         req = requests.post(fullurl, data=json.dumps(data),
                             auth=zauth, verify=False, headers=HEADER,
                             timeout=timeout)

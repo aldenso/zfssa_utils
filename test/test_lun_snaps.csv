@@ -1,2 +1,8 @@
-#pool(str),project(str),snaptarget(str),snaptype(str),snapname(str)
+# pool:       str
+# project:    str
+# snaptarget: str
+# snaptype:   str   for projects: '-', for luns: 'lun', for filesystems: 'filesystem'
+# snapname:   str
+#
+# pool,project,snaptarget,snaptype,snapname
 pool_0,unittest,lun10,lun,backup

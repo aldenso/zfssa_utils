@@ -1,4 +1,16 @@
-# pool(str),project(str),lun(str),size(str),blocksize(str),
-# thin(bool),targetgrp(str),initiatorgrp(str),compression(str)
-# logbias(str), nodestroy(bool)
+# pool:           str
+# project:        str
+# lun:            str
+# size:           str or int   example: 10737418240 or 10g
+# blocksize:      str or int   example: 131072 or 128k
+# thin:           bool
+# targetgrp:      str
+# initiatorgrp:   str
+# compression:    str          example: gzip, lzjb, lz4, etc
+# logbias:        str          values: latency|throughput
+# nodestroy:      bool
+#
+# Confirm the restful API accepted values in the Oracle Docs for your ZFSSA version.
+#
+# pool,project,lun,size,blocksize,thin,targetgrp,initiatorgrp,compression,logbias,nodestroy
 pool_0,unittest,lun01,1g,128k,False,default,cluster-test,gzip,latency,False

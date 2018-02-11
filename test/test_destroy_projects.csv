@@ -1,2 +1,5 @@
-#pool(str),project(str)
+# pool:                 str
+# project:              str
+#
+# pool,project
 pool_0,unittest01

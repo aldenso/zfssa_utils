@@ -1,2 +1,6 @@
-#pool(str),project(str),filesystem(str)
+# pool:             str
+# project:          str
+# filesystem:       str
+#
+# pool,project,filesystem
 pool_0,unittest,fs10
