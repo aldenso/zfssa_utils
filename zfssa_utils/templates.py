@@ -119,6 +119,7 @@ pool_0,unittest,fs01,filesystem,backup
 pool_0,unittest,lun10,lun,backup
 """
 
+
 def write_file(name, data):
     """Write a file base on templates."""
     if os.path.exists(name):
@@ -129,6 +130,7 @@ def write_file(name, data):
             print("Created file '{}'".format(name))
     except Exception as err:
         print("Not able to create file: '{}'".format(err))
+
 
 def create_template(args):
     """Create template based on the args given"""
