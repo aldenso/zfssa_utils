@@ -151,7 +151,7 @@ def create_template(args):
             write_file("create_filesystems.csv", TEMPL_FS_CREATE)
         else:
             write_file("destroy_filesystems.csv", TEMPL_FS_DESTROY)
-    elif args.snapsthos:
+    elif args.snapshots:
         if args.create:
             write_file("create_snapshots.csv", TEMPL_SNAPSHOTS)
         else:
