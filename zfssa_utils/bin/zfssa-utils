@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 sys.path.append(".")
-from zfssa_utils.common import create_parser
+from zfssa_utils.common import create_parser, run_updates
 from zfssa_utils.explorer import run_explorer
 from zfssa_utils.projects import run_projects
 from zfssa_utils.luns import run_luns
@@ -24,6 +24,8 @@ if __name__ == "__main__":
         run_filesystems(args)
     elif args.subparser_name == 'TEMPLATES':
         create_template(args)
+    elif args.subparser_name == 'UPDATE':
+        run_updates(args)
     else:
         pass
     # print(args)
