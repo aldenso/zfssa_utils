@@ -7,8 +7,9 @@ import csv
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from zipfile import ZipFile
-from zfssa_utils.common import exists, response_size, read_yaml_file, \
-     urls_constructor, createprogress, fetch, HEADER
+from zfssa_utils.common import (exists, response_size, read_yaml_file,
+                                urls_constructor, createprogress, fetch,
+                                HEADER, createlogger, EXPLORERLOGFILE)
 
 
 def trimpath(outputdir, filename):
@@ -554,6 +555,7 @@ def run_explorer(args):
     timeout = args.timeout
     if args.progress:
         progbar = createprogress(len(group))
+        logger = createlogger(EXPLORERLOGFILE)
     with ThreadPoolExecutor(max_workers=4) as executor:
         futures = {}
         for i in group:
@@ -570,6 +572,8 @@ def run_explorer(args):
             else:
                 if progbar:
                     create_csv(data, datatype, outputdir)
+                    logger.info("Collecting '{}' for '{}'".format(datatype,
+                                                                  outputdir))
                     initial += 1
                     progbar.update(initial)
                 else:

@@ -20,6 +20,7 @@ LUNLOGFILE = "luns_output.log"
 SNAPLOGFILE = "snaps_output.log"
 FSLOGFILE = "filesystems_output.log"
 UPDATELOGFILE = "updates_output.log"
+EXPLORERLOGFILE = "explorer_output.log"
 
 
 def read_yaml_file(configfile):
