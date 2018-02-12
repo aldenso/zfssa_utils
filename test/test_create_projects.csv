@@ -5,12 +5,12 @@
 # reservation:          str or int  example: 10737418240 or 10g
 # compression:          str
 # dedup:                bool
-# logbias:              str
+# logbias:              str         values: latency|throughput
 # nodestroy:            bool
 # recordsize:           str or int  example: example: 131072 or 128k
 # readonly:             bool
 # atime:                bool
-# default_sparse:       bool
+# default_sparse:       bool        known as default thin provision
 # default_user:         str
 # default_group:        str
 # default_permissions:  int         example: 750

@@ -322,7 +322,7 @@ def update_component(component_type, fullurl, zauth, timeout, data,
                     return True, ("UPDATE - FAIL - filesystem '{}' project"
                                   " '{}' pool '{}' - Error '{}' - updates: {}"
                                   .format(filesystem, project, pool,
-                                          j['fault']['message']), stringdata)
+                                          j['fault']['message'], stringdata))
             req.close()
             req.raise_for_status()
             return False, ("UPDATE - SUCCESS - filesystem '{}' project "
