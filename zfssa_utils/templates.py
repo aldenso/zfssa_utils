@@ -41,18 +41,18 @@ TEMPL_LUN_CREATE = """# Template create luns
 # pool:           str
 # project:        str
 # lun:            str
-# size:           str or int   example: 10737418240 or 10g
-# blocksize:      str or int   example: 131072 or 128k
+# volsize:        str or int   example: 10737418240 or 10g
+# volblocksize:   str or int   example: 131072 or 128k
 # sparse:         bool         known as thin provision
-# targetgrp:      str
-# initiatorgrp:   str
+# targetgroup:    str
+# initiatorgroup: str
 # compression:    str          example: gzip, lzjb, lz4, etc
 # logbias:        str          values: latency|throughput
 # nodestroy:      bool
 #
 # Confirm the restful API accepted values in the Oracle Docs for your ZFSSA version.
 #
-# pool,project,lun,size,blocksize,sparse,targetgrp,initiatorgrp,compression,logbias,nodestroy
+# pool,project,lun,volsize,volblocksize,sparse,targetgroup,initiatorgroup,compression,logbias,nodestroy
 pool_0,unittest,lun01,1g,128k,False,default,cluster-test,gzip,latency,False
 """
 

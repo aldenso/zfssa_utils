@@ -10,6 +10,7 @@ All testing must run using a ZFSSA emulator/demo, based on OS86 and OS87, downlo
 - project: unittest, pool: pool_0
 - lun: lun10, project: unittest, pool: pool_0
 - filesystem: fs01, project: unittest, pool: pool_0
+- initiator group called 'cluster-test'
 
 **Note**: Response times depends on your zfssa assigned resources.
 
