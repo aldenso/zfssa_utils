@@ -8,7 +8,7 @@ from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from zipfile import ZipFile
 from zfssa_utils.common import exists, response_size, read_yaml_file, \
-     urls_contructor, createprogress, fetch, HEADER
+     urls_constructor, createprogress, fetch, HEADER
 
 
 def trimpath(outputdir, filename):
@@ -547,7 +547,7 @@ def run_explorer(args):
     outputdir = os.path.join("data", "zfssa_explorer_{}_{}"
                              .format(config['ip'],
                                      datetime.now().strftime("%d%m%y_%H%M%S")))
-    group = urls_contructor(zfsip)
+    group = urls_constructor(zfsip)
 
     progbar = None
     initial = 0

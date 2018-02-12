@@ -112,7 +112,7 @@ class TestLUNS(unittest.TestCase):
             self.fail("need to run in buffered mode")
         self.assertTrue('PRESENT' in sys.stdout.getvalue())
 
-    def test__07_list_fail_csv(self):
+    def test_07_list_fail_csv(self):
         """List luns with wrong csv."""
         serverfile = os.path.join(HERE, 'serverOS86.yml')
         lunswrongfile = os.path.join(HERE, 'test_create_fs.csv')

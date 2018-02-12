@@ -5,10 +5,7 @@
 # lun,lunname;projname;pool,key1;val1,key2;val2
 # fs,fsname;projname;pool,key1;val1,key2;val2
 #
-# For projects the second col (name) is hyphen('-').
-project,-;unittest;pool_0,logbias;latency,dedup;True
+# For projects the second column (name) is hyphen('-').
+project,-;unittest;pool_0,logbias;latency
 lun,lun10;unittest;pool_0,compression;lzjb,sparse;True
 filesystem,fs01;unittest;pool_0,reservation;512m,atime;False
-project,-;unittest;pool_0,logbias;throughput,dedup;False
-lun,lun10;unittest;pool_0,compression;gzip,sparse;False
-filesystem,fs01;unittest;pool_0,reservation;1g,atime;True

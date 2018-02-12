@@ -4,7 +4,7 @@ import sys
 import os
 import six
 from zfssa_utils.explorer import run_explorer
-from zfssa_utils.common import urls_contructor
+# from zfssa_utils.common import urls_constructor
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
