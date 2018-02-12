@@ -21,7 +21,7 @@ class TestSnapshots(unittest.TestCase):
     """Test Snapshots functions"""
 
     def test_00_create_snap_project(self):
-        """Test snapshots with arguments to create a project snap."""
+        """Create project snapshots."""
         serverfile = os.path.join(HERE, 'serverOS86.yml')
         projsnapfile = os.path.join(HERE, PROJSNAPFILE)
         listargs = Namespace(server=serverfile, file=projsnapfile,
@@ -34,7 +34,7 @@ class TestSnapshots(unittest.TestCase):
         self.assertTrue('SUCCESS' in sys.stdout.getvalue())
 
     def test_01_list_snap_project(self):
-        """Test snapshots with arguments to list/show a project snap."""
+        """List/Show project snapshots."""
         serverfile = os.path.join(HERE, 'serverOS86.yml')
         projcreatefile = os.path.join(HERE, PROJSNAPFILE)
         listargs = Namespace(server=serverfile, file=projcreatefile,
@@ -47,7 +47,7 @@ class TestSnapshots(unittest.TestCase):
         self.assertTrue('PRESENT' in sys.stdout.getvalue())
 
     def test_02_delete_snap_projects(self):
-        """Test snapshots with arguments to delete a project snap."""
+        """Delete project snapshots."""
         serverfile = os.path.join(HERE, 'serverOS86.yml')
         projdestroyfile = os.path.join(HERE, PROJSNAPFILE)
         listargs = Namespace(server=serverfile, file=projdestroyfile,
@@ -60,7 +60,7 @@ class TestSnapshots(unittest.TestCase):
         self.assertTrue('SUCCESS' in sys.stdout.getvalue())
 
     def test_03_create_snap_filesystem(self):
-        """Test snapshots with arguments to create a filesystem snap."""
+        """Create filesystem snapshots."""
         serverfile = os.path.join(HERE, 'serverOS86.yml')
         projsnapfile = os.path.join(HERE, FSSNAPFILE)
         listargs = Namespace(server=serverfile, file=projsnapfile,
@@ -73,7 +73,7 @@ class TestSnapshots(unittest.TestCase):
         self.assertTrue('SUCCESS' in sys.stdout.getvalue())
 
     def test_04_list_snap_filesystem(self):
-        """Test snapshots with arguments to list/show a filesystem snap."""
+        """List/Show filesystem snapshots."""
         serverfile = os.path.join(HERE, 'serverOS86.yml')
         projcreatefile = os.path.join(HERE, FSSNAPFILE)
         listargs = Namespace(server=serverfile, file=projcreatefile,
@@ -86,7 +86,7 @@ class TestSnapshots(unittest.TestCase):
         self.assertTrue('PRESENT' in sys.stdout.getvalue())
 
     def test_05_delete_snap_filesystem(self):
-        """Test snapshots with arguments to delete a filesystem snap."""
+        """Delete filesystem snapshots."""
         serverfile = os.path.join(HERE, 'serverOS86.yml')
         projdestroyfile = os.path.join(HERE, FSSNAPFILE)
         listargs = Namespace(server=serverfile, file=projdestroyfile,
@@ -99,7 +99,7 @@ class TestSnapshots(unittest.TestCase):
         self.assertTrue('SUCCESS' in sys.stdout.getvalue())
 
     def test_06_create_snap_lun(self):
-        """Test snapshots with arguments to create a lun snap."""
+        """Create lun snapshots."""
         serverfile = os.path.join(HERE, 'serverOS86.yml')
         projsnapfile = os.path.join(HERE, LUNSNAPFILE)
         listargs = Namespace(server=serverfile, file=projsnapfile,
@@ -112,7 +112,7 @@ class TestSnapshots(unittest.TestCase):
         self.assertTrue('SUCCESS' in sys.stdout.getvalue())
 
     def test_07_list_snap_lun(self):
-        """Test snapshots with arguments to list/show a lun snap."""
+        """List/Show lun snapshots."""
         serverfile = os.path.join(HERE, 'serverOS86.yml')
         projcreatefile = os.path.join(HERE, LUNSNAPFILE)
         listargs = Namespace(server=serverfile, file=projcreatefile,
@@ -125,7 +125,7 @@ class TestSnapshots(unittest.TestCase):
         self.assertTrue('PRESENT' in sys.stdout.getvalue())
 
     def test_08_delete_snap_lun(self):
-        """Test snapshots with arguments to delete a lun snap."""
+        """Delete lun snapshots."""
         serverfile = os.path.join(HERE, 'serverOS86.yml')
         projdestroyfile = os.path.join(HERE, LUNSNAPFILE)
         listargs = Namespace(server=serverfile, file=projdestroyfile,

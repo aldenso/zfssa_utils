@@ -36,7 +36,7 @@ optional arguments:
   -h, --help            show this help message and exit
 ```
 
-Explorer generation gather mosts common values you need about you zfssa system.
+Explorer generation will get the most common values you need about you zfssa system.
 
 ```sh
 (.venv) $ zfssa-utils EXPLORER -s test/serverOS86.yml -p

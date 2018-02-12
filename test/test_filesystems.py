@@ -31,7 +31,7 @@ class TestFilesystems(unittest.TestCase):
         self.assertTrue('SUCCESS' in sys.stdout.getvalue())
 
     def test_01_create_exists(self):
-        """Create filesystems to fail to create an existing filesystem."""
+        """Create filesystems but fail trying, existing filesystem."""
         serverfile = os.path.join(HERE, 'serverOS86.yml')
         fscreatefile = os.path.join(HERE, 'test_create_fs.csv')
         listargs = Namespace(server=serverfile, file=fscreatefile,

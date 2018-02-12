@@ -15,7 +15,7 @@ class TestTemplates(unittest.TestCase):
     """Test LUNs functions"""
 
     def test_00_write_files(self):
-        """Test write_file function."""
+        """Write file."""
         filename = "test_file"
         data = "some line to write\nand test the function.\n"
         write_file(filename, data)
@@ -31,7 +31,7 @@ class TestTemplates(unittest.TestCase):
             self.fail("file created but unable to remove.")
 
     def test_01_write_existing(self):
-        """Try to write a file that already exists."""
+        """Write a file that already exists."""
         filename = "test_file"
         data = "some line to write\nand test the function.\n"
         try:
@@ -50,7 +50,7 @@ class TestTemplates(unittest.TestCase):
             self.fail("file created but unable to remove.")
 
     def test_02_write_fail(self):
-        """Try to write a file with a non existent directory."""
+        """Write a file with a non existent directory."""
         nodir = "unknown"
         filename = "test_file"
         data = "some line to write\nand test the function.\n"

@@ -17,7 +17,7 @@ class TestCommon(unittest.TestCase):
     """Test common script functions"""
 
     def test_response_size(self):
-        """Test response_size function to print human readable sizes"""
+        """Test response_size function to print human readable sizes."""
         self.assertEqual(response_size(10240), '10 KB')
         self.assertEqual(response_size(9437184), '9 MB')
         self.assertEqual(response_size(103809024), '99 MB')
@@ -25,7 +25,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(response_size(140737488355), '131.07 GB')
 
     def test_read_yaml_file(self):
-        """Test read_yaml_file function to read a regular yml file"""
+        """Test read_yaml_file function to read a regular yml file."""
         self.assertEqual(read_yaml_file(os.path.join(HERE, "serverOS86.yml")),
                          YAMLOUTPUT)
 
@@ -37,14 +37,14 @@ class TestCommon(unittest.TestCase):
                          YAMLOUTPUT)
 
     def test_read_csv_file(self):
-        """Test read_csv_file function to read a regular csv file"""
+        """Test read_csv_file function to read a regular csv file."""
         self.assertEqual(read_csv_file(os.path.join(HERE,
                                                     "test_destroy_lun.csv")),
                          LUNFILEOUTPUT)
 
     @unittest.expectedFailure
     def test_read_csv_file_fail(self):
-        """Test read_csv_file function to read a file not in csv format"""
+        """Test read_csv_file function to read a file not in csv format."""
         self.assertEqual(read_csv_file(os.path.join(HERE,
                                                     "serverOS86.yml")),
                          LUNFILEOUTPUT)
