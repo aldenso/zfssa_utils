@@ -24,6 +24,9 @@ run_tests(){
 
     # test templates
     python -m unittest --buffer -v test.test_templates
+
+    # test updates
+    python -m unittest --buffer -v test.test_updates
 }
 
 source venv/bin/activate

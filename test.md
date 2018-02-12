@@ -5,6 +5,7 @@ All testing must run using a ZFSSA emulator/demo, based on OS86 and OS87, downlo
 ## ZFSSA requirements to run tests
 
 - ip, username and password like those in the file serverOS86.yml.
+- additional user 'baduser' with basic role.
 - pool: pool_0
 - project: unittest, pool: pool_0
 - lun: lun10, project: unittest, pool: pool_0
