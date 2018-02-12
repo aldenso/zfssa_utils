@@ -6,6 +6,8 @@ from zfssa_utils.projects import run_projects
 from zfssa_utils.common import PROJECTLOGFILE
 
 HERE = os.path.abspath(os.path.dirname(__file__))
+CSVDIR = os.path.join(HERE, "csvfiles")
+SERVERDIR = os.path.join(HERE, "serverfiles")
 
 
 class Namespace:
@@ -19,8 +21,8 @@ class TestProjects(unittest.TestCase):
 
     def test_00_create_projects(self):
         """Create projects."""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
-        projcreatefile = os.path.join(HERE, 'test_create_projects.csv')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
+        projcreatefile = os.path.join(CSVDIR, 'test_create_projects.csv')
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=False, create=True, delete=False,
                              progress=False, subparser_name='PROJECTS',
@@ -32,8 +34,8 @@ class TestProjects(unittest.TestCase):
 
     def test_01_create_exists(self):
         """Create projects but fail trying, existing project."""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
-        projcreatefile = os.path.join(HERE, 'test_create_projects.csv')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
+        projcreatefile = os.path.join(CSVDIR, 'test_create_projects.csv')
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=False, create=True, delete=False,
                              progress=False, subparser_name='PROJECTS',
@@ -45,8 +47,8 @@ class TestProjects(unittest.TestCase):
 
     def test_02_create_fail_csv(self):
         """Create projects with wrong csv."""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
-        projcreatefile = os.path.join(HERE, 'test_create_lun.csv')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
+        projcreatefile = os.path.join(CSVDIR, 'test_create_lun.csv')
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=False, create=True, delete=False,
                              progress=False, subparser_name='PROJECTS',
@@ -58,8 +60,8 @@ class TestProjects(unittest.TestCase):
 
     def test_03_create_fail_conn_error(self):
         """Create projects with wrong connection."""
-        serverfile = os.path.join(HERE, 'fakeServer.yml')
-        projcreatefile = os.path.join(HERE, 'test_create_projects.csv')
+        serverfile = os.path.join(SERVERDIR, 'fakeServer.yml')
+        projcreatefile = os.path.join(CSVDIR, 'test_create_projects.csv')
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=False, create=True, delete=False,
                              progress=False, subparser_name='PROJECTS',
@@ -71,8 +73,8 @@ class TestProjects(unittest.TestCase):
 
     def test_04_create_fail_progress(self):
         """Create projects with wrong connection and progress."""
-        serverfile = os.path.join(HERE, 'fakeServer.yml')
-        projcreatefile = os.path.join(HERE, 'test_create_projects.csv')
+        serverfile = os.path.join(SERVERDIR, 'fakeServer.yml')
+        projcreatefile = os.path.join(CSVDIR, 'test_create_projects.csv')
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=False, create=True, delete=False,
                              progress=True, subparser_name='PROJECTS',
@@ -88,8 +90,8 @@ class TestProjects(unittest.TestCase):
 
     def test_05_list_projects(self):
         """List projects."""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
-        projcreatefile = os.path.join(HERE, 'test_create_projects.csv')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
+        projcreatefile = os.path.join(CSVDIR, 'test_create_projects.csv')
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=True, create=False, delete=False,
                              progress=False, subparser_name='PROJECTS',
@@ -101,8 +103,8 @@ class TestProjects(unittest.TestCase):
 
     def test_06_list_short_csv(self):
         """List projects with short csv."""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
-        projcreatefile = os.path.join(HERE, 'test_destroy_projects.csv')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
+        projcreatefile = os.path.join(CSVDIR, 'test_destroy_projects.csv')
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=True, create=False, delete=False,
                              progress=False, subparser_name='PROJECTS',
@@ -114,8 +116,8 @@ class TestProjects(unittest.TestCase):
 
     def test_07_list_fail_csv(self):
         """List projects with wrong csv."""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
-        projcreatefile = os.path.join(HERE, 'test_destroy_fs.csv')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
+        projcreatefile = os.path.join(CSVDIR, 'test_destroy_fs.csv')
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=True, create=False, delete=False,
                              progress=False, subparser_name='PROJECTS',
@@ -127,8 +129,8 @@ class TestProjects(unittest.TestCase):
 
     def test_08_list_fail_conn_error(self):
         """List projects with wrong connection."""
-        serverfile = os.path.join(HERE, 'fakeServer.yml')
-        projcreatefile = os.path.join(HERE, 'test_destroy_fs.csv')
+        serverfile = os.path.join(SERVERDIR, 'fakeServer.yml')
+        projcreatefile = os.path.join(CSVDIR, 'test_destroy_fs.csv')
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=True, create=False, delete=False,
                              progress=False, subparser_name='PROJECTS',
@@ -140,8 +142,8 @@ class TestProjects(unittest.TestCase):
 
     def test_09_list_fail_progress(self):
         """List projects with wrong connection and progress."""
-        serverfile = os.path.join(HERE, 'fakeServer.yml')
-        projcreatefile = os.path.join(HERE, 'test_destroy_fs.csv')
+        serverfile = os.path.join(SERVERDIR, 'fakeServer.yml')
+        projcreatefile = os.path.join(CSVDIR, 'test_destroy_fs.csv')
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=True, create=False, delete=False,
                              progress=True, subparser_name='PROJECTS',
@@ -157,8 +159,8 @@ class TestProjects(unittest.TestCase):
 
     def test_10_delete_projects(self):
         """Delete projects."""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
-        projdestroyfile = os.path.join(HERE, 'test_destroy_projects.csv')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
+        projdestroyfile = os.path.join(CSVDIR, 'test_destroy_projects.csv')
         listargs = Namespace(server=serverfile, file=projdestroyfile,
                              list=False, create=False, delete=True,
                              progress=False, subparser_name='PROJECTS',
@@ -170,8 +172,8 @@ class TestProjects(unittest.TestCase):
 
     def test_11_delete_fail_csv(self):
         """Delete projects with with wrong csv"""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
-        projdestroyfile = os.path.join(HERE, 'test_destroy_fs.csv')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
+        projdestroyfile = os.path.join(CSVDIR, 'test_destroy_fs.csv')
         listargs = Namespace(server=serverfile, file=projdestroyfile,
                              list=False, create=False, delete=True,
                              progress=False, subparser_name='PROJECTS',
@@ -183,8 +185,8 @@ class TestProjects(unittest.TestCase):
 
     def test_12_delete_fail_conn_error(self):
         """Delete projects with wrong connection."""
-        serverfile = os.path.join(HERE, 'fakeServer.yml')
-        projdestroyfile = os.path.join(HERE, 'test_destroy_projects.csv')
+        serverfile = os.path.join(SERVERDIR, 'fakeServer.yml')
+        projdestroyfile = os.path.join(CSVDIR, 'test_destroy_projects.csv')
         listargs = Namespace(server=serverfile, file=projdestroyfile,
                              list=False, create=False, delete=True,
                              progress=False, subparser_name='PROJECTS',
@@ -196,8 +198,8 @@ class TestProjects(unittest.TestCase):
 
     def test_13_delete_fail_progress(self):
         """Delete projects with wrong connection and progress."""
-        serverfile = os.path.join(HERE, 'fakeServer.yml')
-        projdestroyfile = os.path.join(HERE, 'test_destroy_projects.csv')
+        serverfile = os.path.join(SERVERDIR, 'fakeServer.yml')
+        projdestroyfile = os.path.join(CSVDIR, 'test_destroy_projects.csv')
         listargs = Namespace(server=serverfile, file=projdestroyfile,
                              list=False, create=False, delete=True,
                              progress=True, subparser_name='PROJECTS',
@@ -213,8 +215,8 @@ class TestProjects(unittest.TestCase):
 
     def test_14_create_progress(self):
         """Create projects with progress."""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
-        projcreatefile = os.path.join(HERE, 'test_create_projects.csv')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
+        projcreatefile = os.path.join(CSVDIR, 'test_create_projects.csv')
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=False, create=True, delete=False,
                              progress=True, subparser_name='PROJECTS',
@@ -230,8 +232,8 @@ class TestProjects(unittest.TestCase):
 
     def test_15_list_progress(self):
         """List projects with progress."""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
-        projcreatefile = os.path.join(HERE, 'test_create_projects.csv')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
+        projcreatefile = os.path.join(CSVDIR, 'test_create_projects.csv')
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=True, create=False, delete=False,
                              progress=True, subparser_name='PROJECTS',
@@ -247,8 +249,8 @@ class TestProjects(unittest.TestCase):
 
     def test_16_delete_progress(self):
         """Delete projects with progress."""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
-        projdestroyfile = os.path.join(HERE, 'test_destroy_projects.csv')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
+        projdestroyfile = os.path.join(CSVDIR, 'test_destroy_projects.csv')
         listargs = Namespace(server=serverfile, file=projdestroyfile,
                              list=False, create=False, delete=True,
                              progress=True, subparser_name='PROJECTS',

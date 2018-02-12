@@ -7,6 +7,7 @@ from zfssa_utils.common import UPDATELOGFILE
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 CSVDIR = os.path.join(HERE, "csvfiles")
+SERVERDIR = os.path.join(HERE, "serverfiles")
 
 
 class Namespace:
@@ -20,7 +21,7 @@ class TestUpdates(unittest.TestCase):
 
     def test_00_update(self):
         """Update project, filesystem and lun."""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
         updatefile = os.path.join(CSVDIR, 'update_component.csv')
         listargs = Namespace(server=serverfile, file=updatefile,
                              progress=False, subparser_name='UPDATE',
@@ -32,7 +33,7 @@ class TestUpdates(unittest.TestCase):
 
     def test_01_update_fail_csv(self):
         """Update project, filesystem and lun with wrong csv."""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
         updatewrongfile = os.path.join(CSVDIR, 'test_create_fs.csv')
         listargs = Namespace(server=serverfile, file=updatewrongfile,
                              progress=False, subparser_name='UPDATE',
@@ -44,7 +45,7 @@ class TestUpdates(unittest.TestCase):
 
     def test_02_update_progress(self):
         """Update project, filesystem and lun with progress."""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
         updatefile = os.path.join(CSVDIR, 'update_component.csv')
         listargs = Namespace(server=serverfile, file=updatefile,
                              progress=True, subparser_name='UPDATE',
@@ -61,7 +62,7 @@ class TestUpdates(unittest.TestCase):
 
     def test_03_update_fail_conn_error(self):
         """Update project, filesystem and lun with wrong connection."""
-        serverfile = os.path.join(HERE, 'fakeServer.yml')
+        serverfile = os.path.join(SERVERDIR, 'fakeServer.yml')
         updatefile = os.path.join(CSVDIR, 'update_component.csv')
         listargs = Namespace(server=serverfile, file=updatefile,
                              progress=False, subparser_name='UPDATE',
@@ -74,7 +75,7 @@ class TestUpdates(unittest.TestCase):
     def test_04_update_fail_progress(self):
         """Update project, filesystem and lun with wrong connection & progress.
         """
-        serverfile = os.path.join(HERE, 'fakeServer.yml')
+        serverfile = os.path.join(SERVERDIR, 'fakeServer.yml')
         updatefile = os.path.join(CSVDIR, 'update_component.csv')
         listargs = Namespace(server=serverfile, file=updatefile,
                              progress=True, subparser_name='UPDATE',
@@ -90,7 +91,7 @@ class TestUpdates(unittest.TestCase):
 
     def test_05_update_fail(self):
         """Update project, filesystem and lun with wrong user."""
-        serverfile = os.path.join(HERE, 'server_baduser.yml')
+        serverfile = os.path.join(SERVERDIR, 'server_baduser.yml')
         updatefile = os.path.join(CSVDIR, 'update_component.csv')
         listargs = Namespace(server=serverfile, file=updatefile,
                              progress=False, subparser_name='UPDATE',

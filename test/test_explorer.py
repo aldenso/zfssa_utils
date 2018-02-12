@@ -7,6 +7,7 @@ from zfssa_utils.explorer import run_explorer
 # from zfssa_utils.common import urls_constructor
 
 HERE = os.path.abspath(os.path.dirname(__file__))
+SERVERDIR = os.path.join(HERE, "serverfiles")
 
 DATASET = ['cluster',
            'problems',
@@ -42,7 +43,7 @@ class TestExplorer(unittest.TestCase):
 
     def test_00_explorer(self):
         """Test explorer creation."""
-        serverfile = os.path.join(HERE, 'serverOS86.yml')
+        serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
         listargs = Namespace(server=serverfile, subparser_name='EXPLORER',
                              progress=False, timeout=100)
         run_explorer(listargs)
