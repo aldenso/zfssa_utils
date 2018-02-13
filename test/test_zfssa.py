@@ -32,12 +32,11 @@ class TestCommon(unittest.TestCase):
                                                      "serverOS86.yml")),
                          YAMLOUTPUT)
 
-    @unittest.expectedFailure
     def test_read_yaml_file_fail(self):
         """Test read_yaml_file function to read a file not in yml format."""
-        self.assertEqual(read_yaml_file(os.path.join(CSVDIR,
-                                                     "test_fs_snaps.csv")),
-                         YAMLOUTPUT)
+        with self.assertRaises(SystemExit) as cm:
+            read_yaml_file(os.path.join(CSVDIR, "test_fs_snaps.csv"))
+        self.assertTrue('looks wrong' in cm.exception.code)
 
     def test_read_csv_file(self):
         """Test read_csv_file function to read a regular csv file."""

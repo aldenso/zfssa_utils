@@ -66,13 +66,13 @@ def list_projects(fileline, zfsurl, zauth, timeout):
                                j["project"]["sharesmb"]))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("LIST - FAIL - project '{}', pool '{}' - Error {}"
+            exit("LIST - FAIL - project '{}', pool '{}' - Error \"{}\""
                  .format(project, pool, error))
         else:
-            return True, ("LIST - FAIL - project '{}' pool '{}' - Error {}"
+            return True, ("LIST - FAIL - project '{}' pool '{}' - Error \"{}\""
                           .format(project, pool, error))
     except ConnectionError as error:
-        return True, ("LIST - FAIL - project '{}' pool '{}' - Error {}"
+        return True, ("LIST - FAIL - project '{}' pool '{}' - Error \"{}\""
                       .format(project, pool, error))
 
 
@@ -114,21 +114,21 @@ def create_project(fileline, zfsurl, zauth, timeout):
         if 'fault' in j:
             if 'message' in j['fault']:
                 return True, ("CREATE - FAIL - project '{}' pool '{}' - Error"
-                              " {}".format(project, pool,
-                                           j['fault']['message']))
+                              " \"{}\"".format(project, pool,
+                                               j['fault']['message']))
         req.close()
         req.raise_for_status()
         return False, ("CREATE - SUCCESS - project '{}' pool '{}'"
                        .format(project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("CREATE - FAIL - project '{}' pool '{}' - Error {}"
+            exit("CREATE - FAIL - project '{}' pool '{}' - Error \"{}\""
                  .format(project, pool, error))
         else:
-            return True, ("CREATE - FAIL - project '{}' pool '{}' - Error {}"
-                          .format(project, pool, error))
+            return True, ("CREATE - FAIL - project '{}' pool '{}' - Error "
+                          "\"{}\"".format(project, pool, error))
     except ConnectionError as error:
-        return True, ("CREATE - FAIL - project '{}' pool '{}' - Error {}"
+        return True, ("CREATE - FAIL - project '{}' pool '{}' - Error \"{}\""
                       .format(project, pool, error))
 
 
@@ -150,13 +150,13 @@ def delete_project(fileline, zfsurl, zauth, timeout):
                        .format(project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("DELETE - FAIL - project '{}' pool '{}' - Error {}"
+            exit("DELETE - FAIL - project '{}' pool '{}' - Error \"{}\""
                  .format(project, pool, error))
         else:
-            return True, ("DELETE - FAIL - project '{}' pool '{}' - Error {}"
-                          .format(project, pool, error))
+            return True, ("DELETE - FAIL - project '{}' pool '{}' - Error "
+                          "\"{}\"".format(project, pool, error))
     except ConnectionError as error:
-        return True, ("DELETE - FAIL - project '{}' pool '{}' - Error {}"
+        return True, ("DELETE - FAIL - project '{}' pool '{}' - Error \"{}\""
                       .format(project, pool, error))
 
 

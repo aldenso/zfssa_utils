@@ -72,18 +72,18 @@ def list_snap(snap, zfsurl, zauth, timeout):
     except HTTPError as error:
         if error.response.status_code == 401:
             exit("LIST - FAIL - snapshot '{}' {} '{}' project '{}' "
-                 "pool '{}' - Error {}".format(snapname, snaptype, snaptarget,
-                                               project, pool, error))
+                 "pool '{}' - Error \"{}\""
+                 .format(snapname, snaptype, snaptarget, project, pool, error))
         else:
             return True, ("LIST - FAIL - snapshot '{}' {} '{}' project "
-                          "'{}' pool '{}' - Error {}"
+                          "'{}' pool '{}' - Error \"{}\""
                           .format(snapname, snaptype, snaptarget, project,
                                   pool, error))
     except ConnectionError as error:
         return True, ("LIST - FAIL - snapshot '{}' {} '{}' project "
-                      "'{}' pool '{}' - Error {}".format(snapname, snaptype,
-                                                         snaptarget, project,
-                                                         pool, error))
+                      "'{}' pool '{}' - Error \"{}\""
+                      .format(snapname, snaptype, snaptarget, project,
+                              pool, error))
 
 
 def create_snap(snap, zfsurl, zauth, timeout):
@@ -111,7 +111,7 @@ def create_snap(snap, zfsurl, zauth, timeout):
         if 'fault' in j:
             if 'message' in j['fault']:
                 return True, ("CREATE - FAIL - snapshot '{}' {} '{}' "
-                              "project '{}' pool {}' - Error {}"
+                              "project '{}' pool {}' - Error \"{}\""
                               .format(snapname, snaptype, snaptarget, project,
                                       pool, j['fault']['message']))
         else:
@@ -122,16 +122,16 @@ def create_snap(snap, zfsurl, zauth, timeout):
     except HTTPError as error:
         if error.response.status_code == 401:
             exit("CREATE - FAIL - snapshot '{}' {} '{}' project '{}' "
-                 "pool '{}' - Error {}".format(snapname, snaptype, snaptarget,
-                                               project, pool, error))
+                 "pool '{}' - Error \"{}\""
+                 .format(snapname, snaptype, snaptarget, project, pool, error))
         else:
             return True, ("CREATE - FAIL - snapshot '{}' {} '{}' "
-                          "project '{}' pool '{}' - Error {}"
+                          "project '{}' pool '{}' - Error \"{}\""
                           .format(snapname, snaptype, snaptarget, project,
                                   pool, error))
     except ConnectionError as error:
         return True, ("CREATE - FAIL - snapshot '{}' {} '{}' project "
-                      "'{}' pool '{}' - Error {}"
+                      "'{}' pool '{}' - Error \"{}\""
                       .format(snapname, snaptype, snaptarget, project, pool,
                               error))
 
@@ -164,16 +164,16 @@ def delete_snap(snap, zfsurl, zauth, timeout):
     except HTTPError as error:
         if error.response.status_code == 401:
             exit("DELETE - FAIL - snapshot '{}' {} '{}' project '{}'"
-                 "pool '{}' - Error {}".format(snapname, snaptype, snaptarget,
-                                               project, pool, error))
+                 "pool '{}' - Error \"{}\""
+                 .format(snapname, snaptype, snaptarget, project, pool, error))
         else:
             return True, ("DELETE - FAIL - snapshot '{}' {} '{}' "
-                          "project '{}' pool '{}' - Error {}"
+                          "project '{}' pool '{}' - Error \"{}\""
                           .format(snapname, snaptype, snaptarget, project,
                                   pool, error))
     except ConnectionError as error:
         return True, ("DELETE - FAIL - snapshot '{}' {} '{}' project "
-                      "'{}' pool '{}' - Error {}"
+                      "'{}' pool '{}' - Error \"{}\""
                       .format(snapname, snaptype, snaptarget, project, pool,
                               error))
 

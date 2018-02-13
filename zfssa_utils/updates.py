@@ -29,7 +29,7 @@ def update_component(component_type, fullurl, zauth, timeout, data,
             if 'fault' in j:
                 if 'message' in j['fault']:
                     return True, ("UPDATE - FAIL - project '{}' pool '{}' "
-                                  "- Error {} - updates: {}"
+                                  "- Error \"{}\" - updates: {}"
                                   .format(project, pool,
                                           j['fault']['message'], stringdata))
             req.close()
@@ -39,15 +39,15 @@ def update_component(component_type, fullurl, zauth, timeout, data,
         except HTTPError as error:
             if error.response.status_code == 401:
                 return True, ("UPDATE - FAIL - project '{}' pool '{}' - "
-                              "Error '{}' - updates: {}"
+                              "Error \"{}\" - updates: {}"
                               .format(project, pool, error, stringdata))
             else:
                 return True, ("UPDATE - FAIL - project '{}' pool '{}' - "
-                              "Error '{}' - updates: {}"
+                              "Error \"{}\" - updates: {}"
                               .format(project, pool, error, stringdata))
         except ConnectionError as error:
             return True, ("UPDATE - FAIL - project '{}' pool '{}' - Error "
-                          "'{}' - updates: {}"
+                          "\"{}\" - updates: {}"
                           .format(project, pool, error, stringdata))
 
     elif component_type == 'filesystem':
@@ -58,8 +58,8 @@ def update_component(component_type, fullurl, zauth, timeout, data,
             j = json.loads(req.text)
             if 'fault' in j:
                 if 'message' in j['fault']:
-                    return True, ("UPDATE - FAIL - filesystem '{}' project"
-                                  " '{}' pool '{}' - Error '{}' - updates: {}"
+                    return True, ("UPDATE - FAIL - filesystem '{}' project "
+                                  "'{}' pool '{}' - Error \"{}\" - updates: {}"
                                   .format(filesystem, project, pool,
                                           j['fault']['message'], stringdata))
             req.close()
@@ -70,17 +70,17 @@ def update_component(component_type, fullurl, zauth, timeout, data,
         except HTTPError as error:
             if error.response.status_code == 401:
                 return True, ("UPDATE - FAIL - filesystem '{}' project "
-                              "'{}' pool '{}' - Error '{}' - updates: {}"
+                              "'{}' pool '{}' - Error \"{}\" - updates: {}"
                               .format(filesystem, project, pool, error,
                                       stringdata))
             else:
                 return True, ("UPDATE - FAIL - filesystem '{}' project "
-                              "'{}' pool '{}' - Error '{}'  - updates: {}"
+                              "'{}' pool '{}' - Error \"{}\"  - updates: {}"
                               .format(filesystem, project, pool, error,
                                       stringdata))
         except ConnectionError as error:
             return True, ("UPDATE - FAIL - filesystem '{}' project '{}' "
-                          "pool '{}' - Error '{}' - updates: {}"
+                          "pool '{}' - Error \"{}\" - updates: {}"
                           .format(filesystem, project, pool, error,
                                   stringdata))
 
@@ -93,7 +93,7 @@ def update_component(component_type, fullurl, zauth, timeout, data,
             if 'fault' in j:
                 if 'message' in j['fault']:
                     return True, ("UPDATE - FAIL - lun '{}' project '{}' "
-                                  "pool '{}' - Error '{}' - updates: {}"
+                                  "pool '{}' - Error \"{}\" - updates: {}"
                                   .format(lun, project, pool,
                                           j['fault']['message'], stringdata))
             req.close()
@@ -104,15 +104,15 @@ def update_component(component_type, fullurl, zauth, timeout, data,
         except HTTPError as error:
             if error.response.status_code == 401:
                 return True, ("UPDATE - FAIL - lun '{}' project '{}' pool "
-                              "'{}' - Error '{}' - updates: {}"
+                              "'{}' - Error \"{}\" - updates: {}"
                               .format(lun, project, pool, error, stringdata))
             else:
                 return True, ("UPDATE - FAIL - lun '{}' project '{}' pool "
-                              "'{}' - Error '{}' - updates: {}"
+                              "'{}' - Error \"{}\" - updates: {}"
                               .format(lun, project, pool, error, stringdata))
         except ConnectionError as error:
             return True, ("UPDATE - FAIL - lun '{}' project '{}' pool '{}'"
-                          " - Error '{}' - updates: {}"
+                          " - Error \"{}\" - updates: {}"
                           .format(lun, project, pool, error, stringdata))
     else:
         return True, ("Wrong component type '{}'".format(component_type))
