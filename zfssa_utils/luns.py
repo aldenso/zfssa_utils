@@ -55,11 +55,10 @@ def list_lun(fileline, zfsurl, zauth, timeout, verify):
                                      j["lun"]["nodestroy"]))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("LIST - FAIL - lun '{}' project '{}' pool '{}' - Error \"{}\""
-                 .format(lun, project, pool, error))
-        else:
             return True, ("LIST - FAIL - lun '{}' project '{}' pool '{}' - "
                           "Error \"{}\"".format(lun, project, pool, error))
+        return True, ("LIST - FAIL - lun '{}' project '{}' pool '{}' - "
+                      "Error \"{}\"".format(lun, project, pool, error))
     except ConnectionError as error:
         return True, ("LIST - FAIL - lun '{}' project '{}' pool '{}' - Error "
                       "\"{}\"".format(lun, project, pool, error))
@@ -99,11 +98,10 @@ def create_lun(fileline, zfsurl, zauth, timeout, verify):
                        .format(lun, project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("CREATE - FAIL - lun '{}' project '{}' pool '{}' - Error "
-                 "\"{}\"".format(lun, project, pool, error))
-        else:
-            return True, ("CREATE - FAIL - lun '{}' project '{}' pool '{}' - "
-                          "Error \"{}\"".format(lun, project, pool, error))
+            return True, ("CREATE - FAIL - lun '{}' project '{}' pool '{}' "
+                          "- Error \"{}\"".format(lun, project, pool, error))
+        return True, ("CREATE - FAIL - lun '{}' project '{}' pool '{}' - "
+                      "Error \"{}\"".format(lun, project, pool, error))
     except ConnectionError as error:
         return True, ("CREATE - FAIL - lun '{}' project '{}' pool '{}' - Error"
                       " \"{}\"".format(lun, project, pool, error))
@@ -126,11 +124,10 @@ def delete_lun(fileline, zfsurl, zauth, timeout, verify):
                        .format(lun, project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("DELETE - FAIL - lun '{}' project '{}' pool '{}' - Error "
-                 "\"{}\"".format(lun, project, pool, error))
-        else:
             return True, ("DELETE - FAIL - lun '{}' project '{}' pool '{}' - "
                           "Error \"{}\"".format(lun, project, pool, error))
+        return True, ("DELETE - FAIL - lun '{}' project '{}' pool '{}' - "
+                      "Error \"{}\"".format(lun, project, pool, error))
     except ConnectionError as error:
         return True, ("DELETE - FAIL - lun '{}' project '{}' pool '{}' - Error"
                       " \"{}\"".format(lun, project, pool, error))

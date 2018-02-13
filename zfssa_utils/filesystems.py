@@ -66,12 +66,12 @@ def list_filesystems(fileline, zfsurl, zauth, timeout, verify):
                                j['filesystem']['sharesmb']))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("LIST - FAIL - filesystem '{}' project '{}', pool '{}' "
-                 "- Error \"{}\"".format(fs, project, pool, error))
-        else:
-            return True, ("LIST - FAIL - filesystem '{}' project '{}' pool "
+            return True, ("LIST - FAIL - filesystem '{}' project '{}', pool "
                           "'{}' - Error \"{}\""
                           .format(fs, project, pool, error))
+        return True, ("LIST - FAIL - filesystem '{}' project '{}' pool "
+                      "'{}' - Error \"{}\""
+                      .format(fs, project, pool, error))
     except ConnectionError as error:
         return True, ("LIST - FAIL - filesystem '{}' project '{}' pool '{}' "
                       "- Error \"{}\"".format(fs, project, pool, error))
@@ -120,12 +120,12 @@ def create_filesystems(fileline, zfsurl, zauth, timeout, verify):
                        "'{}'".format(fs, project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("CREATE - FAIL - filesystem '{}' project '{}' pool '{}' - "
-                 "Error \"{}\"".format(fs, project, pool, error))
-        else:
             return True, ("CREATE - FAIL - filesystem '{}' project '{}' pool "
                           "'{}' - Error \"{}\""
                           .format(fs, project, pool, error))
+        return True, ("CREATE - FAIL - filesystem '{}' project '{}' pool "
+                      "'{}' - Error \"{}\""
+                      .format(fs, project, pool, error))
     except ConnectionError as error:
         return True, ("CREATE - FAIL - filesystem '{}' project '{}' pool '{}' "
                       "- Error \"{}\"".format(fs, project, pool, error))
@@ -148,12 +148,12 @@ def delete_filesystems(fileline, zfsurl, zauth, timeout, verify):
                        "'{}'".format(fs, project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("DELETE - FAIL - filesystem '{}' project '{}' pool '{}' - "
-                 "Error \"{}\"".format(fs, project, pool, error))
-        else:
             return True, ("DELETE - FAIL - filesystem '{}' project '{}' pool "
                           "'{}' - Error \"{}\""
                           .format(fs, project, pool, error))
+        return True, ("DELETE - FAIL - filesystem '{}' project '{}' pool "
+                      "'{}' - Error \"{}\""
+                      .format(fs, project, pool, error))
     except ConnectionError as error:
         return True, ("DELETE - FAIL - filesystem '{}' project '{}' pool '{}' "
                       "- Error \"{}\"".format(fs, project, pool, error))

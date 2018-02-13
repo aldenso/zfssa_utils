@@ -66,11 +66,10 @@ def list_projects(fileline, zfsurl, zauth, timeout, verify):
                                j["project"]["sharesmb"]))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("LIST - FAIL - project '{}', pool '{}' - Error \"{}\""
-                 .format(project, pool, error))
-        else:
-            return True, ("LIST - FAIL - project '{}' pool '{}' - Error \"{}\""
-                          .format(project, pool, error))
+            return True, ("LIST - FAIL - project '{}', pool '{}' - Error "
+                          "\"{}\"".format(project, pool, error))
+        return True, ("LIST - FAIL - project '{}' pool '{}' - Error \"{}\""
+                      .format(project, pool, error))
     except ConnectionError as error:
         return True, ("LIST - FAIL - project '{}' pool '{}' - Error \"{}\""
                       .format(project, pool, error))
@@ -122,11 +121,10 @@ def create_project(fileline, zfsurl, zauth, timeout, verify):
                        .format(project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("CREATE - FAIL - project '{}' pool '{}' - Error \"{}\""
-                 .format(project, pool, error))
-        else:
             return True, ("CREATE - FAIL - project '{}' pool '{}' - Error "
                           "\"{}\"".format(project, pool, error))
+        return True, ("CREATE - FAIL - project '{}' pool '{}' - Error "
+                      "\"{}\"".format(project, pool, error))
     except ConnectionError as error:
         return True, ("CREATE - FAIL - project '{}' pool '{}' - Error \"{}\""
                       .format(project, pool, error))
@@ -150,11 +148,10 @@ def delete_project(fileline, zfsurl, zauth, timeout, verify):
                        .format(project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            exit("DELETE - FAIL - project '{}' pool '{}' - Error \"{}\""
-                 .format(project, pool, error))
-        else:
             return True, ("DELETE - FAIL - project '{}' pool '{}' - Error "
                           "\"{}\"".format(project, pool, error))
+        return True, ("DELETE - FAIL - project '{}' pool '{}' - Error "
+                      "\"{}\"".format(project, pool, error))
     except ConnectionError as error:
         return True, ("DELETE - FAIL - project '{}' pool '{}' - Error \"{}\""
                       .format(project, pool, error))
