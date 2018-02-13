@@ -26,23 +26,31 @@ EXPLORERLOGFILE = "explorer_output.log"
 def read_yaml_file(configfile):
     """Read config file and return credentials in json."""
     config = {}
-    with open(configfile, 'r') as configuration:
-        try:
-            config = yaml.load(configuration)
-        except yaml.YAMLError as error:
-            print("Error in configuration file: {}").format(error)
-        return config
+    try:
+        with open(configfile, 'r') as configuration:
+            try:
+                config = yaml.load(configuration)
+                if type(config) != dict:
+                    exit("Yaml file: Format looks wrong")
+            except yaml.YAMLError as error:
+                print("Error in configuration file: {}").format(error)
+            return config
+    except IOError as error:
+        exit("Error: {}".format(error))
 
 
 def read_csv_file(filename):
     """Read csv file and return the list"""
     csvlist = []
-    with open(filename, 'r') as cvsfile:
-        filereader = csv.reader(cvsfile, delimiter=',')
-        for row in filereader:
-            if not row[0].startswith('#'):
-                csvlist.append(row)
-    # del csvlist[0]
+    try:
+        with open(filename, 'r') as cvsfile:
+            filereader = csv.reader(cvsfile, delimiter=',')
+            for row in filereader:
+                if not row[0].startswith('#'):
+                    csvlist.append(row)
+        # del csvlist[0]
+    except IOError as error:
+        exit("Error: {}".format(error))
     return csvlist
 
 
