@@ -574,8 +574,8 @@ def run_explorer(args):
             else:
                 if progbar:
                     create_csv(data, datatype, outputdir)
-                    logger.info("Collecting '{}' for '{}'".format(datatype,
-                                                                  outputdir))
+                    logger.info("Collecting '%s' for '%s'", datatype,
+                                outputdir)
                     initial += 1
                     progbar.update(initial)
                 else:

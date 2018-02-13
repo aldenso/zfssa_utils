@@ -2,7 +2,7 @@
 import sys
 sys.path.append(".")
 from zfssa_utils import __version__
-from zfssa_utils.common import create_parser
+from zfssa_utils.common import create_parser, check_files_exists
 from zfssa_utils.explorer import run_explorer
 from zfssa_utils.projects import run_projects
 from zfssa_utils.luns import run_luns
@@ -20,6 +20,9 @@ if __name__ == "__main__":
         print("*" * 79)
         print("Warning: not using certificate verification.")
         print("*" * 79)
+    msg = check_files_exists([args.cert, args.server, args.file])
+    if msg:
+        exit(msg)
     if args.subparser_name == 'EXPLORER':
         run_explorer(args)
     elif args.subparser_name == 'PROJECTS':

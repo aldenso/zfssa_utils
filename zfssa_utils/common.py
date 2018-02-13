@@ -1,4 +1,5 @@
 """Common functions"""
+import os
 import argparse
 import logging
 import csv
@@ -30,7 +31,7 @@ def read_yaml_file(configfile):
         with open(configfile, 'r') as configuration:
             try:
                 config = yaml.load(configuration)
-                if type(config) != dict:
+                if not isinstance(config, dict):
                     exit("Yaml file: Format looks wrong")
             except yaml.YAMLError as error:
                 print("Error in configuration file: {}").format(error)
@@ -71,6 +72,17 @@ def exists(data, key):
         return data[key]
     except KeyError:
         return "-"
+
+
+def check_files_exists(filelist):
+    """Return msg if files in list don't exists."""
+    files = []
+    for file in filelist:
+        if not os.path.exists(file):
+            files.append(file)
+    if files:
+        return "Files not found: {}".format(files)
+    return None
 
 
 def fetch(url, zauth, header, timeout, datatype, verify):

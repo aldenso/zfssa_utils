@@ -1,5 +1,4 @@
 """Update functions"""
-import csv
 import json
 import requests
 from requests.exceptions import HTTPError, ConnectionError
@@ -16,6 +15,7 @@ requests.urllib3.disable_warnings(InsecureRequestWarning)
 
 def update_component(component_type, fullurl, zauth, timeout, data, verify,
                      project=None, pool=None, filesystem=None, lun=None):
+    """Update every component passed."""
     project, pool, filesystem, lun = project, pool, filesystem, lun
     stringdata = ""
     for k in data:
@@ -41,10 +41,9 @@ def update_component(component_type, fullurl, zauth, timeout, data, verify,
                 return True, ("UPDATE - FAIL - project '{}' pool '{}' - "
                               "Error \"{}\" - updates: {}"
                               .format(project, pool, error, stringdata))
-            else:
-                return True, ("UPDATE - FAIL - project '{}' pool '{}' - "
-                              "Error \"{}\" - updates: {}"
-                              .format(project, pool, error, stringdata))
+            return True, ("UPDATE - FAIL - project '{}' pool '{}' - "
+                          "Error \"{}\" - updates: {}"
+                          .format(project, pool, error, stringdata))
         except ConnectionError as error:
             return True, ("UPDATE - FAIL - project '{}' pool '{}' - Error "
                           "\"{}\" - updates: {}"
@@ -73,11 +72,10 @@ def update_component(component_type, fullurl, zauth, timeout, data, verify,
                               "'{}' pool '{}' - Error \"{}\" - updates: {}"
                               .format(filesystem, project, pool, error,
                                       stringdata))
-            else:
-                return True, ("UPDATE - FAIL - filesystem '{}' project "
-                              "'{}' pool '{}' - Error \"{}\"  - updates: {}"
-                              .format(filesystem, project, pool, error,
-                                      stringdata))
+            return True, ("UPDATE - FAIL - filesystem '{}' project "
+                          "'{}' pool '{}' - Error \"{}\"  - updates: {}"
+                          .format(filesystem, project, pool, error,
+                                  stringdata))
         except ConnectionError as error:
             return True, ("UPDATE - FAIL - filesystem '{}' project '{}' "
                           "pool '{}' - Error \"{}\" - updates: {}"
@@ -106,10 +104,9 @@ def update_component(component_type, fullurl, zauth, timeout, data, verify,
                 return True, ("UPDATE - FAIL - lun '{}' project '{}' pool "
                               "'{}' - Error \"{}\" - updates: {}"
                               .format(lun, project, pool, error, stringdata))
-            else:
-                return True, ("UPDATE - FAIL - lun '{}' project '{}' pool "
-                              "'{}' - Error \"{}\" - updates: {}"
-                              .format(lun, project, pool, error, stringdata))
+            return True, ("UPDATE - FAIL - lun '{}' project '{}' pool "
+                          "'{}' - Error \"{}\" - updates: {}"
+                          .format(lun, project, pool, error, stringdata))
         except ConnectionError as error:
             return True, ("UPDATE - FAIL - lun '{}' project '{}' pool '{}'"
                           " - Error \"{}\" - updates: {}"
