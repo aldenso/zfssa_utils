@@ -25,7 +25,7 @@ class TestUpdates(unittest.TestCase):
         updatefile = os.path.join(CSVDIR, 'update_component.csv')
         listargs = Namespace(server=serverfile, file=updatefile,
                              progress=False, subparser_name='UPDATE',
-                             timeout=100)
+                             timeout=100, cert=False)
         run_updates(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -37,7 +37,7 @@ class TestUpdates(unittest.TestCase):
         updatewrongfile = os.path.join(CSVDIR, 'test_create_fs.csv')
         listargs = Namespace(server=serverfile, file=updatewrongfile,
                              progress=False, subparser_name='UPDATE',
-                             timeout=100)
+                             timeout=100, cert=False)
         run_updates(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -49,7 +49,7 @@ class TestUpdates(unittest.TestCase):
         updatefile = os.path.join(CSVDIR, 'update_component.csv')
         listargs = Namespace(server=serverfile, file=updatefile,
                              progress=True, subparser_name='UPDATE',
-                             timeout=100)
+                             timeout=100, cert=False)
         run_updates(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -66,7 +66,7 @@ class TestUpdates(unittest.TestCase):
         updatefile = os.path.join(CSVDIR, 'update_component.csv')
         listargs = Namespace(server=serverfile, file=updatefile,
                              progress=False, subparser_name='UPDATE',
-                             timeout=2)
+                             timeout=2, cert=False)
         run_updates(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -79,7 +79,7 @@ class TestUpdates(unittest.TestCase):
         updatefile = os.path.join(CSVDIR, 'update_component.csv')
         listargs = Namespace(server=serverfile, file=updatefile,
                              progress=True, subparser_name='UPDATE',
-                             timeout=2)
+                             timeout=2, cert=False)
         run_updates(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -95,7 +95,7 @@ class TestUpdates(unittest.TestCase):
         updatefile = os.path.join(CSVDIR, 'update_component.csv')
         listargs = Namespace(server=serverfile, file=updatefile,
                              progress=False, subparser_name='UPDATE',
-                             timeout=100)
+                             timeout=100, cert=False)
         run_updates(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")

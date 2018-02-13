@@ -29,7 +29,7 @@ class TestSnapshots(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=projsnapfile,
                              list=False, create=True, delete=False,
                              progress=False, subparser_name='SNAPSHOTS',
-                             noconfirm=False, timeout=100)
+                             noconfirm=False, timeout=100, cert=False)
         run_snaps(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -42,7 +42,7 @@ class TestSnapshots(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=True, create=False, delete=False,
                              progress=False, subparser_name='SNAPSHOTS',
-                             noconfirm=False, timeout=100)
+                             noconfirm=False, timeout=100, cert=False)
         run_snaps(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -55,7 +55,7 @@ class TestSnapshots(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=projdestroyfile,
                              list=False, create=False, delete=True,
                              progress=False, subparser_name='SNAPSHOTS',
-                             noconfirm=True, timeout=100)
+                             noconfirm=True, timeout=100, cert=False)
         run_snaps(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -68,7 +68,7 @@ class TestSnapshots(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=projsnapfile,
                              list=False, create=True, delete=False,
                              progress=False, subparser_name='SNAPSHOTS',
-                             noconfirm=False, timeout=100)
+                             noconfirm=False, timeout=100, cert=False)
         run_snaps(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -81,7 +81,7 @@ class TestSnapshots(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=True, create=False, delete=False,
                              progress=False, subparser_name='SNAPSHOTS',
-                             noconfirm=False, timeout=100)
+                             noconfirm=False, timeout=100, cert=False)
         run_snaps(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -94,7 +94,7 @@ class TestSnapshots(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=projdestroyfile,
                              list=False, create=False, delete=True,
                              progress=False, subparser_name='SNAPSHOTS',
-                             noconfirm=True, timeout=100)
+                             noconfirm=True, timeout=100, cert=False)
         run_snaps(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -107,7 +107,7 @@ class TestSnapshots(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=projsnapfile,
                              list=False, create=True, delete=False,
                              progress=False, subparser_name='SNAPSHOTS',
-                             noconfirm=False, timeout=100)
+                             noconfirm=False, timeout=100, cert=False)
         run_snaps(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -120,7 +120,7 @@ class TestSnapshots(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=projcreatefile,
                              list=True, create=False, delete=False,
                              progress=False, subparser_name='SNAPSHOTS',
-                             noconfirm=False, timeout=100)
+                             noconfirm=False, timeout=100, cert=False)
         run_snaps(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
@@ -133,7 +133,7 @@ class TestSnapshots(unittest.TestCase):
         listargs = Namespace(server=serverfile, file=projdestroyfile,
                              list=False, create=False, delete=True,
                              progress=False, subparser_name='SNAPSHOTS',
-                             noconfirm=True, timeout=100)
+                             noconfirm=True, timeout=100, cert=False)
         run_snaps(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")

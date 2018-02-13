@@ -30,7 +30,7 @@ from zfssa_utils.common import HEADER, response_size, read_yaml_file, \
 requests.urllib3.disable_warnings(InsecureRequestWarning)
 
 
-def list_snap(snap, zfsurl, zauth, timeout):
+def list_snap(snap, zfsurl, zauth, timeout, verify):
     """List Snapshots from line in csv format. (err, msg)"""
     pool, project, snaptarget, snaptype, snapname = snap
     fullurl = ""
@@ -46,7 +46,7 @@ def list_snap(snap, zfsurl, zauth, timeout):
     else:
         return False, "snaptype '{}' unknown".format(snaptype)
     try:
-        req = requests.get(fullurl, auth=zauth, verify=False, headers=HEADER,
+        req = requests.get(fullurl, auth=zauth, verify=verify, headers=HEADER,
                            timeout=timeout)
         j = json.loads(req.text)
         req.close()
@@ -86,7 +86,7 @@ def list_snap(snap, zfsurl, zauth, timeout):
                               pool, error))
 
 
-def create_snap(snap, zfsurl, zauth, timeout):
+def create_snap(snap, zfsurl, zauth, timeout, verify):
     """Create Snapshots from line in csv format. (err, msg)"""
     pool, project, snaptarget, snaptype, snapname = snap
     fullurl = ""
@@ -103,7 +103,7 @@ def create_snap(snap, zfsurl, zauth, timeout):
         return False, "snaptype '{}' unknown".format(snaptype)
     try:
         req = requests.post(fullurl, data=json.dumps({'name': snapname}),
-                            auth=zauth, verify=False, headers=HEADER,
+                            auth=zauth, verify=verify, headers=HEADER,
                             timeout=timeout)
         j = json.loads(req.text)
         req.close()
@@ -136,7 +136,7 @@ def create_snap(snap, zfsurl, zauth, timeout):
                               error))
 
 
-def delete_snap(snap, zfsurl, zauth, timeout):
+def delete_snap(snap, zfsurl, zauth, timeout, verify):
     """Delete Snapshots from line in csv format. (err, msg)"""
     pool, project, snaptarget, snaptype, snapname = snap
     fullurl = ""
@@ -154,7 +154,7 @@ def delete_snap(snap, zfsurl, zauth, timeout):
     else:
         return False, "snaptype ''{}' unknown".format(snaptype)
     try:
-        req = requests.delete(fullurl, auth=zauth, verify=False,
+        req = requests.delete(fullurl, auth=zauth, verify=verify,
                               headers=HEADER, timeout=timeout)
         req.close()
         req.raise_for_status()
@@ -185,6 +185,7 @@ def run_snaps(args):
     createsnaps = args.create
     deletesnaps = args.delete
     timeout = args.timeout
+    verify = args.cert
     snaplist = read_csv_file(csvfile)
     configfile = args.server
     config = read_yaml_file(configfile)
@@ -196,7 +197,7 @@ def run_snaps(args):
             progbar = createprogress(len(snaplist))
             logger = createlogger(SNAPLOGFILE)
             for entry in snaplist:
-                err, msg = create_snap(entry, zfsurl, zauth, timeout)
+                err, msg = create_snap(entry, zfsurl, zauth, timeout, verify)
                 if err:
                     logger.warning(msg)
                 else:
@@ -209,7 +210,7 @@ def run_snaps(args):
             print("Creating snapshots")
             print("#" * 79)
             for entry in snaplist:
-                print(create_snap(entry, zfsurl, zauth, timeout)[1])
+                print(create_snap(entry, zfsurl, zauth, timeout, verify)[1])
                 print("=" * 79)
     elif deletesnaps:
         if not args.noconfirm:
@@ -232,7 +233,7 @@ def run_snaps(args):
             progbar = createprogress(len(snaplist))
             logger = createlogger(SNAPLOGFILE)
             for entry in snaplist:
-                err, msg = delete_snap(entry, zfsurl, zauth, timeout)
+                err, msg = delete_snap(entry, zfsurl, zauth, timeout, verify)
                 if err:
                     logger.warning(msg)
                 else:
@@ -245,14 +246,14 @@ def run_snaps(args):
             print("Deleting snapshots")
             print("#" * 79)
             for entry in snaplist:
-                print(delete_snap(entry, zfsurl, zauth, timeout)[1])
+                print(delete_snap(entry, zfsurl, zauth, timeout, verify)[1])
                 print("=" * 79)
     elif listsnaps:
         if args.progress:
             progbar = createprogress(len(snaplist))
             logger = createlogger(SNAPLOGFILE)
             for entry in snaplist:
-                err, msg = list_snap(entry, zfsurl, zauth, timeout)
+                err, msg = list_snap(entry, zfsurl, zauth, timeout, verify)
                 if err:
                     logger.warning(msg)
                 else:
@@ -265,5 +266,5 @@ def run_snaps(args):
             print("Listing snapshots")
             print("#" * 79)
             for entry in snaplist:
-                print(list_snap(entry, zfsurl, zauth, timeout)[1])
+                print(list_snap(entry, zfsurl, zauth, timeout, verify)[1])
                 print("=" * 79)

@@ -20,7 +20,7 @@ from zfssa_utils.common import (HEADER, response_size, createprogress,
 requests.urllib3.disable_warnings(InsecureRequestWarning)
 
 
-def list_lun(fileline, zfsurl, zauth, timeout):
+def list_lun(fileline, zfsurl, zauth, timeout, verify):
     """List/Show lun from line in csv format. (err, msg)"""
     pool = project = lun = None
     if len(fileline) == 3:
@@ -33,7 +33,7 @@ def list_lun(fileline, zfsurl, zauth, timeout):
     fullurl = ("{}/storage/v1/pools/{}/projects/{}/luns/{}"
                .format(zfsurl, pool, project, lun))
     try:
-        req = requests.get(fullurl, auth=zauth, verify=False, headers=HEADER,
+        req = requests.get(fullurl, auth=zauth, verify=verify, headers=HEADER,
                            timeout=timeout)
         j = json.loads(req.text)
         req.close()
@@ -65,7 +65,7 @@ def list_lun(fileline, zfsurl, zauth, timeout):
                       "\"{}\"".format(lun, project, pool, error))
 
 
-def create_lun(fileline, zfsurl, zauth, timeout):
+def create_lun(fileline, zfsurl, zauth, timeout, verify):
     """Create LUN from line in csv format. (err, msg)"""
     if len(fileline) != 11:
         return True, ("CREATE - FAIL - Error in line {} It needs to be 11 "
@@ -85,7 +85,7 @@ def create_lun(fileline, zfsurl, zauth, timeout):
                 "logbias": latency,
                 "nodestroy": ast.literal_eval(nodestroy)}
         req = requests.post(fullurl, data=json.dumps(data),
-                            auth=zauth, verify=False, headers=HEADER,
+                            auth=zauth, verify=verify, headers=HEADER,
                             timeout=timeout)
         j = json.loads(req.text)
         if 'fault' in j:
@@ -109,7 +109,7 @@ def create_lun(fileline, zfsurl, zauth, timeout):
                       " \"{}\"".format(lun, project, pool, error))
 
 
-def delete_lun(fileline, zfsurl, zauth, timeout):
+def delete_lun(fileline, zfsurl, zauth, timeout, verify):
     """Delete lun from line in csv format. (err, msg)"""
     if len(fileline) != 3:
         return True, ("DELETE - FAIL - Error in line {} It needs to be 3 "
@@ -119,7 +119,7 @@ def delete_lun(fileline, zfsurl, zauth, timeout):
                .format(zfsurl, pool, project, lun))
     try:
         req = requests.delete(fullurl, auth=zauth,
-                              verify=False, headers=HEADER, timeout=timeout)
+                              verify=verify, headers=HEADER, timeout=timeout)
         req.close()
         req.raise_for_status()
         return False, ("DELETE - SUCCESS - lun '{}' project '{}' pool '{}'"
@@ -143,6 +143,7 @@ def run_luns(args):
     createlun = args.create
     deletelun = args.delete
     timeout = args.timeout
+    verify = args.cert
     lunlistfromfile = read_csv_file(csvfile)
     configfile = args.server
     config = read_yaml_file(configfile)
@@ -154,7 +155,7 @@ def run_luns(args):
             progbar = createprogress(len(lunlistfromfile))
             logger = createlogger(LUNLOGFILE)
             for entry in lunlistfromfile:
-                err, msg = create_lun(entry, zfsurl, zauth, timeout)
+                err, msg = create_lun(entry, zfsurl, zauth, timeout, verify)
                 if err:
                     logger.warning(msg)
                 else:
@@ -167,7 +168,7 @@ def run_luns(args):
             print("Creating luns")
             print("#" * 79)
             for entry in lunlistfromfile:
-                print(create_lun(entry, zfsurl, zauth, timeout)[1])
+                print(create_lun(entry, zfsurl, zauth, timeout, verify)[1])
                 print("=" * 79)
     elif deletelun:
         if not args.noconfirm:
@@ -187,7 +188,7 @@ def run_luns(args):
             progbar = createprogress(len(lunlistfromfile))
             logger = createlogger(LUNLOGFILE)
             for entry in lunlistfromfile:
-                err, msg = delete_lun(entry, zfsurl, zauth, timeout)
+                err, msg = delete_lun(entry, zfsurl, zauth, timeout, verify)
                 if err:
                     logger.warning(msg)
                 else:
@@ -200,14 +201,14 @@ def run_luns(args):
             print("Deleting luns")
             print("#" * 79)
             for entry in lunlistfromfile:
-                print(delete_lun(entry, zfsurl, zauth, timeout)[1])
+                print(delete_lun(entry, zfsurl, zauth, timeout, verify)[1])
                 print("=" * 79)
     elif listlun:
         if args.progress:
             progbar = createprogress(len(lunlistfromfile))
             logger = createlogger(LUNLOGFILE)
             for entry in lunlistfromfile:
-                err, msg = list_lun(entry, zfsurl, zauth, timeout)
+                err, msg = list_lun(entry, zfsurl, zauth, timeout, verify)
                 if err:
                     logger.warning(msg)
                 else:
@@ -220,5 +221,5 @@ def run_luns(args):
             print("Listing luns")
             print("#" * 79)
             for entry in lunlistfromfile:
-                print(list_lun(entry, zfsurl, zauth, timeout)[1])
+                print(list_lun(entry, zfsurl, zauth, timeout, verify)[1])
                 print("=" * 79)

@@ -553,6 +553,7 @@ def run_explorer(args):
     progbar = None
     initial = 0
     timeout = args.timeout
+    verify = args.cert
     if args.progress:
         progbar = createprogress(len(group))
         logger = createlogger(EXPLORERLOGFILE)
@@ -560,7 +561,8 @@ def run_explorer(args):
         futures = {}
         for i in group:
             url = i[0]
-            future = executor.submit(fetch, url, zauth, HEADER, timeout, i[1])
+            future = executor.submit(fetch, url, zauth, HEADER,
+                                     timeout, i[1], verify)
             futures[future] = url
 
         for future in as_completed(futures):

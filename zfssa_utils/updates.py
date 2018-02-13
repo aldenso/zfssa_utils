@@ -14,7 +14,7 @@ from zfssa_utils.common import (HEADER, read_csv_file, read_yaml_file,
 requests.urllib3.disable_warnings(InsecureRequestWarning)
 
 
-def update_component(component_type, fullurl, zauth, timeout, data,
+def update_component(component_type, fullurl, zauth, timeout, data, verify,
                      project=None, pool=None, filesystem=None, lun=None):
     project, pool, filesystem, lun = project, pool, filesystem, lun
     stringdata = ""
@@ -23,7 +23,7 @@ def update_component(component_type, fullurl, zauth, timeout, data,
     if component_type == 'project':
         try:
             req = requests.put(fullurl, data=json.dumps(data),
-                               auth=zauth, verify=False, headers=HEADER,
+                               auth=zauth, verify=verify, headers=HEADER,
                                timeout=timeout)
             j = json.loads(req.text)
             if 'fault' in j:
@@ -53,7 +53,7 @@ def update_component(component_type, fullurl, zauth, timeout, data,
     elif component_type == 'filesystem':
         try:
             req = requests.put(fullurl, data=json.dumps(data),
-                               auth=zauth, verify=False, headers=HEADER,
+                               auth=zauth, verify=verify, headers=HEADER,
                                timeout=timeout)
             j = json.loads(req.text)
             if 'fault' in j:
@@ -87,7 +87,7 @@ def update_component(component_type, fullurl, zauth, timeout, data,
     elif component_type == 'lun':
         try:
             req = requests.put(fullurl, data=json.dumps(data),
-                               auth=zauth, verify=False, headers=HEADER,
+                               auth=zauth, verify=verify, headers=HEADER,
                                timeout=timeout)
             j = json.loads(req.text)
             if 'fault' in j:
@@ -132,6 +132,7 @@ def run_updates(args):
     """
     datafile = args.file
     timeout = args.timeout
+    verify = args.cert
     configfile = args.server
     config = read_yaml_file(configfile)
     zauth = (config['username'], config['password'])
@@ -152,7 +153,8 @@ def run_updates(args):
                     key, value = entry.split(';')
                     data[key] = value
                 err, msg = update_component('project', fullurl, zauth, timeout,
-                                            data, project=project, pool=pool)
+                                            data, verify, project=project,
+                                            pool=pool)
                 if err:
                     logger.warning(msg)
                 else:
@@ -168,7 +170,8 @@ def run_updates(args):
                     key, value = entry.split(';')
                     data[key] = value
                 err, msg = update_component('project', fullurl, zauth, timeout,
-                                            data, project=project, pool=pool)
+                                            data, verify, project=project,
+                                            pool=pool)
                 if err:
                     logger.warning(msg)
                 else:
@@ -184,8 +187,8 @@ def run_updates(args):
                     key, value = entry.split(';')
                     data[key] = value
                 err, msg = update_component('lun', fullurl, zauth, timeout,
-                                            data, project=project, pool=pool,
-                                            lun=lun)
+                                            data, verify, project=project,
+                                            pool=pool, lun=lun)
                 if err:
                     logger.warning(msg)
                 else:
@@ -209,7 +212,8 @@ def run_updates(args):
                 print("Updating project")
                 print("#" * 79)
                 print(update_component('project', fullurl, zauth, timeout,
-                                       data, project=project, pool=pool)[1])
+                                       data, verify, project=project,
+                                       pool=pool)[1])
                 print("=" * 79)
 
             elif item[0] == 'filesystem':
@@ -223,8 +227,8 @@ def run_updates(args):
                 print("Updating filesystem")
                 print("#" * 79)
                 print(update_component('filesystem', fullurl, zauth, timeout,
-                                       data, project=project, pool=pool,
-                                       filesystem=filesystem)[1])
+                                       data, verify, project=project,
+                                       pool=pool, filesystem=filesystem)[1])
                 print("=" * 79)
 
             elif item[0] == 'lun':
@@ -238,7 +242,8 @@ def run_updates(args):
                 print("Updating lun")
                 print("#" * 79)
                 print(update_component('lun', fullurl, zauth, timeout, data,
-                                       project=project, pool=pool, lun=lun)[1])
+                                       verify, project=project, pool=pool,
+                                       lun=lun)[1])
                 print("=" * 79)
 
             else:

@@ -45,7 +45,7 @@ class TestExplorer(unittest.TestCase):
         """Test explorer creation."""
         serverfile = os.path.join(SERVERDIR, 'serverOS86.yml')
         listargs = Namespace(server=serverfile, subparser_name='EXPLORER',
-                             progress=False, timeout=100)
+                             progress=False, timeout=100, cert=False)
         run_explorer(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("need to run in buffered mode")

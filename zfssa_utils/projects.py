@@ -18,7 +18,7 @@ from zfssa_utils.common import HEADER, response_size, read_yaml_file, \
 requests.urllib3.disable_warnings(InsecureRequestWarning)
 
 
-def list_projects(fileline, zfsurl, zauth, timeout):
+def list_projects(fileline, zfsurl, zauth, timeout, verify):
     """List/Show projects from line in csv format. (err, msg)"""
     pool = project = None
     if len(fileline) == 2:
@@ -32,7 +32,7 @@ def list_projects(fileline, zfsurl, zauth, timeout):
     fullurl = ("{}/storage/v1/pools/{}/projects/{}"
                .format(zfsurl, pool, project))
     try:
-        req = requests.get(fullurl, auth=zauth, verify=False, headers=HEADER,
+        req = requests.get(fullurl, auth=zauth, verify=verify, headers=HEADER,
                            timeout=timeout)
         j = json.loads(req.text)
         req.close()
@@ -76,7 +76,7 @@ def list_projects(fileline, zfsurl, zauth, timeout):
                       .format(project, pool, error))
 
 
-def create_project(fileline, zfsurl, zauth, timeout):
+def create_project(fileline, zfsurl, zauth, timeout, verify):
     """Create Project from line in csv format. (err, msg)"""
     if len(fileline) != 20:
         return True, ("CREATE - FAIL - Error in line {} It needs to be 20"
@@ -108,7 +108,7 @@ def create_project(fileline, zfsurl, zauth, timeout):
                 "sharenfs": sharenfs,
                 "sharesmb": sharesmb}
         req = requests.post(fullurl, data=json.dumps(data),
-                            auth=zauth, verify=False, headers=HEADER,
+                            auth=zauth, verify=verify, headers=HEADER,
                             timeout=timeout)
         j = json.loads(req.text)
         if 'fault' in j:
@@ -132,7 +132,7 @@ def create_project(fileline, zfsurl, zauth, timeout):
                       .format(project, pool, error))
 
 
-def delete_project(fileline, zfsurl, zauth, timeout):
+def delete_project(fileline, zfsurl, zauth, timeout, verify):
     """Delete project from line in csv format. (err, msg)"""
     if len(fileline) != 2:
         return True, ("DELETE - FAIL - Error in line {} It needs to be 2 "
@@ -142,7 +142,7 @@ def delete_project(fileline, zfsurl, zauth, timeout):
                .format(zfsurl, pool, project))
     try:
         req = requests.delete(fullurl, auth=zauth,
-                              verify=False, headers=HEADER,
+                              verify=verify, headers=HEADER,
                               timeout=timeout)
         req.close()
         req.raise_for_status()
@@ -167,6 +167,7 @@ def run_projects(args):
     createproject = args.create
     deleteproject = args.delete
     timeout = args.timeout
+    verify = args.cert
     projectlistfromfile = read_csv_file(csvfile)
     configfile = args.server
     config = read_yaml_file(configfile)
@@ -178,7 +179,9 @@ def run_projects(args):
             progbar = createprogress(len(projectlistfromfile))
             logger = createlogger(PROJECTLOGFILE)
             for entry in projectlistfromfile:
-                err, msg = create_project(entry, zfsurl, zauth, timeout)
+                err, msg = create_project(entry, zfsurl,
+                                          zauth, timeout,
+                                          verify)
                 if err:
                     logger.warning(msg)
                 else:
@@ -191,7 +194,7 @@ def run_projects(args):
             print("Creating projects")
             print("#" * 79)
             for entry in projectlistfromfile:
-                print(create_project(entry, zfsurl, zauth, timeout)[1])
+                print(create_project(entry, zfsurl, zauth, timeout, verify)[1])
                 print("=" * 79)
     elif deleteproject:
         if not args.noconfirm:
@@ -211,7 +214,9 @@ def run_projects(args):
             progbar = createprogress(len(projectlistfromfile))
             logger = createlogger(PROJECTLOGFILE)
             for entry in projectlistfromfile:
-                err, msg = delete_project(entry, zfsurl, zauth, timeout)
+                err, msg = delete_project(entry, zfsurl,
+                                          zauth, timeout,
+                                          verify)
                 if err:
                     logger.warning(msg)
                 else:
@@ -224,14 +229,14 @@ def run_projects(args):
             print("Deleting projects")
             print("#" * 79)
             for entry in projectlistfromfile:
-                print(delete_project(entry, zfsurl, zauth, timeout)[1])
+                print(delete_project(entry, zfsurl, zauth, timeout, verify)[1])
                 print("=" * 79)
     elif listprojects:
         if args.progress:
             progbar = createprogress(len(projectlistfromfile))
             logger = createlogger(PROJECTLOGFILE)
             for entry in projectlistfromfile:
-                err, msg = list_projects(entry, zfsurl, zauth, timeout)
+                err, msg = list_projects(entry, zfsurl, zauth, timeout, verify)
                 initial += 1
                 if err:
                     logger.warning(msg)
@@ -244,5 +249,5 @@ def run_projects(args):
             print("Listing projects")
             print("#" * 79)
             for entry in projectlistfromfile:
-                print(list_projects(entry, zfsurl, zauth, timeout)[1])
+                print(list_projects(entry, zfsurl, zauth, timeout, verify)[1])
                 print("=" * 79)

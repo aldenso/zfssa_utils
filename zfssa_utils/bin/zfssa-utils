@@ -16,7 +16,11 @@ if __name__ == "__main__":
     args = create_parser()
     if args.version:
         exit(__version__)
-    elif args.subparser_name == 'EXPLORER':
+    if not args.cert:
+        print("*" * 79)
+        print("Warning: not using certificate verification.")
+        print("*" * 79)
+    if args.subparser_name == 'EXPLORER':
         run_explorer(args)
     elif args.subparser_name == 'PROJECTS':
         run_projects(args)

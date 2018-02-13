@@ -73,10 +73,10 @@ def exists(data, key):
         return "-"
 
 
-def fetch(url, zauth, header, timeout, datatype):
+def fetch(url, zauth, header, timeout, datatype, verify):
     """Fetch data from zfs api, returning a tuple (data, datatype)"""
     req = requests.get(url, timeout=timeout, auth=zauth,
-                       verify=False, headers=header)
+                       verify=verify, headers=header)
     data = req.json()
     return data, datatype
 
@@ -106,6 +106,8 @@ def create_parser():
                         help="program version", required=False)
     parser.add_argument("-t", "--timeout", type=int, help="connection timeout",
                         required=False, default=100)
+    parser.add_argument("--cert", type=str, help="use certificate",
+                        required=False, default=False)
 
     subparser = parser.add_subparsers(help='COMMANDS', dest='subparser_name')
 
