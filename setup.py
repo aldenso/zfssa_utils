@@ -1,7 +1,8 @@
 from setuptools import setup
+from zfssa_utils import __version__
 
 setup(name='zfssa_utils',
-      version='0.1',
+      version=__version__,
       description='Command Line utility to handle common tasks on ZFSSA.',
       url='http://github.com/aldenso/zfssa_utils',
       author='Aldo Sotolongo',

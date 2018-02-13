@@ -5,3 +5,4 @@ Projects creation, validation and deletion.
 LUNs creation, validation and deletion.
 Snapshots creation, validation and deletion.
 """
+__version__ = "0.0.1"

@@ -102,6 +102,9 @@ def create_parser():
     """
     parser = argparse.ArgumentParser(description=desc)
 
+    parser.add_argument("-v", "--version", action="store_true",
+                        help="program version", required=False)
+
     subparser = parser.add_subparsers(help='COMMANDS', dest='subparser_name')
 
     # Explorer arguments
