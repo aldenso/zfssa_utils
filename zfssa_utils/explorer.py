@@ -571,7 +571,7 @@ def run_explorer(args):
                 data, datatype = future.result()
             except Exception as exc:
                 if progbar:
-                    logger.warning("'%s' - '%s'", url, exc)
+                    logger.warning('"%s" - "%s"', url, exc)
                     initial += 1
                     progbar.update(initial)
                 else:
