@@ -20,7 +20,17 @@ if __name__ == "__main__":
         print("*" * 79)
         print("Warning: not using certificate verification.")
         print("*" * 79)
-    msg = check_files_exists([args.cert, args.server, args.file])
+    arglist = []
+    try:
+        if args.cert:
+            arglist.append(args.cert)
+        if args.server:
+            arglist.append(args.server)
+        if args.file:
+            arglist.append(args.file)
+    except Exception:
+        pass
+    msg = check_files_exists(arglist)
     if msg:
         exit(msg)
     if args.subparser_name == 'EXPLORER':

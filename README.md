@@ -1,27 +1,37 @@
 # zfssa_utils
 
-Command Line utility to handle most common tasks with ZFS Storage Appliance **Work In progress**
+Command Line utility to handle most common tasks with ZFS Storage Appliance.
 
-For convenience setup a virtual environment and install the utility in it.
+For convenience, clone the repo and setup a virtual environment to install the utility in it.
 
 ```sh
+git clone https://github.com/aldenso/zfssa_utils
+cd zfssa_utils
 python -m venv .venv
 source .venv/bin/activate
+```
+
+You'll see a prompt like this.
+
+```txt
 (.venv) $
 ```
 
-At the moment you can install the utility cloning the repo and building with setup.
+At the moment you can install the utility building with setup.
 
 ```sh
-(.venv) $ python setup.py install
+python setup.py install
 ```
 
 Check the utility (remember to rehash if you are using zsh).
 
 ```sh
-(.venv) $ zfssa-utils -h
-usage: zfssa-utils [-h]
-                   {EXPLORER,PROJECTS,FILESYSTEMS,LUNS,SNAPSHOTS,TEMPLATES}
+zfssa-utils -h
+```
+
+```txt
+usage: zfssa-utils [-h] [-v] [-t TIMEOUT] [--cert CERT]
+                   {EXPLORER,PROJECTS,FILESYSTEMS,LUNS,SNAPSHOTS,TEMPLATES,UPDATE}
                    ...
 
 Utils for ZFS Storage Appliance. This program allow you to generate zfssa
@@ -29,28 +39,52 @@ general info csv files, manipulate or validate info for projects, luns and
 snapshots.
 
 positional arguments:
-  {EXPLORER,PROJECTS,FILESYSTEMS,LUNS,SNAPSHOTS,TEMPLATES}
+  {EXPLORER,PROJECTS,FILESYSTEMS,LUNS,SNAPSHOTS,TEMPLATES,UPDATE}
                         COMMANDS
 
 optional arguments:
   -h, --help            show this help message and exit
+  -v, --version         program version
+  -t TIMEOUT, --timeout TIMEOUT
+                        connection timeout
+  --cert CERT           use certificate
+```
+
+**Note**: You can run operations without validating certificates, but you'll get a warning.
+
+```txt
+*******************************************************************************
+Warning: not using certificate verification.
+*******************************************************************************
 ```
 
 Explorer generation will get the most common values you need about you zfssa system.
 
 ```sh
-(.venv) $ zfssa-utils EXPLORER -s test/serverOS86.yml -p
+zfssa-utils EXPLORER -s test/serverOS86.yml -p
+```
+
+```txt
  23% |##############                                               | ETA:  0:01:19
  .
  .
  .
- (.venv) $ zfssa-utils EXPLORER -s test/serverOS86.yml -p
 100% |#############################################################| Time: 0:01:57
+```
 
-(.venv) $ ls data
+```sh
+ls data
+```
+
+```txt
 zfssa_explorer_192.168.56.150_110218_144857.zip
+```
 
-(.venv) $ unzip -l data/zfssa_explorer_192.168.56.150_110218_144857.zip
+```sh
+unzip -l data/zfssa_explorer_192.168.56.150_110218_144857.zip
+```
+
+```txt
 Archive:  data/zfssa_explorer_192.168.56.150_110218_144857.zip
   Length      Date    Time    Name
 ---------  ---------- -----   ----
@@ -79,10 +113,13 @@ Archive:  data/zfssa_explorer_192.168.56.150_110218_144857.zip
     19233                     21 files
 ```
 
-Create templates files to create several components in a serial way.
+Create templates files to make several components operations in a serial way.
 
 ```sh
-(.venv) $ zfssa-utils TEMPLATES -h
+zfssa-utils TEMPLATES -h
+```
+
+```txt
 usage: zfssa-utils TEMPLATES [-h] [--projects] [--filesystems] [--luns]
                              [--snapshots] [-t TIMEOUT] (--create | --delete)
 
@@ -99,21 +136,24 @@ optional arguments:
 ```
 
 ```sh
-(.venv) $ zfssa-utils TEMPLATES --projects --create
+zfssa-utils TEMPLATES --projects --create
+zfssa-utils TEMPLATES --projects --delete
+zfssa-utils TEMPLATES --filesystems --create
+zfssa-utils TEMPLATES --filesystems --delete
+zfssa-utils TEMPLATES --luns --create
+zfssa-utils TEMPLATES --luns --delete
+zfssa-utils TEMPLATES --snapshots --create
+zfssa-utils TEMPLATES --snapshots --delete
+```
+
+```txt
 Created file 'create_projects.csv'
-(.venv) $ zfssa-utils TEMPLATES --projects --delete
 Created file 'destroy_projects.csv'
-(.venv) $ zfssa-utils TEMPLATES --filesystems --create
 Created file 'create_filesystems.csv'
-(.venv) $ zfssa-utils TEMPLATES --filesystems --delete
 Created file 'destroy_filesystems.csv'
-(.venv) $ zfssa-utils TEMPLATES --luns --create
 Created file 'create_luns.csv'
-(.venv) $ zfssa-utils TEMPLATES --luns --delete
 Created file 'destroy_luns.csv'
-(.venv) $ zfssa-utils TEMPLATES --snapshots --create
 Created file 'create_snapshots.csv'
-(.venv) $ zfssa-utils TEMPLATES --snapshots --delete
 Created file 'destroy_snapshots.csv'
 ```
 
@@ -124,21 +164,24 @@ Make changes in the templates you want and create, delete or show the components
 Projects operations.
 
 ```sh
-(.venv) $ zfssa-utils PROJECTS -s test/serverOS86.yml -f create_projects.csv --create
+zfssa-utils PROJECTS -s test/serverOS86.yml -f create_projects.csv --create
+zfssa-utils PROJECTS -s test/serverOS86.yml -f create_projects.csv --list
+zfssa-utils PROJECTS -s test/serverOS86.yml -f destroy_projects.csv --delete
+```
+
+```txt
 ###############################################################################
 Creating projects
 ###############################################################################
 CREATE - SUCCESS - project 'unittest01' pool 'pool_0'
 ===============================================================================
 
-(.venv) $ zfssa-utils PROJECTS -s test/serverOS86.yml -f create_projects.csv --list
 ###############################################################################
 Listing projects
 ###############################################################################
 LIST - PRESENT - project 'unittest01' pool 'pool_0' mountpoint '/export/unittest01' quota '10 GB' reservation '10 GB' compression 'gzip' dedup 'True' logbias 'latency' nodestroy 'False' recordsize '128 KB' readonly 'False' atime 'True' def_sparse 'True' def_user 'nobody' def_group 'other' def_perms '750' def_volblocksize '128 KB' def_volsize '1 GB' sharenfs 'on' sharesmb 'off'
 ===============================================================================
 
-(.venv) $ zfssa-utils PROJECTS -s test/serverOS86.yml -f destroy_projects.csv --delete
 You are about to destroy
 ==============================
 Pool           Project
@@ -154,3 +197,5 @@ DELETE - SUCCESS - project 'unittest01' pool 'pool_0'
 ```
 
 **Note**: Every delete operation for projects, filesystems, luns and snapshots has a --noconfirm flag if you are completely sure about the file accuracy.
+
+**Pending to complete**
