@@ -1,5 +1,6 @@
 """Update functions"""
 import json
+from six.moves import input
 import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
@@ -115,6 +116,31 @@ def update_component(component_type, fullurl, zauth, timeout, data, verify,
         return True, ("Wrong component type '{}'".format(component_type))
 
 
+def noconfirm_update(noconfirm, update_list):
+    """Ask for confirmation to continue or exit program."""
+    if noconfirm:
+        pass
+    else:
+        print("You are about to modify/update")
+        print("=" * 79)
+        print("{:15} {:30} {}"
+              .format("TYPE", "NAME:PROJECT:POOL",
+                      "keyx: valx , keyx+1: valx+1, ..."))
+        print("=" * 79)
+        for item in update_list:
+            comp_type, comp = item[:2]
+            changes = item[2:]
+            print("{:15} {:30} {}"
+                  .format(comp_type, comp.replace(';', ':'),
+                          str(changes).replace(';', ': ')))
+        print("=" * 79)
+        response = input("Do you want to proceed (y/N)")
+        if response == "Y" or response == "y":
+            pass
+        else:
+            exit("Not confirmed, Exiting program")
+
+
 def run_updates(args):
     """Update component based on a csv file with the following format.
 
@@ -137,6 +163,7 @@ def run_updates(args):
     initial = 0  # for progressbar
     updates = read_csv_file(datafile)
     if args.progress:
+        noconfirm_update(args.noconfirm, updates)
         progbar = createprogress(len(updates))
         logger = createlogger(UPDATELOGFILE)
         for item in updates:
@@ -195,6 +222,7 @@ def run_updates(args):
         progbar.finish()
 
     else:
+        noconfirm_update(args.noconfirm, updates)
         for item in updates:
             changes = item[2:]
             data = {}

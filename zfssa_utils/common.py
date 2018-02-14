@@ -242,6 +242,9 @@ def create_parser():
                              help="Server config file (YAML)")
     update_args.add_argument("-p", "--progress", action="store_true",
                              help="progress bar", required=False)
+    update_args.add_argument("--noconfirm", action="store_true",
+                             help=("Don't ask for confirmation when updating a"
+                                   "component"), required=False)
 
     parsed_args = parser.parse_args()
     return parsed_args

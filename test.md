@@ -147,7 +147,8 @@ Then run the script **run_test.sh**.
 coverage run --source zfssa_utils -m unittest --buffer -v \
 test.test_zfssa test.test_projects test.test_filesystems \
 test.test_luns test.test_snapshots test.test_explorer \
-test.test_templates
+test.test_templates test.test_updates
 ```
 
 **TODO**: Include Docker to test more python versions.
+
