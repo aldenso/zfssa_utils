@@ -120,6 +120,20 @@ pool_0,unittest,fs01,filesystem,backup
 pool_0,unittest,lun10,lun,backup
 """
 
+TEMPL_UPDATES = """# Template updates components (projects, filesystems, luns)
+# "component type", "name;project;pool", "key;value" ...
+#
+# Examples:
+# project,-;projname;pool,key1;val1,key2;val2
+# lun,lunname;projname;pool,key1;val1,key2;val2
+# fs,fsname;projname;pool,key1;val1,key2;val2
+#
+# For projects the second column (name) is hyphen('-').
+project,-;unittest;pool_0,logbias;latency
+lun,lun10;unittest;pool_0,compression;lzjb,sparse;True
+filesystem,fs01;unittest;pool_0,reservation;512m,atime;False
+"""
+
 
 def write_file(name, data):
     """Write a file base on templates."""
@@ -156,6 +170,8 @@ def create_template(args):
             write_file("create_snapshots.csv", TEMPL_SNAPSHOTS)
         else:
             write_file("destroy_snapshots.csv", TEMPL_SNAPSHOTS)
+    elif args.updates:
+        write_file("update_components.csv", TEMPL_UPDATES)
     else:
         print("You need to choose an option:"
               "projects, --luns, --filesystems, --snapshots")

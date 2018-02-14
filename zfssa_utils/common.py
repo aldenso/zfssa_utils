@@ -223,6 +223,10 @@ def create_parser():
     template_args.add_argument("--snapshots", action="store_true",
                                required=False,
                                help="generate template for snapshots")
+    template_args.add_argument("--updates", action="store_true",
+                               required=False,
+                               help=("generate template for components"
+                                     "(lun|fs|project) updates/modification"))
 
     templ_opers = template_args.add_mutually_exclusive_group(required=True)
     templ_opers.add_argument("--create", action="store_true",
