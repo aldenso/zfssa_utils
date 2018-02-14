@@ -570,7 +570,12 @@ def run_explorer(args):
             try:
                 data, datatype = future.result()
             except Exception as exc:
-                print(exc)
+                if progbar:
+                    logger.warning(exc)
+                    initial += 1
+                    progbar.update(initial)
+                else:
+                    print(exc)
             else:
                 if progbar:
                     create_csv(data, datatype, outputdir)
