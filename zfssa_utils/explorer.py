@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from zipfile import ZipFile
 from zfssa_utils.common import (exists, response_size, read_yaml_file,
                                 urls_constructor, createprogress, fetch,
-                                HEADER, createlogger, EXPLORERLOGFILE)
+                                HEADER, CreateLogger, EXPLORERLOGFILE)
 
 
 def trimpath(outputdir, filename):
@@ -556,7 +556,7 @@ def run_explorer(args):
     verify = args.cert
     if args.progress:
         progbar = createprogress(len(group))
-        logger = createlogger(EXPLORERLOGFILE)
+        logger = CreateLogger(EXPLORERLOGFILE)
     with ThreadPoolExecutor(max_workers=4) as executor:
         futures = {}
         for i in group:
@@ -571,7 +571,8 @@ def run_explorer(args):
                 data, datatype = future.result()
             except Exception as exc:
                 if progbar:
-                    logger.warning('"%s" - "%s"', url, exc)
+                    msg = '"{}" - "{}"'.format(url, exc)
+                    logger.warning(msg)
                     initial += 1
                     progbar.update(initial)
                 else:
@@ -579,13 +580,17 @@ def run_explorer(args):
             else:
                 if progbar:
                     create_csv(data, datatype, outputdir)
-                    logger.info("Collecting '%s' for '%s'", datatype,
-                                outputdir)
+                    msg = "Collecting '{}' for '{}'".format(datatype,
+                                                            outputdir)
+                    logger.info(msg)
                     initial += 1
                     progbar.update(initial)
                 else:
                     print("++++ Creating csv for {} ++++".format(datatype))
                     create_csv(data, datatype, outputdir)
+        if args.progress:
+            progbar.finish()
+            logger.shutdown()
         try:
             with ZipFile('{}.zip'.format(outputdir), 'w') as outzip:
                 for root, _, files in os.walk(outputdir):
@@ -599,5 +604,3 @@ def run_explorer(args):
             os.rmdir(outputdir)
         except FileNotFoundError as err:
             print("Nothing to remove: {}".format(err))
-        if progbar:
-            progbar.finish()

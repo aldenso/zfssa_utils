@@ -282,17 +282,24 @@ def urls_constructor(zfsip):
     return urls_group
 
 
-def createlogger(log_name):
-    """Return logger"""
-    # create logger with 'progress bar'
-    logger = logging.getLogger(log_name)
-    logger.setLevel(logging.DEBUG)
-    # create file handler which logs even debug messages
-    fh = logging.FileHandler(log_name)
-    # create formatter and add it to the handler
-    formatter = logging.Formatter('%(asctime)s - %(name)s - '
-                                  '%(levelname)s - %(message)s')
-    fh.setFormatter(formatter)
-    # add the handler to logger
-    logger.addHandler(fh)
-    return logger
+class CreateLogger(object):
+
+    def __init__(self, log_name):
+        self.log_name = log_name
+        self.logger = logging.getLogger(log_name)
+        self.logger.setLevel(logging.DEBUG)
+        self.formatter = logging.Formatter('%(asctime)s - %(name)s - '
+                                           '%(levelname)s - %(message)s')
+        self.fh = logging.FileHandler(self.log_name)
+        self.fh.setFormatter(self.formatter)
+        self.logger.addHandler(self.fh)
+
+    def info(self, msg):
+        self.logger.info(msg)
+
+    def warning(self, msg):
+        self.logger.warning(msg)
+
+    def shutdown(self):
+        self.logger.removeHandler(self.fh)
+        logging.shutdown()

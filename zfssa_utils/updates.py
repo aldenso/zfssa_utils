@@ -5,7 +5,7 @@ import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
 from zfssa_utils.common import (HEADER, read_csv_file, read_yaml_file,
-                                createprogress, createlogger, UPDATELOGFILE)
+                                createprogress, CreateLogger, UPDATELOGFILE)
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
@@ -165,7 +165,7 @@ def run_updates(args):
     if args.progress:
         noconfirm_update(args.noconfirm, updates)
         progbar = createprogress(len(updates))
-        logger = createlogger(UPDATELOGFILE)
+        logger = CreateLogger(UPDATELOGFILE)
         for item in updates:
             changes = item[2:]
             data = {}
@@ -220,6 +220,7 @@ def run_updates(args):
                 initial += 1
                 progbar.update(initial)
         progbar.finish()
+        logger.shutdown()
 
     else:
         noconfirm_update(args.noconfirm, updates)

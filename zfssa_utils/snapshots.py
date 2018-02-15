@@ -21,7 +21,7 @@ import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
 from zfssa_utils.common import HEADER, response_size, read_yaml_file, \
-     read_csv_file, createprogress, createlogger, SNAPLOGFILE
+     read_csv_file, createprogress, CreateLogger, SNAPLOGFILE
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
@@ -195,7 +195,7 @@ def run_snaps(args):
     if createsnaps:
         if args.progress:
             progbar = createprogress(len(snaplist))
-            logger = createlogger(SNAPLOGFILE)
+            logger = CreateLogger(SNAPLOGFILE)
             for entry in snaplist:
                 err, msg = create_snap(entry, zfsurl, zauth, timeout, verify)
                 if err:
@@ -205,6 +205,7 @@ def run_snaps(args):
                 initial += 1
                 progbar.update(initial)
             progbar.finish()
+            logger.shutdown()
         else:
             print("#" * 79)
             print("Creating snapshots")
@@ -231,7 +232,7 @@ def run_snaps(args):
                 exit("Not confirmed, Exiting program")
         if args.progress:
             progbar = createprogress(len(snaplist))
-            logger = createlogger(SNAPLOGFILE)
+            logger = CreateLogger(SNAPLOGFILE)
             for entry in snaplist:
                 err, msg = delete_snap(entry, zfsurl, zauth, timeout, verify)
                 if err:
@@ -241,6 +242,7 @@ def run_snaps(args):
                 initial += 1
                 progbar.update(initial)
             progbar.finish()
+            logger.shutdown()
         else:
             print("#" * 79)
             print("Deleting snapshots")
@@ -251,7 +253,7 @@ def run_snaps(args):
     elif listsnaps:
         if args.progress:
             progbar = createprogress(len(snaplist))
-            logger = createlogger(SNAPLOGFILE)
+            logger = CreateLogger(SNAPLOGFILE)
             for entry in snaplist:
                 err, msg = list_snap(entry, zfsurl, zauth, timeout, verify)
                 if err:
@@ -261,6 +263,7 @@ def run_snaps(args):
                 initial += 1
                 progbar.update(initial)
             progbar.finish()
+            logger.shutdown()
         else:
             print("#" * 79)
             print("Listing snapshots")

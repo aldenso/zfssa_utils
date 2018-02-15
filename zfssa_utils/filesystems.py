@@ -9,7 +9,7 @@ import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
 from zfssa_utils.common import HEADER, response_size, read_yaml_file, \
-     read_csv_file, createprogress, createlogger, FSLOGFILE
+     read_csv_file, createprogress, CreateLogger, FSLOGFILE
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
@@ -176,7 +176,7 @@ def run_filesystems(args):
     if createfs:
         if args.progress:
             progbar = createprogress(len(fslistfromfile))
-            logger = createlogger(FSLOGFILE)
+            logger = CreateLogger(FSLOGFILE)
             for entry in fslistfromfile:
                 err, msg = create_filesystems(entry, zfsurl,
                                               zauth, timeout,
@@ -188,6 +188,7 @@ def run_filesystems(args):
                 initial += 1
                 progbar.update(initial)
             progbar.finish()
+            logger.shutdown()
         else:
             print("#" * 79)
             print("Creating filesystems")
@@ -212,7 +213,7 @@ def run_filesystems(args):
                 exit("Not confirmed, Exiting program")
         if args.progress:
             progbar = createprogress(len(fslistfromfile))
-            logger = createlogger(FSLOGFILE)
+            logger = CreateLogger(FSLOGFILE)
             for entry in fslistfromfile:
                 err, msg = delete_filesystems(entry, zfsurl,
                                               zauth, timeout,
@@ -224,6 +225,7 @@ def run_filesystems(args):
                 initial += 1
                 progbar.update(initial)
             progbar.finish()
+            logger.shutdown()
         else:
             print("#" * 79)
             print("Deleting filesystems")
@@ -236,7 +238,7 @@ def run_filesystems(args):
     elif listfs:
         if args.progress:
             progbar = createprogress(len(fslistfromfile))
-            logger = createlogger(FSLOGFILE)
+            logger = CreateLogger(FSLOGFILE)
             for entry in fslistfromfile:
                 err, msg = list_filesystems(entry, zfsurl,
                                             zauth, timeout,
@@ -248,6 +250,7 @@ def run_filesystems(args):
                     logger.info(msg)
                 progbar.update(initial)
             progbar.finish()
+            logger.shutdown()
         else:
             print("#" * 79)
             print("Listing filesystems")

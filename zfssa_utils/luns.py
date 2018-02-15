@@ -10,7 +10,7 @@ import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
 from zfssa_utils.common import (HEADER, response_size, createprogress,
-                                createlogger, read_yaml_file,
+                                CreateLogger, read_yaml_file,
                                 read_csv_file, LUNLOGFILE)
 
 # to disable warning
@@ -150,7 +150,7 @@ def run_luns(args):
     if createlun:
         if args.progress:
             progbar = createprogress(len(lunlistfromfile))
-            logger = createlogger(LUNLOGFILE)
+            logger = CreateLogger(LUNLOGFILE)
             for entry in lunlistfromfile:
                 err, msg = create_lun(entry, zfsurl, zauth, timeout, verify)
                 if err:
@@ -160,6 +160,7 @@ def run_luns(args):
                 initial += 1
                 progbar.update(initial)
             progbar.finish()
+            logger.shutdown()
         else:
             print("#" * 79)
             print("Creating luns")
@@ -183,7 +184,7 @@ def run_luns(args):
                 exit("Not confirmed, Exiting program")
         if args.progress:
             progbar = createprogress(len(lunlistfromfile))
-            logger = createlogger(LUNLOGFILE)
+            logger = CreateLogger(LUNLOGFILE)
             for entry in lunlistfromfile:
                 err, msg = delete_lun(entry, zfsurl, zauth, timeout, verify)
                 if err:
@@ -193,6 +194,7 @@ def run_luns(args):
                 initial += 1
                 progbar.update(initial)
             progbar.finish()
+            logger.shutdown()
         else:
             print("#" * 79)
             print("Deleting luns")
@@ -203,7 +205,7 @@ def run_luns(args):
     elif listlun:
         if args.progress:
             progbar = createprogress(len(lunlistfromfile))
-            logger = createlogger(LUNLOGFILE)
+            logger = CreateLogger(LUNLOGFILE)
             for entry in lunlistfromfile:
                 err, msg = list_lun(entry, zfsurl, zauth, timeout, verify)
                 if err:
@@ -213,6 +215,7 @@ def run_luns(args):
                 initial += 1
                 progbar.update(initial)
             progbar.finish()
+            logger.shutdown()
         else:
             print("#" * 79)
             print("Listing luns")

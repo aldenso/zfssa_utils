@@ -9,7 +9,7 @@ import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
 from zfssa_utils.common import HEADER, response_size, read_yaml_file, \
-     read_csv_file, createprogress, createlogger, PROJECTLOGFILE
+     read_csv_file, createprogress, CreateLogger, PROJECTLOGFILE
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
@@ -174,7 +174,7 @@ def run_projects(args):
     if createproject:
         if args.progress:
             progbar = createprogress(len(projectlistfromfile))
-            logger = createlogger(PROJECTLOGFILE)
+            logger = CreateLogger(PROJECTLOGFILE)
             for entry in projectlistfromfile:
                 err, msg = create_project(entry, zfsurl,
                                           zauth, timeout,
@@ -186,6 +186,7 @@ def run_projects(args):
                 initial += 1
                 progbar.update(initial)
             progbar.finish()
+            logger.shutdown()
         else:
             print("#" * 79)
             print("Creating projects")
@@ -209,7 +210,7 @@ def run_projects(args):
                 exit("Not confirmed, Exiting program")
         if args.progress:
             progbar = createprogress(len(projectlistfromfile))
-            logger = createlogger(PROJECTLOGFILE)
+            logger = CreateLogger(PROJECTLOGFILE)
             for entry in projectlistfromfile:
                 err, msg = delete_project(entry, zfsurl,
                                           zauth, timeout,
@@ -221,6 +222,7 @@ def run_projects(args):
                 initial += 1
                 progbar.update(initial)
             progbar.finish()
+            logger.shutdown()
         else:
             print("#" * 79)
             print("Deleting projects")
@@ -231,7 +233,7 @@ def run_projects(args):
     elif listprojects:
         if args.progress:
             progbar = createprogress(len(projectlistfromfile))
-            logger = createlogger(PROJECTLOGFILE)
+            logger = CreateLogger(PROJECTLOGFILE)
             for entry in projectlistfromfile:
                 err, msg = list_projects(entry, zfsurl, zauth, timeout, verify)
                 initial += 1
@@ -241,6 +243,7 @@ def run_projects(args):
                     logger.info(msg)
                 progbar.update(initial)
             progbar.finish()
+            logger.shutdown()
         else:
             print("#" * 79)
             print("Listing projects")
