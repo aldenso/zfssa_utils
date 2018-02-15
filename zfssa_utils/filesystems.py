@@ -24,11 +24,11 @@ def list_filesystems(fileline, zfsurl, zauth, timeout, verify):
     pool = project = fs = None
     if len(fileline) == 3:
         pool, project, fs = fileline
-    elif len(fileline) == 18:
+    elif len(fileline) == 17:
         pool, project, fs, _, _, _, _, _, _, _, \
-            _, _, _, _, _, _, _, _, = fileline
+            _, _, _, _, _, _, _ = fileline
     else:
-        return True, ("LIST - FAIL - Error in line {} It needs to be 3 or 18 "
+        return True, ("LIST - FAIL - Error in line {} It needs to be 3 or 17 "
                       "columns long".format(fileline))
     fullurl = ("{}/storage/v1/pools/{}/projects/{}/filesystems/{}"
                .format(zfsurl, pool, project, fs))
@@ -79,10 +79,10 @@ def list_filesystems(fileline, zfsurl, zauth, timeout, verify):
 
 def create_filesystems(fileline, zfsurl, zauth, timeout, verify):
     """Create Filesystems from line in csv format. (err, msg)"""
-    if len(fileline) != 18:
-        return True, ("CREATE - FAIL - Error in line {} It needs to be 18"
+    if len(fileline) != 17:
+        return True, ("CREATE - FAIL - Error in line {} It needs to be 17"
                       " columns long".format(fileline))
-    pool, project, fs, mountpoint, quota, reservation, compression, dedup, \
+    pool, project, fs, mountpoint, quota, reservation, compression, \
         logbias, nodestroy, recordsize, readonly, atime, root_user, \
         root_group, root_permissions, sharenfs, sharesmb = fileline
     fullurl = ("{}/storage/v1/pools/{}/projects/{}/filesystems"
@@ -93,7 +93,6 @@ def create_filesystems(fileline, zfsurl, zauth, timeout, verify):
                 "quota": quota,
                 "reservation": reservation,
                 "compression": compression,
-                "dedup": dedup,
                 "logbias": logbias,
                 "nodestroy": nodestroy,
                 "recordsize": recordsize,

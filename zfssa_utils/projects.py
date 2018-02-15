@@ -23,11 +23,11 @@ def list_projects(fileline, zfsurl, zauth, timeout, verify):
     pool = project = None
     if len(fileline) == 2:
         pool, project = fileline
-    elif len(fileline) == 20:
+    elif len(fileline) == 19:
         pool, project, _, _, _, _, _, _, _, _, \
-            _, _, _, _, _, _, _, _, _, _ = fileline
+            _, _, _, _, _, _, _, _, _ = fileline
     else:
-        return True, ("LIST - FAIL - Error in line {} It needs to be 2 or 20 "
+        return True, ("LIST - FAIL - Error in line {} It needs to be 2 or 19 "
                       "columns long".format(fileline))
     fullurl = ("{}/storage/v1/pools/{}/projects/{}"
                .format(zfsurl, pool, project))
@@ -77,10 +77,10 @@ def list_projects(fileline, zfsurl, zauth, timeout, verify):
 
 def create_project(fileline, zfsurl, zauth, timeout, verify):
     """Create Project from line in csv format. (err, msg)"""
-    if len(fileline) != 20:
-        return True, ("CREATE - FAIL - Error in line {} It needs to be 20"
+    if len(fileline) != 19:
+        return True, ("CREATE - FAIL - Error in line {} It needs to be 19"
                       "columns long".format(fileline))
-    pool, project, mountpoint, quota, reservation, compression, dedup, \
+    pool, project, mountpoint, quota, reservation, compression, \
         logbias, nodestroy, recordsize, readonly, atime, default_sparse, \
         default_user, default_group, default_permissions, \
         default_volblocksize, default_volsize, sharenfs, \
@@ -92,7 +92,6 @@ def create_project(fileline, zfsurl, zauth, timeout, verify):
                 "quota": quota,
                 "reservation": reservation,
                 "compression": compression,
-                "dedup": dedup,
                 "logbias": logbias,
                 "nodestroy": nodestroy,
                 "recordsize": recordsize,

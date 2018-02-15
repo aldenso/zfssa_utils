@@ -10,7 +10,6 @@ TEMPL_FS_CREATE = """# Template create filesystems
 # quota:            str or int   example: 10737418240 or 10g
 # reservation:      str or int   example: 10737418240 or 10g
 # compression:      str          example: gzip, lzjb, lz4, etc
-# dedup:            bool
 # logbias:          str          values: latency|throughput
 # nodestroy:        bool
 # recordsize:       str or int   example: 131072 or 128k
@@ -24,8 +23,8 @@ TEMPL_FS_CREATE = """# Template create filesystems
 #
 # Confirm the restful API accepted values in the Oracle Docs for your ZFSSA version.
 #
-# pool,project,filesystem,mountpoint,quota,reservation,compression,dedup,logbias,nodestroy,recordsize,readonly,atime,root_user,root_group,root_permissions,sharenfs,sharesmb
-pool_0,unittest,fs10,/export/unittest/fs10,2g,1g,lzjb,False,latency,False,128k,False,False,root,other,750,rw=@192.168.56.101/24:@192.168.56.1/24,on
+# pool,project,filesystem,mountpoint,quota,reservation,compression,logbias,nodestroy,recordsize,readonly,atime,root_user,root_group,root_permissions,sharenfs,sharesmb
+pool_0,unittest,fs10,/export/unittest/fs10,2g,1g,lzjb,latency,False,128k,False,False,root,other,750,rw=@192.168.56.101/24:@192.168.56.1/24,on
 """
 
 TEMPL_FS_DESTROY = """# Template destroy filesystems
@@ -72,7 +71,6 @@ TEMPL_PROJECT_CREATE = """# Template create projects
 # quota:                str or int  example: 10737418240 or 10g
 # reservation:          str or int  example: 10737418240 or 10g
 # compression:          str
-# dedup:                bool
 # logbias:              str         values: latency|throughput
 # nodestroy:            bool
 # recordsize:           str or int  example: example: 131072 or 128k
@@ -89,8 +87,8 @@ TEMPL_PROJECT_CREATE = """# Template create projects
 #
 # Confirm the restful API accepted values in the Oracle Docs for your ZFSSA version.
 #
-# pool,project,mountpoint,quota,reservation,compression,dedup,logbias,nodestroy,recordsize,readonly,atime,default_sparse,default_user,default_group,default_permissions,default_volblocksize,default_volsize,sharenfs,sharesmb
-pool_0,unittest01,/export/unittest01,10g,10g,gzip,True,latency,False,128k,False,True,True,nobody,other,750,128k,1g,on,off
+# pool,project,mountpoint,quota,reservation,compression,logbias,nodestroy,recordsize,readonly,atime,default_sparse,default_user,default_group,default_permissions,default_volblocksize,default_volsize,sharenfs,sharesmb
+pool_0,unittest01,/export/unittest01,10g,10g,gzip,latency,False,128k,False,True,True,nobody,other,750,128k,1g,on,off
 """
 
 TEMPL_PROJECT_DESTROY = """# Template destroy projects

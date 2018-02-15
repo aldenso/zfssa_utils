@@ -1,6 +1,8 @@
 # zfssa_utils
 
-Command Line utility to handle most common tasks with ZFS Storage Appliance.
+Command Line utility to handle most common tasks with ZFS Storage Appliance (OS86 and OS87).
+
+This utility only works with the Rest Api service, so you must activate the service.
 
 For convenience, clone the repo and setup a virtual environment to install the utility in it.
 
