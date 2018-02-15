@@ -313,22 +313,18 @@ class CreateLogger(object):
         logging.shutdown()
 
 
-def pager(file):
+def pager(text):
     try:
         if os.name == 'nt':
-            pager = subprocess.Popen(['more'],
-                                     stdin=subprocess.PIPE, stdout=sys.stdout)
-            for line in file:
+            for line in text:
                 if six.PY2:
-                    pager.stdin.write(line)
+                    sys.stdin.write(line)
                 else:
-                    pager.stdin.write(line.encode())
-            pager.stdin.close()
-            pager.wait()
+                    sys.stdin.write(line)
         else:
             pager = subprocess.Popen(['less', '-F', '-R', '-S', '-X', '-K'],
                                      stdin=subprocess.PIPE, stdout=sys.stdout)
-            for line in file:
+            for line in text:
                 if six.PY2:
                     pager.stdin.write(line)
                 else:
