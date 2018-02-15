@@ -318,9 +318,9 @@ def pager(text):
         if os.name == 'nt':
             for line in text:
                 if six.PY2:
-                    sys.stdin.write(line)
+                    sys.stdout.write(line)
                 else:
-                    sys.stdin.write(line)
+                    sys.stdout.write(line)
         else:
             pager = subprocess.Popen(['less', '-F', '-R', '-S', '-X', '-K'],
                                      stdin=subprocess.PIPE, stdout=sys.stdout)
