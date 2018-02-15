@@ -30,4 +30,5 @@ setup(name='zfssa_utils',
           'Topic :: System :: Systems Administration',
           ],
       scripts=['zfssa_utils/bin/zfssa-utils'],
-      zip_safe=False)
+      zip_safe=False,
+      include_package_data=True)
