@@ -1,12 +1,18 @@
 """Common functions"""
 import os
-import argparse
+import sys
 import logging
+import subprocess
 import csv
+import six
 import requests
 from urllib3.exceptions import InsecureRequestWarning
 import yaml
 from progressbar import ProgressBar, AdaptiveETA, Bar, Percentage
+if six.PY2:
+    import zfssa_utils.argparse_py2_modified as argparse
+else:
+    import argparse
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
@@ -120,6 +126,8 @@ def create_parser():
                         required=False, default=100)
     parser.add_argument("--cert", type=str, help="use certificate",
                         required=False, default=False)
+    parser.add_argument("--doc", action="store_true",
+                        help="program documentation", required=False)
 
     subparser = parser.add_subparsers(help='COMMANDS', dest='subparser_name')
 
@@ -303,3 +311,29 @@ class CreateLogger(object):
     def shutdown(self):
         self.logger.removeHandler(self.fh)
         logging.shutdown()
+
+
+def pager(file):
+    try:
+        if os.name == 'nt':
+            pager = subprocess.Popen(['more'],
+                                     stdin=subprocess.PIPE, stdout=sys.stdout)
+            for line in file:
+                if six.PY2:
+                    pager.stdin.write(line)
+                else:
+                    pager.stdin.write(line.encode())
+            pager.stdin.close()
+            pager.wait()
+        else:
+            pager = subprocess.Popen(['less', '-F', '-R', '-S', '-X', '-K'],
+                                     stdin=subprocess.PIPE, stdout=sys.stdout)
+            for line in file:
+                if six.PY2:
+                    pager.stdin.write(line)
+                else:
+                    pager.stdin.write(line.encode())
+            pager.stdin.close()
+            pager.wait()
+    except KeyboardInterrupt:
+        pass
