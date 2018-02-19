@@ -5,7 +5,8 @@ import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
 from zfssa_utils.common import (HEADER, read_csv_file, read_yaml_file,
-                                createprogress, CreateLogger, UPDATELOGFILE)
+                                createprogress, CreateLogger, UPDATELOGFILE,
+                                msgdeco)
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
@@ -29,26 +30,28 @@ def update_component(component_type, fullurl, zauth, timeout, data, verify,
             j = json.loads(req.text)
             if 'fault' in j:
                 if 'message' in j['fault']:
-                    return True, ("UPDATE - FAIL - project '{}' pool '{}' "
-                                  "- Error \"{}\" - updates: {}"
-                                  .format(project, pool,
-                                          j['fault']['message'], stringdata))
+                    return True, msgdeco('FAIL', 'UPDATE', "project '{}' pool "
+                                         "'{}' - Error \"{}\" - updates: {}"
+                                         .format(project, pool,
+                                                 j['fault']['message'],
+                                                 stringdata))
             req.close()
             req.raise_for_status()
-            return False, ("UPDATE - SUCCESS - project '{}' pool '{}' - "
-                           "updates: {}".format(project, pool, stringdata))
+            return False, msgdeco('SUCCESS', 'UPDATE', "project '{}' pool '{}'"
+                                  " - updates: {}"
+                                  .format(project, pool, stringdata))
         except HTTPError as error:
             if error.response.status_code == 401:
-                return True, ("UPDATE - FAIL - project '{}' pool '{}' - "
-                              "Error \"{}\" - updates: {}"
-                              .format(project, pool, error, stringdata))
-            return True, ("UPDATE - FAIL - project '{}' pool '{}' - "
-                          "Error \"{}\" - updates: {}"
-                          .format(project, pool, error, stringdata))
+                return True, msgdeco('FAIL', 'UPDATE', "project '{}' pool '{}'"
+                                     " - Error \"{}\" - updates: {}"
+                                     .format(project, pool, error, stringdata))
+            return True, msgdeco('FAIL', 'UPDATE', "project '{}' pool '{}' - "
+                                 "Error \"{}\" - updates: {}"
+                                 .format(project, pool, error, stringdata))
         except ConnectionError as error:
-            return True, ("UPDATE - FAIL - project '{}' pool '{}' - Error "
-                          "\"{}\" - updates: {}"
-                          .format(project, pool, error, stringdata))
+            return True, msgdeco('FAIL', 'UPDATE', "project '{}' pool '{}' - "
+                                 "Error \"{}\" - updates: {}"
+                                 .format(project, pool, error, stringdata))
 
     elif component_type == 'filesystem':
         try:
@@ -58,30 +61,34 @@ def update_component(component_type, fullurl, zauth, timeout, data, verify,
             j = json.loads(req.text)
             if 'fault' in j:
                 if 'message' in j['fault']:
-                    return True, ("UPDATE - FAIL - filesystem '{}' project "
-                                  "'{}' pool '{}' - Error \"{}\" - updates: {}"
-                                  .format(filesystem, project, pool,
-                                          j['fault']['message'], stringdata))
+                    return True, msgdeco('FAIL', 'UPDATE', "filesystem '{}' "
+                                         "project '{}' pool '{}' - Error "
+                                         "\"{}\" - updates: {}"
+                                         .format(filesystem, project, pool,
+                                                 j['fault']['message'],
+                                                 stringdata))
             req.close()
             req.raise_for_status()
-            return False, ("UPDATE - SUCCESS - filesystem '{}' project "
-                           "'{}' pool '{}' - updates: {}"
-                           .format(filesystem, project, pool, stringdata))
+            return False, msgdeco('SUCCESS', 'UPDATE', "filesystem '{}' "
+                                  "project '{}' pool '{}' - updates: {}"
+                                  .format(filesystem, project,
+                                          pool, stringdata))
         except HTTPError as error:
             if error.response.status_code == 401:
-                return True, ("UPDATE - FAIL - filesystem '{}' project "
-                              "'{}' pool '{}' - Error \"{}\" - updates: {}"
-                              .format(filesystem, project, pool, error,
-                                      stringdata))
-            return True, ("UPDATE - FAIL - filesystem '{}' project "
-                          "'{}' pool '{}' - Error \"{}\"  - updates: {}"
-                          .format(filesystem, project, pool, error,
-                                  stringdata))
+                return True, msgdeco('FAIL', 'UPDATE', "filesystem '{}' "
+                                     "project '{}' pool '{}' - Error \"{}\" "
+                                     "- updates: {}"
+                                     .format(filesystem, project, pool, error,
+                                             stringdata))
+            return True, msgdeco('FAIL', 'UPDATE', "filesystem '{}' project "
+                                 "'{}' pool '{}' - Error \"{}\"  - updates: {}"
+                                 .format(filesystem, project, pool, error,
+                                         stringdata))
         except ConnectionError as error:
-            return True, ("UPDATE - FAIL - filesystem '{}' project '{}' "
-                          "pool '{}' - Error \"{}\" - updates: {}"
-                          .format(filesystem, project, pool, error,
-                                  stringdata))
+            return True, msgdeco('FAIL', 'UPDATE', "filesystem '{}' project "
+                                 "'{}' pool '{}' - Error \"{}\" - updates: {}"
+                                 .format(filesystem, project, pool, error,
+                                         stringdata))
 
     elif component_type == 'lun':
         try:
@@ -91,29 +98,35 @@ def update_component(component_type, fullurl, zauth, timeout, data, verify,
             j = json.loads(req.text)
             if 'fault' in j:
                 if 'message' in j['fault']:
-                    return True, ("UPDATE - FAIL - lun '{}' project '{}' "
-                                  "pool '{}' - Error \"{}\" - updates: {}"
-                                  .format(lun, project, pool,
-                                          j['fault']['message'], stringdata))
+                    return True, msgdeco('FAIL', 'UPDATE', "lun '{}' project "
+                                         "'{}' pool '{}' - Error \"{}\" - "
+                                         "updates: {}"
+                                         .format(lun, project, pool,
+                                                 j['fault']['message'],
+                                                 stringdata))
             req.close()
             req.raise_for_status()
-            return False, ("UPDATE - SUCCESS - lun '{}' project '{}' pool "
-                           "'{}' - updates: {}"
-                           .format(lun, project, pool, stringdata))
+            return False, msgdeco('SUCCESS', 'UPDATE', "lun '{}' project '{}' "
+                                  "pool '{}' - updates: {}"
+                                  .format(lun, project, pool, stringdata))
         except HTTPError as error:
             if error.response.status_code == 401:
-                return True, ("UPDATE - FAIL - lun '{}' project '{}' pool "
-                              "'{}' - Error \"{}\" - updates: {}"
-                              .format(lun, project, pool, error, stringdata))
-            return True, ("UPDATE - FAIL - lun '{}' project '{}' pool "
-                          "'{}' - Error \"{}\" - updates: {}"
-                          .format(lun, project, pool, error, stringdata))
+                return True, msgdeco('FAIL', 'UPDATE', "lun '{}' project '{}' "
+                                     "pool '{}' - Error \"{}\" - updates: {}"
+                                     .format(lun, project, pool,
+                                             error, stringdata))
+            return True, msgdeco('FAIL', 'UPDATE', "lun '{}' project '{}' pool"
+                                 " '{}' - Error \"{}\" - updates: {}"
+                                 .format(lun, project, pool,
+                                         error, stringdata))
         except ConnectionError as error:
-            return True, ("UPDATE - FAIL - lun '{}' project '{}' pool '{}'"
-                          " - Error \"{}\" - updates: {}"
-                          .format(lun, project, pool, error, stringdata))
+            return True, msgdeco('FAIL', 'UPDATE', "lun '{}' project '{}' pool"
+                                 " '{}' - Error \"{}\" - updates: {}"
+                                 .format(lun, project, pool,
+                                         error, stringdata))
     else:
-        return True, ("Wrong component type '{}'".format(component_type))
+        return True, msgdeco('FAIL', 'UPDATE', "Wrong component type '{}'"
+                             .format(component_type))
 
 
 def noconfirm_update(noconfirm, update_list):
