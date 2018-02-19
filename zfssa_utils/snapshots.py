@@ -20,8 +20,9 @@ from six.moves import input
 import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
-from zfssa_utils.common import HEADER, response_size, read_yaml_file, \
-     read_csv_file, createprogress, CreateLogger, SNAPLOGFILE
+from zfssa_utils.common import (HEADER, response_size, read_yaml_file,
+                                read_csv_file, createprogress, CreateLogger,
+                                SNAPLOGFILE, msgdeco)
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
@@ -44,7 +45,8 @@ def list_snap(snap, zfsurl, zauth, timeout, verify):
         fullurl = ("{}/storage/v1/pools/{}/projects/{}/snapshots"
                    .format(zfsurl, pool, project))
     else:
-        return False, "snaptype '{}' unknown".format(snaptype)
+        return False, msgdeco('FAIL', 'LIST', "snaptype '{}' unknown"
+                              .format(snaptype))
     try:
         req = requests.get(fullurl, auth=zauth, verify=verify, headers=HEADER,
                            timeout=timeout)
@@ -53,38 +55,44 @@ def list_snap(snap, zfsurl, zauth, timeout, verify):
         req.raise_for_status()
         # if len(j['snapshots']) == 0:
         if not j['snapshots']:
-            return False, ("LIST - NOTPRESENT - snapshot '{}' {} '{}' "
-                           "project '{}' and pool '{}' - Message Snapshot not "
-                           "present".format(snapname, snaptype, snaptarget,
-                                            project, pool))
+            return False, msgdeco('FAIL', 'LIST', "snapshot '{}' {} '{}' "
+                                  "project '{}' and pool '{}' - Message "
+                                  "Snapshot not present"
+                                  .format(snapname, snaptype, snaptarget,
+                                          project, pool))
         else:
             for i in j['snapshots']:
                 if i['name'] == snapname:
-                    return False, ("LIST - PRESENT - snapshot '{}' {} "
-                                   "'{}' project '{}' pool '{}' created_at "
-                                   "'{}' space_data '{}' space_unique '{}'"
-                                   .format(i['name'], snaptype, snaptarget,
-                                           project, pool, i['creation'],
-                                           response_size(i['space_data']),
-                                           response_size(i['space_unique'])))
-        return False, ("LIST - NOTPRESENT - snapshot '{}' {} '{}' "
-                       "project '{}' pool '{}' - Message Snapshot not present"
-                       .format(snapname, snaptype, snaptarget, project, pool))
+                    return False, msgdeco('SUCCESS', 'LIST', "snapshot '{}' {}"
+                                          " '{}' project '{}' pool '{}' "
+                                          "created_at '{}' space_data '{}' "
+                                          "space_unique '{}'"
+                                          .format(i['name'], snaptype,
+                                                  snaptarget, project, pool,
+                                                  i['creation'],
+                                                  response_size(
+                                                      i['space_data']),
+                                                  response_size(
+                                                      i['space_unique'])))
+        return False, msgdeco('FAIL', 'LIST', "snapshot '{}' {} '{}' "
+                              "project '{}' pool '{}' - Message Snapshot not "
+                              "present".format(snapname, snaptype, snaptarget,
+                                               project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            return True, ("LIST - FAIL - snapshot '{}' {} '{}' project '{}' "
-                          "pool '{}' - Error \"{}\""
-                          .format(snapname, snaptype, snaptarget,
-                                  project, pool, error))
-        return True, ("LIST - FAIL - snapshot '{}' {} '{}' project "
-                      "'{}' pool '{}' - Error \"{}\""
-                      .format(snapname, snaptype, snaptarget, project,
-                              pool, error))
+            return True, msgdeco('FAIL', 'LIST', "snapshot '{}' {} '{}' "
+                                 "project '{}' pool '{}' - Error \"{}\""
+                                 .format(snapname, snaptype, snaptarget,
+                                         project, pool, error))
+        return True, msgdeco('FAIL', 'LIST', "snapshot '{}' {} '{}' project "
+                             "'{}' pool '{}' - Error \"{}\""
+                             .format(snapname, snaptype, snaptarget, project,
+                                     pool, error))
     except ConnectionError as error:
-        return True, ("LIST - FAIL - snapshot '{}' {} '{}' project "
-                      "'{}' pool '{}' - Error \"{}\""
-                      .format(snapname, snaptype, snaptarget, project,
-                              pool, error))
+        return True, msgdeco('FAIL', 'LIST', "snapshot '{}' {} '{}' project "
+                             "'{}' pool '{}' - Error \"{}\""
+                             .format(snapname, snaptype, snaptarget, project,
+                                     pool, error))
 
 
 def create_snap(snap, zfsurl, zauth, timeout, verify):
@@ -101,7 +109,8 @@ def create_snap(snap, zfsurl, zauth, timeout, verify):
         fullurl = ("{}/storage/v1/pools/{}/projects/{}/snapshots"
                    .format(zfsurl, pool, project))
     else:
-        return False, "snaptype '{}' unknown".format(snaptype)
+        return False, msgdeco('FAIL', 'CREATE', "snaptype '{}' unknown"
+                              .format(snaptype))
     try:
         req = requests.post(fullurl, data=json.dumps({'name': snapname}),
                             auth=zauth, verify=verify, headers=HEADER,
@@ -111,29 +120,30 @@ def create_snap(snap, zfsurl, zauth, timeout, verify):
         req.raise_for_status()
         if 'fault' in j:
             if 'message' in j['fault']:
-                return True, ("CREATE - FAIL - snapshot '{}' {} '{}' "
-                              "project '{}' pool {}' - Error \"{}\""
-                              .format(snapname, snaptype, snaptarget, project,
-                                      pool, j['fault']['message']))
-        return False, ("CREATE - SUCCESS - snapshot '{}' {} '{}' "
-                       "project '{}' pool '{}'"
-                       .format(snapname, snaptype, snaptarget,
-                               project, pool))
+                return True, msgdeco('FAIL', 'CREATE', "snapshot '{}' {} '{}' "
+                                     "project '{}' pool {}' - Error \"{}\""
+                                     .format(snapname, snaptype, snaptarget,
+                                             project, pool,
+                                             j['fault']['message']))
+        return False, msgdeco('SUCCESS', 'CREATE', "snapshot '{}' {} '{}' "
+                              "project '{}' pool '{}'"
+                              .format(snapname, snaptype, snaptarget,
+                                      project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            return True, ("CREATE - FAIL - snapshot '{}' {} '{}' project '{}' "
-                          "pool '{}' - Error \"{}\""
-                          .format(snapname, snaptype, snaptarget,
-                                  project, pool, error))
-        return True, ("CREATE - FAIL - snapshot '{}' {} '{}' "
-                      "project '{}' pool '{}' - Error \"{}\""
-                      .format(snapname, snaptype, snaptarget, project,
-                              pool, error))
+            return True, msgdeco('FAIL', 'CREATE', "snapshot '{}' {} '{}' "
+                                 "project '{}' pool '{}' - Error \"{}\""
+                                 .format(snapname, snaptype, snaptarget,
+                                         project, pool, error))
+        return True, msgdeco('FAIL', 'CREATE', "snapshot '{}' {} '{}' "
+                             "project '{}' pool '{}' - Error \"{}\""
+                             .format(snapname, snaptype, snaptarget, project,
+                                     pool, error))
     except ConnectionError as error:
-        return True, ("CREATE - FAIL - snapshot '{}' {} '{}' project "
-                      "'{}' pool '{}' - Error \"{}\""
-                      .format(snapname, snaptype, snaptarget, project, pool,
-                              error))
+        return True, msgdeco('FAIL', 'CREATE', "snapshot '{}' {} '{}' project "
+                             "'{}' pool '{}' - Error \"{}\""
+                             .format(snapname, snaptype, snaptarget, project,
+                                     pool, error))
 
 
 def delete_snap(snap, zfsurl, zauth, timeout, verify):
@@ -152,30 +162,32 @@ def delete_snap(snap, zfsurl, zauth, timeout, verify):
         fullurl = ("{}/storage/v1/pools/{}/projects/{}/snapshots/{}"
                    .format(zfsurl, pool, project, snapname))
     else:
-        return False, "snaptype ''{}' unknown".format(snaptype)
+        return False, msgdeco('FAIL', 'DELETE', "snaptype ''{}' unknown"
+                              .format(snaptype))
     try:
         req = requests.delete(fullurl, auth=zauth, verify=verify,
                               headers=HEADER, timeout=timeout)
         req.close()
         req.raise_for_status()
-        return False, ("DELETE - SUCCESS - snapshot '{}' {} '{}' "
-                       "project '{}' pool '{}'"
-                       .format(snapname, snaptype, snaptarget, project, pool))
+        return False, msgdeco('SUCCESS', 'DELETE', "snapshot '{}' {} '{}' "
+                              "project '{}' pool '{}'"
+                              .format(snapname, snaptype, snaptarget,
+                                      project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            return True, ("DELETE - FAIL - snapshot '{}' {} '{}' project '{}'"
-                          "pool '{}' - Error \"{}\""
-                          .format(snapname, snaptype, snaptarget,
-                                  project, pool, error))
-        return True, ("DELETE - FAIL - snapshot '{}' {} '{}' "
-                      "project '{}' pool '{}' - Error \"{}\""
-                      .format(snapname, snaptype, snaptarget, project,
-                              pool, error))
+            return True, msgdeco('FAIL', 'DELETE', "snapshot '{}' {} '{}' "
+                                 "project '{}' pool '{}' - Error \"{}\""
+                                 .format(snapname, snaptype, snaptarget,
+                                         project, pool, error))
+        return True, msgdeco('FAIL', 'DELETE', "snapshot '{}' {} '{}' "
+                             "project '{}' pool '{}' - Error \"{}\""
+                             .format(snapname, snaptype, snaptarget, project,
+                                     pool, error))
     except ConnectionError as error:
-        return True, ("DELETE - FAIL - snapshot '{}' {} '{}' project "
-                      "'{}' pool '{}' - Error \"{}\""
-                      .format(snapname, snaptype, snaptarget, project, pool,
-                              error))
+        return True, msgdeco('FAIL', 'DELETE', "snapshot '{}' {} '{}' project "
+                             "'{}' pool '{}' - Error \"{}\""
+                             .format(snapname, snaptype, snaptarget, project,
+                                     pool, error))
 
 
 def run_snaps(args):
