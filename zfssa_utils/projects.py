@@ -8,8 +8,9 @@ from six.moves import input
 import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
-from zfssa_utils.common import HEADER, response_size, read_yaml_file, \
-     read_csv_file, createprogress, CreateLogger, PROJECTLOGFILE
+from zfssa_utils.common import (HEADER, response_size, read_yaml_file,
+                                read_csv_file, createprogress, CreateLogger,
+                                PROJECTLOGFILE, msgdeco)
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
@@ -27,8 +28,8 @@ def list_projects(fileline, zfsurl, zauth, timeout, verify):
         pool, project, _, _, _, _, _, _, _, _, \
             _, _, _, _, _, _, _, _, _ = fileline
     else:
-        return True, ("LIST - FAIL - Error in line {} It needs to be 2 or 19 "
-                      "columns long".format(fileline))
+        return True, msgdeco('FAIL', 'LIST', "Error in line {} It needs to be "
+                             "2 or 19 columns long".format(fileline))
     fullurl = ("{}/storage/v1/pools/{}/projects/{}"
                .format(zfsurl, pool, project))
     try:
@@ -37,49 +38,54 @@ def list_projects(fileline, zfsurl, zauth, timeout, verify):
         j = json.loads(req.text)
         req.close()
         req.raise_for_status()
-        return False, ("LIST - PRESENT - project '{}' pool '{}' mountpoint "
-                       "'{}' quota '{}' reservation '{}' compression '{}' "
-                       "dedup '{}' logbias '{}' nodestroy '{}' recordsize "
-                       "'{}' readonly '{}' atime '{}' def_sparse '{}' def_user"
-                       " '{}' def_group '{}' def_perms '{}' def_volblocksize "
-                       "'{}' def_volsize '{}' sharenfs '{}' sharesmb '{}'"
-                       .format(j["project"]["name"],
-                               j["project"]["pool"],
-                               j["project"]["mountpoint"],
-                               response_size(j["project"]["quota"]),
-                               response_size(j["project"]["reservation"]),
-                               j["project"]["compression"],
-                               j["project"]["dedup"],
-                               j["project"]["logbias"],
-                               j["project"]["nodestroy"],
-                               response_size(j["project"]["recordsize"]),
-                               j["project"]["readonly"],
-                               j["project"]["atime"],
-                               j["project"]["default_sparse"],
-                               j["project"]["default_user"],
-                               j["project"]["default_group"],
-                               j["project"]["default_permissions"],
-                               response_size(j["project"]
-                                             ["default_volblocksize"]),
-                               response_size(j["project"]["default_volsize"]),
-                               j["project"]["sharenfs"],
-                               j["project"]["sharesmb"]))
+        return False, msgdeco('SUCCESS', 'LIST', "PRESENT - project '{}' pool "
+                              "'{}' mountpoint '{}' quota '{}' reservation "
+                              "'{}' compression '{}' dedup '{}' logbias '{}'"
+                              " nodestroy '{}' recordsize '{}' readonly '{}' "
+                              "atime '{}' def_sparse '{}' def_user '{}' "
+                              "def_group '{}' def_perms '{}' def_volblocksize "
+                              "'{}' def_volsize '{}' sharenfs '{}' sharesmb "
+                              "'{}'"
+                              .format(j["project"]["name"],
+                                      j["project"]["pool"],
+                                      j["project"]["mountpoint"],
+                                      response_size(j["project"]["quota"]),
+                                      response_size(j["project"]
+                                                    ["reservation"]),
+                                      j["project"]["compression"],
+                                      j["project"]["dedup"],
+                                      j["project"]["logbias"],
+                                      j["project"]["nodestroy"],
+                                      response_size(j["project"]
+                                                    ["recordsize"]),
+                                      j["project"]["readonly"],
+                                      j["project"]["atime"],
+                                      j["project"]["default_sparse"],
+                                      j["project"]["default_user"],
+                                      j["project"]["default_group"],
+                                      j["project"]["default_permissions"],
+                                      response_size(j["project"]
+                                                    ["default_volblocksize"]),
+                                      response_size(j["project"]
+                                                    ["default_volsize"]),
+                                      j["project"]["sharenfs"],
+                                      j["project"]["sharesmb"]))
     except HTTPError as error:
         if error.response.status_code == 401:
-            return True, ("LIST - FAIL - project '{}', pool '{}' - Error "
-                          "\"{}\"".format(project, pool, error))
-        return True, ("LIST - FAIL - project '{}' pool '{}' - Error \"{}\""
-                      .format(project, pool, error))
+            return True, msgdeco('FAIL', 'LIST', "project '{}', pool '{}' - "
+                                 "Error \"{}\"".format(project, pool, error))
+        return True, msgdeco('FAIL', 'list', "project '{}' pool '{}' - Error "
+                             "\"{}\"".format(project, pool, error))
     except ConnectionError as error:
-        return True, ("LIST - FAIL - project '{}' pool '{}' - Error \"{}\""
-                      .format(project, pool, error))
+        return True, msgdeco('FAIL', 'LIST', "project '{}' pool '{}' - Error "
+                             "\"{}\"".format(project, pool, error))
 
 
 def create_project(fileline, zfsurl, zauth, timeout, verify):
     """Create Project from line in csv format. (err, msg)"""
     if len(fileline) != 19:
-        return True, ("CREATE - FAIL - Error in line {} It needs to be 19"
-                      "columns long".format(fileline))
+        return True, msgdeco('FAIL', 'CREATE', "Error in line {} It needs to "
+                             "be 19 columns long".format(fileline))
     pool, project, mountpoint, quota, reservation, compression, \
         logbias, nodestroy, recordsize, readonly, atime, default_sparse, \
         default_user, default_group, default_permissions, \
@@ -111,29 +117,30 @@ def create_project(fileline, zfsurl, zauth, timeout, verify):
         j = json.loads(req.text)
         if 'fault' in j:
             if 'message' in j['fault']:
-                return True, ("CREATE - FAIL - project '{}' pool '{}' - Error"
-                              " \"{}\"".format(project, pool,
-                                               j['fault']['message']))
+                return True, msgdeco('FAIL', 'CREATE', "project '{}' pool '{}'"
+                                     " - Error \"{}\""
+                                     .format(project, pool,
+                                             j['fault']['message']))
         req.close()
         req.raise_for_status()
-        return False, ("CREATE - SUCCESS - project '{}' pool '{}'"
-                       .format(project, pool))
+        return False, msgdeco('SUCCESS', 'CREATE', "project '{}' pool '{}'"
+                              .format(project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            return True, ("CREATE - FAIL - project '{}' pool '{}' - Error "
-                          "\"{}\"".format(project, pool, error))
-        return True, ("CREATE - FAIL - project '{}' pool '{}' - Error "
-                      "\"{}\"".format(project, pool, error))
+            return True, msgdeco('FAIL', 'CREATE', "project '{}' pool '{}' - "
+                                 "Error \"{}\"".format(project, pool, error))
+        return True, msgdeco('FAIL', 'CREATE', "project '{}' pool '{}' - Error"
+                             " \"{}\"".format(project, pool, error))
     except ConnectionError as error:
-        return True, ("CREATE - FAIL - project '{}' pool '{}' - Error \"{}\""
-                      .format(project, pool, error))
+        return True, msgdeco('FAIL', 'CREATE', "project '{}' pool '{}' - Error"
+                             " \"{}\"".format(project, pool, error))
 
 
 def delete_project(fileline, zfsurl, zauth, timeout, verify):
     """Delete project from line in csv format. (err, msg)"""
     if len(fileline) != 2:
-        return True, ("DELETE - FAIL - Error in line {} It needs to be 2 "
-                      "columns long".format(fileline))
+        return True, msgdeco('FAIL', 'DELETE', "Error in line {} It needs to "
+                             "be 2 columns long".format(fileline))
     pool, project = fileline
     fullurl = ("{}/storage/v1/pools/{}/projects/{}"
                .format(zfsurl, pool, project))
@@ -143,17 +150,18 @@ def delete_project(fileline, zfsurl, zauth, timeout, verify):
                               timeout=timeout)
         req.close()
         req.raise_for_status()
-        return False, ("DELETE - SUCCESS - project '{}' pool '{}'"
-                       .format(project, pool))
+        return False, msgdeco('SUCCESS', 'DELETE', "project '{}' pool '{}'"
+                              .format(project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            return True, ("DELETE - FAIL - project '{}' pool '{}' - Error "
-                          "\"{}\"".format(project, pool, error))
-        return True, ("DELETE - FAIL - project '{}' pool '{}' - Error "
-                      "\"{}\"".format(project, pool, error))
+            return True, msgdeco('FAIL', 'DELETE', "project '{}' pool '{}' - "
+                                 "Error \"{}\"".format(project, pool, error))
+        return True, msgdeco('FAIL', 'DELETE', "project '{}' pool '{}' - Error"
+                             " \"{}\"".format(project, pool, error))
     except ConnectionError as error:
-        return True, ("DELETE - FAIL - project '{}' pool '{}' - Error \"{}\""
-                      .format(project, pool, error))
+        return True, msgdeco('FAIL', 'DELETE', "DELETE - FAIL - project '{}' "
+                             "pool '{}' - Error \"{}\""
+                             .format(project, pool, error))
 
 
 def run_projects(args):
