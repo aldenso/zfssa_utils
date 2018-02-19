@@ -8,8 +8,9 @@ from six.moves import input
 import requests
 from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
-from zfssa_utils.common import HEADER, response_size, read_yaml_file, \
-     read_csv_file, createprogress, CreateLogger, FSLOGFILE
+from zfssa_utils.common import (HEADER, response_size, read_yaml_file,
+                                read_csv_file, createprogress, CreateLogger,
+                                FSLOGFILE, msgdeco)
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
@@ -28,8 +29,8 @@ def list_filesystems(fileline, zfsurl, zauth, timeout, verify):
         pool, project, fs, _, _, _, _, _, _, _, \
             _, _, _, _, _, _, _ = fileline
     else:
-        return True, ("LIST - FAIL - Error in line {} It needs to be 3 or 17 "
-                      "columns long".format(fileline))
+        return True, msgdeco('FAIL', 'LIST', "Error in line {} It needs to be "
+                             "3 or 17 columns long".format(fileline))
     fullurl = ("{}/storage/v1/pools/{}/projects/{}/filesystems/{}"
                .format(zfsurl, pool, project, fs))
     # print(fullurl)
@@ -40,48 +41,52 @@ def list_filesystems(fileline, zfsurl, zauth, timeout, verify):
         # print(json.dumps(j))
         req.close()
         req.raise_for_status()
-        return False, ("LIST - PRESENT - filesystem '{}' project '{}' pool "
-                       "'{}' mountpoint '{}' quota '{}' reservation '{}' "
-                       "compression '{}' dedup '{}' logbias '{}' nodestroy "
-                       "'{}' recordsize '{}' readonly '{}' atime '{}' "
-                       "root_user '{}' root_group '{}' root_permissions '{}' "
-                       "sharenfs '{}' sharesmb '{}'"
-                       .format(j['filesystem']['name'],
-                               j['filesystem']['project'],
-                               j['filesystem']['pool'],
-                               j['filesystem']['mountpoint'],
-                               response_size(j['filesystem']['quota']),
-                               response_size(j['filesystem']['reservation']),
-                               j['filesystem']['compression'],
-                               j['filesystem']['dedup'],
-                               j['filesystem']['logbias'],
-                               j['filesystem']['nodestroy'],
-                               response_size(j['filesystem']['recordsize']),
-                               j['filesystem']['readonly'],
-                               j['filesystem']['atime'],
-                               j['filesystem']['root_user'],
-                               j['filesystem']['root_group'],
-                               j['filesystem']['root_permissions'],
-                               j['filesystem']['sharenfs'],
-                               j['filesystem']['sharesmb']))
+        return False, msgdeco('SUCCESS', 'LIST', "filesystem '{}' project '{}'"
+                              " pool '{}' mountpoint '{}' quota '{}' "
+                              "reservation '{}' compression '{}' dedup '{}' "
+                              "logbias '{}' nodestroy '{}' recordsize '{}' "
+                              "readonly '{}' atime '{}' root_user '{}' "
+                              "root_group '{}' root_permissions '{}' sharenfs "
+                              "'{}' sharesmb '{}'"
+                              .format(j['filesystem']['name'],
+                                      j['filesystem']['project'],
+                                      j['filesystem']['pool'],
+                                      j['filesystem']['mountpoint'],
+                                      response_size(j['filesystem']['quota']),
+                                      response_size(j['filesystem']
+                                                    ['reservation']),
+                                      j['filesystem']['compression'],
+                                      j['filesystem']['dedup'],
+                                      j['filesystem']['logbias'],
+                                      j['filesystem']['nodestroy'],
+                                      response_size(j['filesystem']
+                                                    ['recordsize']),
+                                      j['filesystem']['readonly'],
+                                      j['filesystem']['atime'],
+                                      j['filesystem']['root_user'],
+                                      j['filesystem']['root_group'],
+                                      j['filesystem']['root_permissions'],
+                                      j['filesystem']['sharenfs'],
+                                      j['filesystem']['sharesmb']))
     except HTTPError as error:
         if error.response.status_code == 401:
-            return True, ("LIST - FAIL - filesystem '{}' project '{}', pool "
-                          "'{}' - Error \"{}\""
-                          .format(fs, project, pool, error))
-        return True, ("LIST - FAIL - filesystem '{}' project '{}' pool "
-                      "'{}' - Error \"{}\""
-                      .format(fs, project, pool, error))
+            return True, msgdeco('FAIL', 'LIST', "filesystem '{}' project '{}'"
+                                 ", pool '{}' - Error \"{}\""
+                                 .format(fs, project, pool, error))
+        return True, msgdeco('FAIL', 'LIST', "filesystem '{}' project '{}' "
+                             "pool '{}' - Error \"{}\""
+                             .format(fs, project, pool, error))
     except ConnectionError as error:
-        return True, ("LIST - FAIL - filesystem '{}' project '{}' pool '{}' "
-                      "- Error \"{}\"".format(fs, project, pool, error))
+        return True, msgdeco('FAIL', 'LIST', "filesystem '{}' project '{}' "
+                             "pool '{}' - Error \"{}\""
+                             .format(fs, project, pool, error))
 
 
 def create_filesystems(fileline, zfsurl, zauth, timeout, verify):
     """Create Filesystems from line in csv format. (err, msg)"""
     if len(fileline) != 17:
-        return True, ("CREATE - FAIL - Error in line {} It needs to be 17"
-                      " columns long".format(fileline))
+        return True, msgdeco('FAIL', 'CREATE', "Error in line {} It needs to "
+                             "be 17 columns long".format(fileline))
     pool, project, fs, mountpoint, quota, reservation, compression, \
         logbias, nodestroy, recordsize, readonly, atime, root_user, \
         root_group, root_permissions, sharenfs, sharesmb = fileline
@@ -109,32 +114,33 @@ def create_filesystems(fileline, zfsurl, zauth, timeout, verify):
         j = json.loads(req.text)
         if 'fault' in j:
             if 'message' in j['fault']:
-                return True, ("CREATE - FAIL - filesystem '{}' project '{}' "
-                              "pool '{}' - Error \"{}\""
-                              .format(fs, project, pool,
-                                      j['fault']['message']))
+                return True, msgdeco('FAIL', 'CREATE', "filesystem '{}' "
+                                     "project '{}' pool '{}' - Error \"{}\""
+                                     .format(fs, project, pool,
+                                             j['fault']['message']))
         req.close()
         req.raise_for_status()
-        return False, ("CREATE - SUCCESS - filesystem '{}' project '{}' pool "
-                       "'{}'".format(fs, project, pool))
+        return False, msgdeco('SUCCESS', 'CREATE', "filesystem '{}' project "
+                              "'{}' pool '{}'".format(fs, project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            return True, ("CREATE - FAIL - filesystem '{}' project '{}' pool "
-                          "'{}' - Error \"{}\""
-                          .format(fs, project, pool, error))
-        return True, ("CREATE - FAIL - filesystem '{}' project '{}' pool "
-                      "'{}' - Error \"{}\""
-                      .format(fs, project, pool, error))
+            return True, msgdeco('FAIL', 'CREATE', "filesystem '{}' project "
+                                 "'{}' pool '{}' - Error \"{}\""
+                                 .format(fs, project, pool, error))
+        return True, msgdeco('FAIL', 'CREATE', "filesystem '{}' project '{}' "
+                             "pool '{}' - Error \"{}\""
+                             .format(fs, project, pool, error))
     except ConnectionError as error:
-        return True, ("CREATE - FAIL - filesystem '{}' project '{}' pool '{}' "
-                      "- Error \"{}\"".format(fs, project, pool, error))
+        return True, msgdeco('FAIL', 'CREATE', "filesystem '{}' project '{}' "
+                             "pool '{}' - Error \"{}\""
+                             .format(fs, project, pool, error))
 
 
 def delete_filesystems(fileline, zfsurl, zauth, timeout, verify):
     """Delete filesystem from line in csv format. (err, msg)"""
     if len(fileline) != 3:
-        return True, ("DELETE - FAIL - Error in line {} It needs to be 3 "
-                      "columns long".format(fileline))
+        return True, msgdeco('FAIL', 'DELETE', "Error in line {} It needs to "
+                             "be 3 columns long".format(fileline))
     pool, project, fs = fileline
     fullurl = ("{}/storage/v1/pools/{}/projects/{}/filesystems/{}"
                .format(zfsurl, pool, project, fs))
@@ -143,19 +149,20 @@ def delete_filesystems(fileline, zfsurl, zauth, timeout, verify):
                               verify=verify, headers=HEADER, timeout=timeout)
         req.close()
         req.raise_for_status()
-        return False, ("DELETE - SUCCESS - filesystem '{}' project '{}' pool "
-                       "'{}'".format(fs, project, pool))
+        return False, msgdeco('SUCCESS', 'DELETE', "filesystem '{}' project "
+                              "'{}' pool '{}'".format(fs, project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            return True, ("DELETE - FAIL - filesystem '{}' project '{}' pool "
-                          "'{}' - Error \"{}\""
-                          .format(fs, project, pool, error))
-        return True, ("DELETE - FAIL - filesystem '{}' project '{}' pool "
-                      "'{}' - Error \"{}\""
-                      .format(fs, project, pool, error))
+            return True, msgdeco('FAIL', 'DELETE', "filesystem '{}' project "
+                                 "'{}' pool '{}' - Error \"{}\""
+                                 .format(fs, project, pool, error))
+        return True, msgdeco('FAIL', 'DELETE', "filesystem '{}' project '{}' "
+                             "pool '{}' - Error \"{}\""
+                             .format(fs, project, pool, error))
     except ConnectionError as error:
-        return True, ("DELETE - FAIL - filesystem '{}' project '{}' pool '{}' "
-                      "- Error \"{}\"".format(fs, project, pool, error))
+        return True, msgdeco('FAIL', 'DELETE', "filesystem '{}' project '{}' "
+                             "pool '{}' - Error \"{}\""
+                             .format(fs, project, pool, error))
 
 
 def run_filesystems(args):
