@@ -38,7 +38,7 @@ def list_projects(fileline, zfsurl, zauth, timeout, verify):
         j = json.loads(req.text)
         req.close()
         req.raise_for_status()
-        return False, msgdeco('SUCCESS', 'LIST', "PRESENT - project '{}' pool "
+        return False, msgdeco('SUCCESS', 'LIST', "project '{}' pool "
                               "'{}' mountpoint '{}' quota '{}' reservation "
                               "'{}' compression '{}' dedup '{}' logbias '{}'"
                               " nodestroy '{}' recordsize '{}' readonly '{}' "
@@ -74,7 +74,7 @@ def list_projects(fileline, zfsurl, zauth, timeout, verify):
         if error.response.status_code == 401:
             return True, msgdeco('FAIL', 'LIST', "project '{}', pool '{}' - "
                                  "Error \"{}\"".format(project, pool, error))
-        return True, msgdeco('FAIL', 'list', "project '{}' pool '{}' - Error "
+        return True, msgdeco('FAIL', 'LIST', "project '{}' pool '{}' - Error "
                              "\"{}\"".format(project, pool, error))
     except ConnectionError as error:
         return True, msgdeco('FAIL', 'LIST', "project '{}' pool '{}' - Error "
@@ -159,8 +159,8 @@ def delete_project(fileline, zfsurl, zauth, timeout, verify):
         return True, msgdeco('FAIL', 'DELETE', "project '{}' pool '{}' - Error"
                              " \"{}\"".format(project, pool, error))
     except ConnectionError as error:
-        return True, msgdeco('FAIL', 'DELETE', "DELETE - FAIL - project '{}' "
-                             "pool '{}' - Error \"{}\""
+        return True, msgdeco('FAIL', 'DELETE', "project '{}' pool '{}' - Error"
+                             " \"{}\""
                              .format(project, pool, error))
 
 
