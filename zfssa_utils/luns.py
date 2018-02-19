@@ -40,7 +40,7 @@ def list_lun(fileline, zfsurl, zauth, timeout, verify):
         req.close()
         req.raise_for_status()
         return False, msgdeco('SUCCESS', 'LIST',
-                              "PRESENT - name '{}' project '{}' pool "
+                              "lun '{}' project '{}' pool "
                               "'{}' assigned number '{}' initiatorgroup '{}'"
                               " volsize '{}' volblocksize '{}' status '{}' "
                               "space_total '{}' lunguid '{}' logbias '{}' "
