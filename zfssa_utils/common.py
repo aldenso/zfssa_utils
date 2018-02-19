@@ -8,6 +8,7 @@ import six
 import requests
 from urllib3.exceptions import InsecureRequestWarning
 import yaml
+from colorama import init, Fore
 from progressbar import ProgressBar, AdaptiveETA, Bar, Percentage
 if six.PY2:
     import zfssa_utils.argparse_py2_modified as argparse
@@ -330,3 +331,25 @@ def pager(text):
             pager.wait()
     except KeyboardInterrupt:
         pass
+
+
+def decotag(func):
+    """Deco to wrap the output with some color."""
+    init()
+
+    def applydeco(fail_status, type_op, msg):
+        if fail_status == 'FAIL':
+            return "{}".format(Fore.RED + func(fail_status, type_op, msg))
+        else:
+            return "{}".format(Fore.GREEN + func(fail_status, type_op, msg))
+    return applydeco
+
+
+@decotag
+def msgdeco(fail_status, type_op, msg):
+    """Return message status for operation plus a message."""
+
+    if fail_status == 'FAIL':
+        return "{} - {} - {}".format(type_op, fail_status, msg)
+    else:
+        return "{} - {} - {}".format(type_op, fail_status, msg)

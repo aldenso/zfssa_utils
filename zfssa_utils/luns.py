@@ -11,7 +11,7 @@ from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
 from zfssa_utils.common import (HEADER, response_size, createprogress,
                                 CreateLogger, read_yaml_file,
-                                read_csv_file, LUNLOGFILE)
+                                read_csv_file, LUNLOGFILE, msgdeco)
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
@@ -28,8 +28,9 @@ def list_lun(fileline, zfsurl, zauth, timeout, verify):
     elif len(fileline) == 11:
         pool, project, lun, _, _, _, _, _, _, _, _ = fileline
     else:
-        return True, ("LIST - FAIL - Error in line {} It needs to be 3 or 11"
-                      " columns long".format(fileline))
+        return True, msgdeco('FAIL', 'LIST',
+                             'Error in line {} It needs to be '
+                             '3 or 11 columns long'.format(fileline))
     fullurl = ("{}/storage/v1/pools/{}/projects/{}/luns/{}"
                .format(zfsurl, pool, project, lun))
     try:
@@ -38,37 +39,42 @@ def list_lun(fileline, zfsurl, zauth, timeout, verify):
         j = json.loads(req.text)
         req.close()
         req.raise_for_status()
-        return False, ("LIST - PRESENT - name '{}' project '{}' pool '{}' "
-                       "assigned number '{}' initiatorgroup '{}' volsize '{}' "
-                       "volblocksize '{}' status '{}' space_total '{}' lunguid"
-                       " '{}' logbias '{}' creation '{}' thin '{}' nodestroy "
-                       "'{}'".format(j["lun"]["name"], j["lun"]["project"],
-                                     j["lun"]["pool"],
-                                     j["lun"]["assignednumber"],
-                                     j["lun"]["initiatorgroup"],
-                                     response_size(j["lun"]["volsize"]),
-                                     response_size(j["lun"]["volblocksize"]),
-                                     j["lun"]["status"],
-                                     response_size(j["lun"]["space_total"]),
-                                     j["lun"]["lunguid"], j["lun"]["logbias"],
-                                     j["lun"]["creation"], j["lun"]["sparse"],
-                                     j["lun"]["nodestroy"]))
+        return False, msgdeco('SUCCESS', 'LIST',
+                              "PRESENT - name '{}' project '{}' pool "
+                              "'{}' assigned number '{}' initiatorgroup '{}'"
+                              " volsize '{}' volblocksize '{}' status '{}' "
+                              "space_total '{}' lunguid '{}' logbias '{}' "
+                              "creation '{}' thin '{}' nodestroy '{}'"
+                              .format(j["lun"]["name"], j["lun"]["project"],
+                                      j["lun"]["pool"],
+                                      j["lun"]["assignednumber"],
+                                      j["lun"]["initiatorgroup"],
+                                      response_size(j["lun"]["volsize"]),
+                                      response_size(j["lun"]["volblocksize"]),
+                                      j["lun"]["status"],
+                                      response_size(j["lun"]["space_total"]),
+                                      j["lun"]["lunguid"], j["lun"]["logbias"],
+                                      j["lun"]["creation"], j["lun"]["sparse"],
+                                      j["lun"]["nodestroy"]))
     except HTTPError as error:
         if error.response.status_code == 401:
-            return True, ("LIST - FAIL - lun '{}' project '{}' pool '{}' - "
-                          "Error \"{}\"".format(lun, project, pool, error))
-        return True, ("LIST - FAIL - lun '{}' project '{}' pool '{}' - "
-                      "Error \"{}\"".format(lun, project, pool, error))
+            return True, msgdeco('FAIL ', 'LIST',
+                                 "lun '{}' project '{}' pool '{}' - Error "
+                                 "\"{}\"".format(lun, project, pool, error))
+        return True, msgdeco('FAIL', 'LIST', "lun '{}' project '{}' pool '{}' "
+                             "- Error \"{}\""
+                             .format(lun, project, pool, error))
     except ConnectionError as error:
-        return True, ("LIST - FAIL - lun '{}' project '{}' pool '{}' - Error "
-                      "\"{}\"".format(lun, project, pool, error))
+        return True, msgdeco('FAIL', 'LIST', "lun '{}' project '{}' pool '{}'"
+                             " - Error \"{}\""
+                             .format(lun, project, pool, error))
 
 
 def create_lun(fileline, zfsurl, zauth, timeout, verify):
     """Create LUN from line in csv format. (err, msg)"""
     if len(fileline) != 11:
-        return True, ("CREATE - FAIL - Error in line {} It needs to be 11 "
-                      "columns long".format(fileline))
+        return True, msgdeco('FAIL', 'CREATE', "Error in line {} It needs to "
+                             "be 11 columns long".format(fileline))
     pool, project, lun, volsize, volblocksize, thin, targetgroup, \
         initiatorgroup, compression, latency, nodestroy = fileline
     fullurl = ("{}/storage/v1/pools/{}/projects/{}/luns"
@@ -89,29 +95,33 @@ def create_lun(fileline, zfsurl, zauth, timeout, verify):
         j = json.loads(req.text)
         if 'fault' in j:
             if 'message' in j['fault']:
-                return True, ("CREATE - FAIL - lun '{}' project '{}' pool '{}'"
-                              " - Error \"{}\"".format(lun, project, pool,
-                                                       j['fault']['message']))
+                return True, msgdeco('FAIL', 'CREATE', "lun '{}' project '{}' "
+                                     "pool '{}' - Error \"{}\""
+                                     .format(lun, project, pool,
+                                             j['fault']['message']))
         req.close()
         req.raise_for_status()
-        return False, ("CREATE - SUCCESS - lun '{}' project '{}' pool '{}'"
-                       .format(lun, project, pool))
+        return False, msgdeco('SUCCESS', 'CREATE', "lun '{}' project '{}' pool"
+                              " '{}'".format(lun, project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            return True, ("CREATE - FAIL - lun '{}' project '{}' pool '{}' "
-                          "- Error \"{}\"".format(lun, project, pool, error))
-        return True, ("CREATE - FAIL - lun '{}' project '{}' pool '{}' - "
-                      "Error \"{}\"".format(lun, project, pool, error))
+            return True, msgdeco('FAIL', 'CREATE', "lun '{}' project '{}' pool"
+                                 " '{}' - Error \"{}\""
+                                 .format(lun, project, pool, error))
+        return True, msgdeco('FAIL', 'CREATE', "lun '{}' project '{}' pool "
+                             "'{}' - Error \"{}\""
+                             .format(lun, project, pool, error))
     except ConnectionError as error:
-        return True, ("CREATE - FAIL - lun '{}' project '{}' pool '{}' - Error"
-                      " \"{}\"".format(lun, project, pool, error))
+        return True, msgdeco('FAIL', 'CREATE', "lun '{}' project '{}' pool "
+                             "'{}' - Error \"{}\""
+                             .format(lun, project, pool, error))
 
 
 def delete_lun(fileline, zfsurl, zauth, timeout, verify):
     """Delete lun from line in csv format. (err, msg)"""
     if len(fileline) != 3:
-        return True, ("DELETE - FAIL - Error in line {} It needs to be 3 "
-                      "columns long".format(fileline))
+        return True, msgdeco('FAIL', 'DELETE', "Error in line {} It needs to "
+                             "be 3 columns long".format(fileline))
     pool, project, lun = fileline
     fullurl = ("{}/storage/v1/pools/{}/projects/{}/luns/{}"
                .format(zfsurl, pool, project, lun))
@@ -120,17 +130,20 @@ def delete_lun(fileline, zfsurl, zauth, timeout, verify):
                               verify=verify, headers=HEADER, timeout=timeout)
         req.close()
         req.raise_for_status()
-        return False, ("DELETE - SUCCESS - lun '{}' project '{}' pool '{}'"
-                       .format(lun, project, pool))
+        return False, msgdeco('SUCCESS', 'DELETE', "lun '{}' project '{}' pool"
+                              " '{}'".format(lun, project, pool))
     except HTTPError as error:
         if error.response.status_code == 401:
-            return True, ("DELETE - FAIL - lun '{}' project '{}' pool '{}' - "
-                          "Error \"{}\"".format(lun, project, pool, error))
-        return True, ("DELETE - FAIL - lun '{}' project '{}' pool '{}' - "
-                      "Error \"{}\"".format(lun, project, pool, error))
+            return True, msgdeco('FAIL', 'DELETE', "lun '{}' project '{}' pool"
+                                 " '{}' - Error \"{}\""
+                                 .format(lun, project, pool, error))
+        return True, msgdeco('FAIL', 'DELETE', "lun '{}' project '{}' pool "
+                             "'{}' - Error \"{}\""
+                             .format(lun, project, pool, error))
     except ConnectionError as error:
-        return True, ("DELETE - FAIL - lun '{}' project '{}' pool '{}' - Error"
-                      " \"{}\"".format(lun, project, pool, error))
+        return True, msgdeco('FAIL', 'DELETE', "lun '{}' project '{}' pool "
+                             "'{}' - Error \"{}\""
+                             .format(lun, project, pool, error))
 
 
 def run_luns(args):

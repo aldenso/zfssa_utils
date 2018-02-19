@@ -14,6 +14,7 @@ setup(name='zfssa_utils',
           'progressbar33',
           'pyyaml',
           'six',
+          'colorama',
       ],
       extras_require={
           ':python_version < "3.2"': [
