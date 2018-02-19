@@ -29,6 +29,9 @@ SNAPLOGFILE = "snaps_output.log"
 FSLOGFILE = "filesystems_output.log"
 UPDATELOGFILE = "updates_output.log"
 EXPLORERLOGFILE = "explorer_output.log"
+COLORRED = '\033[31m'
+COLORGREEN = '\033[32m'
+RESETCOLOR = '\033[39m'
 
 
 def read_yaml_file(configfile):
@@ -339,9 +342,11 @@ def decotag(func):
 
     def applydeco(fail_status, type_op, msg):
         if fail_status == 'FAIL':
-            return "{}".format(Fore.RED + func(fail_status, type_op, msg))
+            return "{}".format(Fore.RED + func(fail_status, type_op, msg) +
+                               Fore.RESET)
         else:
-            return "{}".format(Fore.GREEN + func(fail_status, type_op, msg))
+            return "{}".format(Fore.GREEN + func(fail_status, type_op, msg) +
+                               Fore.RESET)
     return applydeco
 
 

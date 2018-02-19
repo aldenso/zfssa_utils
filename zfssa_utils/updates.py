@@ -6,7 +6,7 @@ from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
 from zfssa_utils.common import (HEADER, read_csv_file, read_yaml_file,
                                 createprogress, CreateLogger, UPDATELOGFILE,
-                                msgdeco)
+                                msgdeco, COLORGREEN, COLORRED, RESETCOLOR)
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
@@ -193,9 +193,11 @@ def run_updates(args):
                                             data, verify, project=project,
                                             pool=pool)
                 if err:
-                    logger.warning(msg)
+                    logger.warning(msg.replace(COLORRED, "")
+                                   .replace(RESETCOLOR, ""))
                 else:
-                    logger.info(msg)
+                    logger.info(msg.replace(COLORGREEN, "")
+                                .replace(RESETCOLOR, ""))
                 initial += 1
                 progbar.update(initial)
 
@@ -210,9 +212,11 @@ def run_updates(args):
                                             data, verify, project=project,
                                             pool=pool)
                 if err:
-                    logger.warning(msg)
+                    logger.warning(msg.replace(COLORRED, "")
+                                   .replace(RESETCOLOR, ""))
                 else:
-                    logger.info(msg)
+                    logger.info(msg.replace(COLORGREEN, "")
+                                .replace(RESETCOLOR, ""))
                 initial += 1
                 progbar.update(initial)
 
@@ -227,9 +231,11 @@ def run_updates(args):
                                             data, verify, project=project,
                                             pool=pool, lun=lun)
                 if err:
-                    logger.warning(msg)
+                    logger.warning(msg.replace(COLORRED, "")
+                                   .replace(RESETCOLOR, ""))
                 else:
-                    logger.info(msg)
+                    logger.info(msg.replace(COLORGREEN, "")
+                                .replace(RESETCOLOR, ""))
                 initial += 1
                 progbar.update(initial)
         progbar.finish()

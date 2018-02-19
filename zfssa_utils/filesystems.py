@@ -10,7 +10,8 @@ from requests.exceptions import HTTPError, ConnectionError
 from urllib3.exceptions import InsecureRequestWarning
 from zfssa_utils.common import (HEADER, response_size, read_yaml_file,
                                 read_csv_file, createprogress, CreateLogger,
-                                FSLOGFILE, msgdeco)
+                                FSLOGFILE, msgdeco, COLORGREEN, COLORRED,
+                                RESETCOLOR)
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
@@ -188,9 +189,11 @@ def run_filesystems(args):
                                               zauth, timeout,
                                               verify)
                 if err:
-                    logger.warning(msg)
+                    logger.warning(msg.replace(COLORRED, "")
+                                   .replace(RESETCOLOR, ""))
                 else:
-                    logger.info(msg)
+                    logger.info(msg.replace(COLORGREEN, "")
+                                .replace(RESETCOLOR, ""))
                 initial += 1
                 progbar.update(initial)
             progbar.finish()
@@ -225,9 +228,11 @@ def run_filesystems(args):
                                               zauth, timeout,
                                               verify)
                 if err:
-                    logger.warning(msg)
+                    logger.warning(msg.replace(COLORRED, "")
+                                   .replace(RESETCOLOR, ""))
                 else:
-                    logger.info(msg)
+                    logger.info(msg.replace(COLORGREEN, "")
+                                .replace(RESETCOLOR, ""))
                 initial += 1
                 progbar.update(initial)
             progbar.finish()
@@ -251,9 +256,11 @@ def run_filesystems(args):
                                             verify)
                 initial += 1
                 if err:
-                    logger.warning(msg)
+                    logger.warning(msg.replace(COLORRED, "")
+                                   .replace(RESETCOLOR, ""))
                 else:
-                    logger.info(msg)
+                    logger.info(msg.replace(COLORGREEN, "")
+                                .replace(RESETCOLOR, ""))
                 progbar.update(initial)
             progbar.finish()
             logger.shutdown()
