@@ -99,7 +99,7 @@ class TestLUNS(unittest.TestCase):
         run_luns(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("need to run in buffered mode")
-        self.assertTrue('PRESENT' in sys.stdout.getvalue())
+        self.assertTrue('SUCCESS' in sys.stdout.getvalue())
 
     def test_06_list_lun_short_csv(self):
         """List luns with short csv."""
@@ -112,7 +112,7 @@ class TestLUNS(unittest.TestCase):
         run_luns(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("need to run in buffered mode")
-        self.assertTrue('PRESENT' in sys.stdout.getvalue())
+        self.assertTrue('SUCCESS' in sys.stdout.getvalue())
 
     def test_07_list_fail_csv(self):
         """List luns with wrong csv."""

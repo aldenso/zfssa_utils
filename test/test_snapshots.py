@@ -46,7 +46,7 @@ class TestSnapshots(unittest.TestCase):
         run_snaps(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
-        self.assertTrue('PRESENT' in sys.stdout.getvalue())
+        self.assertTrue('SUCCESS' in sys.stdout.getvalue())
 
     def test_02_delete_snap_projects(self):
         """Delete project snapshots."""
@@ -85,7 +85,7 @@ class TestSnapshots(unittest.TestCase):
         run_snaps(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
-        self.assertTrue('PRESENT' in sys.stdout.getvalue())
+        self.assertTrue('SUCCESS' in sys.stdout.getvalue())
 
     def test_05_delete_snap_filesystem(self):
         """Delete filesystem snapshots."""
@@ -124,7 +124,7 @@ class TestSnapshots(unittest.TestCase):
         run_snaps(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
-        self.assertTrue('PRESENT' in sys.stdout.getvalue())
+        self.assertTrue('SUCCESS' in sys.stdout.getvalue())
 
     def test_08_delete_snap_lun(self):
         """Delete lun snapshots."""

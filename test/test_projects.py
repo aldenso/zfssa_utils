@@ -99,7 +99,7 @@ class TestProjects(unittest.TestCase):
         run_projects(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
-        self.assertTrue('PRESENT' in sys.stdout.getvalue())
+        self.assertTrue('SUCCESS' in sys.stdout.getvalue())
 
     def test_06_list_short_csv(self):
         """List projects with short csv."""
@@ -112,7 +112,7 @@ class TestProjects(unittest.TestCase):
         run_projects(listargs)
         if not hasattr(sys.stdout, "getvalue"):
             self.fail("needs to run in buffered mode")
-        self.assertTrue('PRESENT' in sys.stdout.getvalue())
+        self.assertTrue('SUCCESS' in sys.stdout.getvalue())
 
     def test_07_list_fail_csv(self):
         """List projects with wrong csv."""
