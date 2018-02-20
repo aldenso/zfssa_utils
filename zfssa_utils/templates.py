@@ -109,13 +109,13 @@ TEMPL_SNAPSHOTS = """# Template projects snapshots
 # pool,project,snaptarget,snaptype,snapname
 #
 # Project Snap
-pool_0,unittest,-,project,backup
+pool_0,unittest,-,project,backup-proj
 #
 # Filesystem snap
-pool_0,unittest,fs01,filesystem,backup
+pool_0,unittest,fs01,filesystem,backup-fs
 #
 # Lun snap
-pool_0,unittest,lun10,lun,backup
+pool_0,unittest,lun10,lun,backup-lun
 """
 
 TEMPL_UPDATES = """# Template updates components (projects, filesystems, luns)
