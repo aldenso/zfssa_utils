@@ -144,8 +144,8 @@ Then run the script **run_test.sh**.
 ## Testing with coverage
 
 ```sh
-coverage run --source zfssa_utils -m unittest --buffer -v \
-test.test_zfssa test.test_projects test.test_filesystems \
+coverage run --source zfssa_utils --omit zfssa_utils/argparse* -m unittest \
+--buffer -v test.test_zfssa test.test_projects test.test_filesystems \
 test.test_luns test.test_snapshots test.test_explorer \
 test.test_templates test.test_updates
 ```

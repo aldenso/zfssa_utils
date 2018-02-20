@@ -41,6 +41,22 @@ warning.
 Warning: not using certificate verification.
 ******************************************************************************
 
+If you download the certificate, you can use it with the --cert option before 
+the COMMANDS options.
+
+example:
+
+    $ zfssa-utils --cert myzfssa.cert [EXPLORER|PROJECTS|...]
+
+
+For every operations you'll need a server configuration file, where you will 
+indicate the ip of the system, a user with enough privileges and the password
+for the user.
+
+    $ cat server.yml
+    ip: 192.168.56.150
+    username: root
+    password: password
 
 
 1) EXPLORER:
@@ -49,7 +65,7 @@ Warning: not using certificate verification.
 Explorer generation will get the most common values you need about you zfssa 
 system (-p is optional, and it will generate a explorer_output.log file).
 
-    $ zfssa-utils EXPLORER -s test/serverOS86.yml -p
+    $ zfssa-utils EXPLORER -s serverOS86.yml -p
 
     23% |##############                                     | ETA:  0:01:19
 
@@ -147,7 +163,7 @@ Create the templates you are going to use.
 
 Every template comes with a comment line (lines starting with '#') indicating
 some values allowed for the fields, but check your restful API zfssa version 
-to be sure.
+to be sure (Only lines without comments will be processed).
 
 Make changes in the templates you want and create, delete or show only the 
 components you need.
@@ -157,24 +173,23 @@ components you need.
 3) PROJECTS:
    ========
 
-    $ zfssa-utils PROJECTS -s test/serverOS86.yml -f create_projects.csv \
-      --create
+Projects operations, create, delete or show projects.
+
+    $ zfssa-utils PROJECTS -s serverOS86.yml -f create_projects.csv --create
     ###############################################################################
     Creating projects
     ###############################################################################
     CREATE - SUCCESS - project 'unittest01' pool 'pool_0'
     ===============================================================================
 
-    $ zfssa-utils PROJECTS -s test/serverOS86.yml -f create_projects.csv \
-      --list
+    $ zfssa-utils PROJECTS -s serverOS86.yml -f create_projects.csv --list
     ###############################################################################
     Listing projects
     ###############################################################################
     LIST - PRESENT - project 'unittest01' pool 'pool_0' mountpoint '/export/unittest01' quota '10 GB' reservation '10 GB' compression 'gzip' dedup 'True' logbias 'latency' nodestroy 'False' recordsize '128 KB' readonly 'False' atime 'True' def_sparse 'True' def_user 'nobody' def_group 'other' def_perms '750' def_volblocksize '128 KB' def_volsize '1 GB' sharenfs 'on' sharesmb 'off'
     ===============================================================================
 
-    $ zfssa-utils PROJECTS -s test/serverOS86.yml -f destroy_projects.csv \
-      --delete
+    $ zfssa-utils PROJECTS -s serverOS86.yml -f destroy_projects.csv --delete
     You are about to destroy
     ==============================
     Pool           Project
@@ -189,7 +204,155 @@ components you need.
     ===============================================================================
 
 
-Note: Every delete operation for projects, filesystems, luns and snapshots has 
-a --noconfirm flag if you are completely sure about the file accuracy.
+Note: Every delete operation for projects has a --noconfirm flag if you are 
+completely sure about the file accuracy.
 
-**Pending to complete**
+
+
+4) FILESYSTEMS:
+   ===========
+
+Filesystems operations, create, delete or show filesystems.
+
+    $ zfssa-utils FILESYSTEMS -s serverOS86.yml -f create_filesystems.csv --create
+    ###############################################################################
+    Creating filesystems
+    ###############################################################################
+    CREATE - SUCCESS - filesystem 'fs10' project 'unittest' pool 'pool_0'
+    ===============================================================================
+
+    $ zfssa-utils FILESYSTEMS -s serverOS86.yml -f create_filesystems.csv --list
+    ###############################################################################
+    Listing filesystems
+    ###############################################################################
+    LIST - SUCCESS - filesystem 'fs10' project 'unittest' pool 'pool_0' mountpoint '/export/unittest/fs10' quota '2 GB' reservation '1 GB' compression 'lzjb' dedup 'False' logbias 'latency' nodestroy 'False' recordsize '128 KB' readonly 'False' atime 'False' root_user 'root' root_group 'other' root_permissions '750' sharenfs rw=@192.168.56.101/24:@192.168.56.1/24' sharesmb 'on'
+    ===============================================================================
+
+    $ zfssa-utils FILESYSTEMS -s serverOS86.yml -f create_filesystems.csv --delete
+    You are about to destroy
+    =============================================
+    Pool           Project        Filesystem
+    ---------------------------------------------
+    pool_0         unittest       fs10
+    =============================================
+    Do you want to destroy (y/N)y
+    ###############################################################################
+    Deleting filesystems
+    ###############################################################################
+    DELETE - SUCCESS - filesystem 'fs10' project 'unittest' pool 'pool_0'
+    ===============================================================================
+
+Note: Every delete operation for filesystems has a --noconfirm flag if you are
+completely sure about the file accuracy.
+
+
+
+5) LUNS:
+   ====
+
+Luns operations, create, delete or show luns.
+
+    $ zfssa-utils LUNS -s serverOS86.yml -f create_luns.csv --create
+    ###############################################################################
+    Creating luns
+    ###############################################################################
+    CREATE - SUCCESS - lun 'lun01' project 'unittest' pool 'pool_0'
+    ===============================================================================
+
+    $ zfssa-utils LUNS -s serverOS86.yml -f create_luns.csv --list
+    ###############################################################################
+    Listing luns
+    ###############################################################################
+    LIST - SUCCESS - lun 'lun01' project 'unittest' pool 'pool_0' assigned number '4' initiatorgroup '['cluster-test']' volsize '1 GB' volblocksize '128 KB' status 'online' space_total '1 GB' lunguid '600144F0EF0D2BCE00005A8C05890001' logbias ' latency' creation '20180220T11:24:42' thin 'False' nodestroy 'False'
+    ===============================================================================
+
+    $ zfssa-utils LUNS -s serverOS86.yml -f destroy_luns.csv --delete
+    You are about to destroy
+    =============================================
+    Pool           Project        Lun
+    ---------------------------------------------
+    pool_0         unittest       lun01
+    =============================================
+    Do you want to destroy (y/N)y
+    ###############################################################################
+    Deleting luns
+    ###############################################################################
+    DELETE - SUCCESS - lun 'lun01' project 'unittest' pool 'pool_0'
+    ===============================================================================
+
+Note: Every delete operation for luns has a --noconfirm flag if you are completely
+sure about the file accuracy.
+
+
+
+6) UPDATE:
+   ======
+
+Update/Modify operations, modify mutable values in projects, filesystems and luns.
+
+    $ zfssa-utils.exe UPDATE -s serverOS86.yml -f update_components.csv
+    You are about to modify/update
+    ===============================================================================
+    TYPE            NAME:PROJECT:POOL              keyx: valx , keyx+1: valx+1, ...
+    ===============================================================================
+    project         -:unittest:pool_0              ['logbias: latency']
+    lun             lun10:unittest:pool_0          ['compression: lzjb', 'sparse: True']
+    filesystem      fs01:unittest:pool_0           ['reservation: 512m', 'atime: False']
+    ===============================================================================
+    Do you want to proceed (y/N)y
+    ###############################################################################
+    Updating project
+    ###############################################################################
+    UPDATE - SUCCESS - project 'unittest' pool 'pool_0' - updates: logbias 'latency'
+    ===============================================================================
+    ###############################################################################
+    Updating lun
+    ###############################################################################
+    UPDATE - SUCCESS - lun 'lun10' project 'unittest' pool 'pool_0' - updates: compression 'lzjb' sparse 'True'
+    ===============================================================================
+    ###############################################################################
+    Updating filesystem
+    ###############################################################################
+    UPDATE - SUCCESS - filesystem 'fs01' project 'unittest' pool 'pool_0' - updates: reservation '512m' atime 'False'
+    ===============================================================================
+
+Note: Every update/modify operation for projects, filesystems and luns has a
+--noconfirm flag if you are completely sure about the file accuracy.
+
+
+
+7) SNAPSHOTS:
+   =========
+
+Snapshots operations, create, delete or show snaps.
+
+    $ zfssa-utils SNAPSHOTS -s serverOS86.yml -f create_snapshots.csv --create
+    ###############################################################################
+    Creating snapshots
+    ###############################################################################
+    CREATE - SUCCESS - snapshot 'backup' project '-' project 'unittest' pool 'pool_0'
+    ===============================================================================
+
+    $ zfssa-utils SNAPSHOTS -s serverOS86.yml -f create_snapshots.csv --list
+    ###############################################################################
+    Listing snapshots
+    ###############################################################################
+    LIST - SUCCESS - snapshot 'backup' project '-' project 'unittest' pool 'pool_0' created_at '20180220T11:41:15' space_data '112 KB' space_unique '0 B'
+    ===============================================================================
+
+    $ zfssa-utils SNAPSHOTS -s serverOS86.yml -f create_snapshots.csv --delete
+    You are about to destroy
+    ===========================================================================
+    Pool           Project        fs|lun         SnapType       Snapshot
+    ---------------------------------------------------------------------------
+    pool_0         unittest       -              project        backup
+    ===========================================================================
+    Do you want to destroy (y/N)y
+    ###############################################################################
+    Deleting snapshots
+    ###############################################################################
+    DELETE - SUCCESS - snapshot 'backup' project '-' project 'unittest' pool 'pool_0'
+    ===============================================================================
+
+Note: Every delete operation for snapshots has a --noconfirm flag if you are
+completely sure about the file accuracy.

@@ -1,7 +1,5 @@
-#!/usr/bin/env python
 import os
 import sys
-sys.path.append(".")
 from zfssa_utils import __version__
 from zfssa_utils import __file__ as zfssa_utils_file
 from zfssa_utils.common import create_parser, check_files_exists, pager
@@ -15,7 +13,7 @@ from zfssa_utils.updates import run_updates
 
 module_path = os.path.abspath(os.path.dirname(zfssa_utils_file))
 
-if __name__ == "__main__":
+def main():
     args = create_parser()
     if args.version:
         exit(__version__)
