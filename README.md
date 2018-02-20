@@ -56,6 +56,7 @@ optional arguments:
   -t TIMEOUT, --timeout TIMEOUT
                         connection timeout
   --cert CERT           use certificate
+  --doc                 program documentation
 ```
 
 **Note**: You can run operations without validating certificates, but you'll get a warning.
