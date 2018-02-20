@@ -25,6 +25,12 @@ At the moment you can install the utility building with setup.
 python setup.py install
 ```
 
+If you want to develop the program use the option.
+
+```sh
+python setup.py develop
+```
+
 Check the utility (remember to rehash if you are using zsh).
 
 ```sh
