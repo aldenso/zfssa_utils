@@ -1,7 +1,9 @@
 from __future__ import print_function
+import sys
 import os
 from datetime import datetime
 import argparse
+import signal
 import time
 import threading
 import schedule
@@ -76,6 +78,18 @@ class Namespace:
         self.__dict__.update(kwargs)
 
 
+class GetSignal:
+    """Catch signal"""
+    term_now = False
+
+    def __init__(self):
+        signal.signal(signal.SIGINT, self.exit_gracefully)
+        signal.signal(signal.SIGTERM, self.exit_gracefully)
+
+    def exit_gracefully(self, signum, frame):
+        self.term_now = True
+
+
 class ThreadingInotify(object):
     """ Threading inotify"""
 
@@ -94,24 +108,25 @@ class ThreadingInotify(object):
 
             i.add_watch(self.iargs.directory)
 
-            for event in i.event_gen(yield_nones=False):
-                (_, etype, _, _) = event
+            for event in i.event_gen():
+                if event is not None:
+                    (_, etype, _, _) = event
 
-                if 'IN_DELETE' in etype or 'IN_MODIFY' in etype or \
-                        'IN_MOVED_TO' in etype or 'IN_MOVED_FROM' in etype or \
-                        'IN_CREATE' in etype:
-                    schedule.clear()
-                    print("---- Removed previous schedules ----")
-                    zfssalist = get_zfssalist(self.iargs.directory)
-                    for stime in self.iargs.time:
-                        for zfs in zfssalist:
-                            print("++++ Scheduled: {} {} ++++"
-                                  .format(stime, zfs))
-                        schedule.every().day.at(stime).do(launch_explorers,
-                                                          zfssalist,
-                                                          self.iargs)
+                    if 'IN_DELETE' in etype or 'IN_MODIFY' in etype or \
+                            'IN_MOVED_TO' in etype or 'IN_MOVED_FROM' in etype\
+                            or 'IN_CREATE' in etype:
+                        schedule.clear()
+                        print("---- Removed previous schedules ----")
+                        zfssalist = get_zfssalist(self.iargs.directory)
+                        for stime in self.iargs.time:
+                            for zfs in zfssalist:
+                                print("++++ Scheduled: {} {} ++++"
+                                      .format(stime, zfs))
+                            schedule.every().day.at(stime).do(launch_explorers,
+                                                              zfssalist,
+                                                              self.iargs)
 
-            time.sleep(self.interval)
+                time.sleep(self.interval)
 
 
 def main():
@@ -125,6 +140,9 @@ def main():
         for zfssa in zfssalist:
             print("++++ Scheduled: {} {} ++++".format(schedtime, zfssa))
     ThreadingInotify(args)
+    signal_event = GetSignal()
     while True:
         schedule.run_pending()
         time.sleep(1)
+        if signal_event.term_now:
+            sys.exit("Terminating scheduler.")
