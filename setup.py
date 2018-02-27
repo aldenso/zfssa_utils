@@ -1,5 +1,10 @@
 from setuptools import setup
+import os
 from zfssa_utils import __version__
+entrypoints = ['zfssa-utils=zfssa_utils.bin.zfssa:main',
+               'zfssa-sched-explorer=zfssa_utils.bin.scheduler:main']
+if os.name == "nt":
+    entrypoints = ['zfssa-utils=zfssa_utils.bin.zfssa:main']
 
 setup(name='zfssa_utils',
       version=__version__,
@@ -32,8 +37,6 @@ setup(name='zfssa_utils',
           'Operating System :: POSIX :: Linux',
           'Topic :: System :: Systems Administration',
           ],
-      entry_points={'console_scripts':
-                    ['zfssa-utils=zfssa_utils.bin.zfssa:main',
-                     'zfssa-sched-explorer=zfssa_utils.bin.scheduler:main']},
+      entry_points={'console_scripts': entrypoints},
       zip_safe=False,
       include_package_data=True)

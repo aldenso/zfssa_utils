@@ -140,9 +140,9 @@ Archive:  data/zfssa_explorer_192.168.56.150_110218_144857.zip
     19233                     21 files
 ```
 
-### Explorer Scheduler
+### Explorer Scheduler (not in windows platform)
 
-The script 'zfssa-sched-explorer' is useful to schedule regular explorers, even when you make changes in he directory, the script will detect events and will remove previous old files schedules and add the new ones.
+The script 'zfssa-sched-explorer' is useful to schedule regular explorers, even when you make changes in the directory, the script will detect events and will remove previous old files schedules and add the new ones.
 
 ```sh
 zfssa-sched-explorer -h
