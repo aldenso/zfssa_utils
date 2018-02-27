@@ -15,6 +15,8 @@ setup(name='zfssa_utils',
           'pyyaml',
           'six',
           'colorama',
+          'schedule',
+          'inotify',
       ],
       extras_require={
           ':python_version < "3.2"': [
@@ -30,6 +32,8 @@ setup(name='zfssa_utils',
           'Operating System :: POSIX :: Linux',
           'Topic :: System :: Systems Administration',
           ],
-      entry_points={'console_scripts': ['zfssa-utils=zfssa_utils.bin.zfssa:main']},
+      entry_points={'console_scripts':
+                    ['zfssa-utils=zfssa_utils.bin.zfssa:main',
+                     'zfssa-sched-explorer=zfssa_utils.bin.scheduler:main']},
       zip_safe=False,
       include_package_data=True)

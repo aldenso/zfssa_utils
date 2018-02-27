@@ -59,7 +59,7 @@ optional arguments:
   --doc                 program documentation
 ```
 
-**Note**: You can run operations without validating certificates, but you'll get a warning.
+**Note**: You can run operations without validating certificates (PEM certificate), but you'll get a warning.
 
 ```txt
 *******************************************************************************
@@ -138,6 +138,75 @@ Archive:  data/zfssa_explorer_192.168.56.150_110218_144857.zip
       339  2018-02-11 14:50   zfssa_explorer_192.168.56.150_110218_144857/fc_initiators.csv
 ---------                     -------
     19233                     21 files
+```
+
+### Explorer Scheduler
+
+The script 'zfssa-sched-explorer' is useful to schedule regular explorers, even when you make changes in he directory, the script will detect events and will remove previous old files schedules and add the new ones.
+
+```sh
+zfssa-sched-explorer -h
+```
+
+```txt
+usage: zfssa-sched-explorer [-h] -d DIRECTORY [-c] [-p] [--timeout TIMEOUT] -t
+                            TIME [TIME ...]
+
+Schedule zfssa explorers
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DIRECTORY, --directory DIRECTORY
+                        Directory to find Server config files (YAML)
+  -c, --cert            Use certificate (Certificates must be named like the
+                        zfssa yml but with extension '.crt')
+  -p, --progress        progress bar
+  --timeout TIMEOUT     connection timeout
+  -t TIME [TIME ...], --time TIME [TIME ...]
+                        24Hr time where the Job should be launched
+```
+
+If you want to use certificates, then you must place them in the same directory
+of the servers with the same name, but with extension '.crt' instead of '.yml'.
+
+examples:
+
+```sh
+zfssa-sched-explorer -d /tmp/myserver --timeout 100 --cert -t "16:52" "21:00"
+zfssa-sched-explorer -d /tmp/myserver -t "16:27" "21:00" --timeout 100
+```
+
+```txt
+Started at: 2018-02-27 16:26:20.730649
+++++ Scheduled: 16:27 /tmp/myserver/serverOS86.yml ++++
+++++ Scheduled: 21:00 /tmp/myserver/serverOS86.yml ++++
+Explorer for '/tmp/myserver/serverOS86' launched
+++++ Creating csv for cluster ++++
+++++ Creating csv for problems ++++
+++++ Creating csv for datalinks ++++
+++++ Creating csv for version ++++
+++++ Creating csv for interfaces ++++
+++++ Creating csv for routes ++++
+++++ Creating csv for devices ++++
+++++ Creating csv for projects ++++
+++++ Creating csv for luns ++++
+++++ Creating csv for filesystems ++++
+++++ Creating csv for routing ++++
+++++ Creating csv for pools ++++
+++++ Creating csv for fc_initiators ++++
+++++ Creating csv for fc_targets ++++
+++++ Creating csv for fc_initiator-groups ++++
+++++ Creating csv for fc_target-groups ++++
+++++ Creating csv for iscsi_initiator-groups ++++
+++++ Creating csv for iscsi_initiators ++++
+++++ Creating csv for iscsi_target-groups ++++
+++++ Creating csv for iscsi_targets ++++
+++++ Creating csv for users ++++
+---- Removed previous schedules ----
+++++ Scheduled: 16:27 /tmp/myserver/serverOS86.yml ++++
+++++ Scheduled: 16:27 /tmp/myserver/serverOS87.yml ++++
+++++ Scheduled: 21:00 /tmp/myserver/serverOS86.yml ++++
+++++ Scheduled: 21:00 /tmp/myserver/serverOS87.yml ++++
 ```
 
 ## TEMPLATES COMMAND
